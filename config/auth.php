@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'md1',
+        'guard' => 'foreman1',
         'passwords' => 'password',
     ],
 
@@ -46,16 +46,16 @@ return [
             'provider' => 'assistant',
         ],
 
-        'md1' => [
+        'foreman1' => [
               'driver' => 'jwt',
-              'provider' => 'md1',
+              'provider' => 'foreman1',
               'hash' => false,
 
         ],
 
-        'md2' => [
+        'foreman2' => [
               'driver' => 'jwt',
-              'provider' => 'md2',
+              'provider' => 'foreman2',
               'hash' => false,
         ],
 
@@ -90,14 +90,14 @@ return [
             'model' => App\Models\Assistant::class,
         ],
         
-        'md1' => [
+        'Foreman1' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Md1::class,
+            'model' => App\Models\Foreman1::class,
         ],
 
-        'md2' => [
+        'Foreman2' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Md2::class,
+            'model' => App\Models\Foreman2::class,
         ],
 
         // 'users' => [
@@ -136,15 +136,15 @@ return [
             'throttle' => 60,
         ],
 
-        'md1' => [
-            'provider' => 'md1',
+        'foreman1' => [
+            'provider' => 'foreman1',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
         ],
 
-        'md2' => [
-            'provider' => 'md2',
+        'foreman2' => [
+            'provider' => 'foreman2',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

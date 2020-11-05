@@ -12,8 +12,8 @@ class Afdelling extends Model
     protected $table = 'afdelling';
     protected $guarded = [];
 
-    public function rkh() {
-        return $this->hasMany('App\Models\Rkh', 'afdelling_id', 'id');
+    public function rkhrawat() {
+        return $this->hasMany('App\Models\Rkhrawat', 'afdelling_id', 'id');
     }
 
     public function area() {

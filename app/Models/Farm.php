@@ -16,8 +16,8 @@ class Farm extends Model
         return $this->hasMany('App\Models\Block', 'afdelling_id', 'id');
     }
 
-    public function rkh() {
-        return $this->hasMany('App\Models\Rkh', 'farm_id', 'id');
+    public function rkhrawat() {
+        return $this->hasMany('App\Models\Rkhrawat', 'farm_id', 'id');
     }
 
     public function area() {

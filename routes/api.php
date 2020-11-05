@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// use App\Http\Controllers\Api\v1\AuthUserController;
-use App\Http\Controllers\Api\v1\AuthUserController;
+use App\Http\Controllers\Api\AuthUserController;
 
 
     Route::post('login', [AuthUserController::class, 'login']);

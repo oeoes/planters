@@ -21,7 +21,7 @@
 
           <li class="nav-header ml-1">Rencana Kerja Harian</li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('rkh.rawat') }}" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
               <p>R. Kerja Rawat</p>
             </a>

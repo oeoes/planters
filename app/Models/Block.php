@@ -20,8 +20,8 @@ class Block extends Model
         return $this->hasMany('App\Models\Area', 'block_id', 'id');
     }
 
-    public function rkh() {
-        return $this->hasMany('App\Models\Rkh', 'block_id', 'id');
+    public function rkhrawat() {
+        return $this->hasMany('App\Models\Rkhrawat', 'block_id', 'id');
     }
 
 

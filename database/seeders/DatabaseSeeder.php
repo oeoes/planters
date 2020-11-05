@@ -2,11 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Rawatmanual;
-use App\Models\Rawatpupuk;
-use App\Models\Rawatspraying;
-use App\Models\Rkhrawatmanual;
-use App\Models\Rkhrawatpupuk;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,8 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         \App\Models\Assistant::factory(5)->create();
-        \App\Models\Md1::factory(5)->create();
-        \App\Models\Md2::factory(5)->create();
+        // \App\Models\Foreman1::factory(5)->create();
+        // \App\Models\Foreman2::factory(5)->create();
         // \App\Models\Farm::factory(3)->create();
         // \App\Models\Afdelling::factory(15)->create();
         // \App\Models\Block::factory(30)->create();
@@ -33,13 +28,11 @@ class DatabaseSeeder extends Seeder
             AfdellingTableSeeder::class,
             BlockTableSeeder::class,
             AreaTableSeeder::class,
-            RkhTableSeeder::class,
-            RkhRawatPupukTableSeeder::class,
-            RkhRawatManualTableSeeder::class,
-            RkhRawatSprayingTableSeeder::class,
-            RawatManualTableSeeder::class,
-            RawatSprayingTableSeeder::class,
-            RawatPupukTableSeeder::class
+            Foreman1TableSeeder::class,
+            Foreman2TableSeeder::class,
+            RkhMaintainTableSeeder::class,
+            RkhHarvestMaintainTableSeeder::class,
+            HarvestMaintainTableSeeder::class
         ]);
     }
 }

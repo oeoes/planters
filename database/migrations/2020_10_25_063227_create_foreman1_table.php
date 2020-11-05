@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAfdellingTable extends Migration
+class CreateForeman1Table extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class CreateAfdellingTable extends Migration
      */
     public function up()
     {
-        Schema::create('afdelling', function (Blueprint $table) {
+        Schema::create('foreman1', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->enum('role', [1, 2])->default(1);
+            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ class CreateAfdellingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('afdelling');
+        Schema::dropIfExists('md1');
     }
 }
