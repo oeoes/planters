@@ -22,7 +22,7 @@ class AfdellingFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->currencyCode
+            'name' => $this->faker->cityPrefix,
         ];
     }
 }

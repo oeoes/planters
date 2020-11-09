@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Maintain\RkhHarvestMaintain;
+use Illuminate\Support\Facades\DB;
 
 class RkhHarvestMaintainTableSeeder extends Seeder
 {
@@ -14,11 +14,19 @@ class RkhHarvestMaintainTableSeeder extends Seeder
      */
     public function run()
     {
-        RkhHarvestMaintain::create([
-            'rkh_maintain_id' => '7dd6355f-4827-4a1c-b49f-0600c20e1fc4',
-            'fertilizer_type' => 'Caca',
-            'fertilizer_amount' => 100,
-            'fertilizer_period' => 1
-        ]);
+        $data = [
+            [
+                'rkh_maintain_id'   => '3ede7405-5cdc-49a5-9556-9b3688e10721',
+                'fertilizer_type'   => 'Fer1',
+                'fertilizer_amount' => 100,
+                'fertilizer_period' => 1
+            ],            [
+                'rkh_maintain_id'   => 'edd39e38-d07b-4b78-b689-43b1b66b5452',
+                'fertilizer_type'   => 'Fer1',
+                'fertilizer_amount' => 120,
+                'fertilizer_period' => 2
+            ]
+        ];
+        DB::table('rkh_harvest_maintains')->insert($data);
     }
 }

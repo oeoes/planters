@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\HarvestMaintain;
+use App\Models\RkhMaintain;
+use App\Models\SprayingMaintain;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,28 +14,26 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
+    // https://stackoverflow.com/questions/42639976/laravel-seeding-results-in-null-timestamp
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-        \App\Models\Assistant::factory(5)->create();
-        // \App\Models\Foreman1::factory(5)->create();
-        // \App\Models\Foreman2::factory(5)->create();
-        // \App\Models\Farm::factory(3)->create();
-        // \App\Models\Afdelling::factory(15)->create();
-        // \App\Models\Block::factory(30)->create();
-        // \App\Models\Area::factory(3)->create();
+        \App\Models\Assistant::factory(10)->create();
+        \App\Models\Farm::factory(5)->create();
+        \App\Models\Afdelling::factory(10)->create();
+        \App\Models\Block::factory(15)->create();
+        \App\Models\Foreman1::factory(2)->create();
+        \App\Models\Foreman2::factory(2)->create();
 
         $this->call([
-            AssistantTableSeeder::class,
-            FarmTableSeeder::class,
-            AfdellingTableSeeder::class,
-            BlockTableSeeder::class,
             AreaTableSeeder::class,
-            Foreman1TableSeeder::class,
-            Foreman2TableSeeder::class,
+            AssistantTableSeeder::class,
             RkhMaintainTableSeeder::class,
+            RkhManualMaintainTableSeeder::class,
             RkhHarvestMaintainTableSeeder::class,
-            HarvestMaintainTableSeeder::class
+            RkhSprayingMaintainTableSeeder::class,
+            HarvestMaintainTableSeeder::class,
+            SprayingMaintainTableSeeder::class,
+            ManualMaintainTableSeeder::class,
         ]);
     }
 }

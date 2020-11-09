@@ -17,7 +17,7 @@
   <div class="login-logo">
     <a href="#"><b>Planter</b>DEV</a>
   </div>
-  @include('sweetalert::alert')
+  {{-- @include('sweetalert::alert') --}}
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
@@ -33,10 +33,10 @@
         </div>
       @endif
 
-      <form action="/login" method="post" autocomplete="off">
+      <form action="/login" method="post">
         @csrf
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" name="email">
+          <input type="email" class="form-control" placeholder="Email" name="email" value="assistant@planterdev.com">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -44,7 +44,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="password">
+          <input type="password" class="form-control" placeholder="Password" name="password" value="password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -54,7 +54,7 @@
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
-              <input type="checkbox" id="remember">
+              <input type="checkbox" id="remember" name="remember">
               <label for="remember">
                 Remember Me
               </label>

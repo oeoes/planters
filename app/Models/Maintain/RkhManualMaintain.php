@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class RkhManualMaintain extends Model
 {
     use HasFactory;
-    protected $table = 'rkh_manual_maintain';
     protected $guarded = [];
-
+    
 }

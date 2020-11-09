@@ -3,30 +3,35 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Maintain\HarvestMaintain;
+use Illuminate\Support\Facades\DB;
 
 class HarvestMaintainTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         $data = [
             [
-                'rkh_maintain_id' => '7dd6355f-4827-4a1c-b49f-0600c20e1fc4',
+                'rkh_maintain_id' => '3ede7405-5cdc-49a5-9556-9b3688e10721',
                 'employee_name'   => 'Dinda',
                 'amount_used'     => 10,
                 'coverage'        => 12,
             ],[
-                'rkh_maintain_id' => '7dd6355f-4827-4a1c-b49f-0600c20e1fc4',
+                'rkh_maintain_id' => '3ede7405-5cdc-49a5-9556-9b3688e10721',
                 'employee_name'   => 'Alfin',
-                'amount_used'     => 40,
+                'amount_used'     => 15,
                 'coverage'        => 45,
+            ],            [
+                'rkh_maintain_id' => 'edd39e38-d07b-4b78-b689-43b1b66b5452',
+                'employee_name'   => 'Dinda',
+                'amount_used'     => 20,
+                'coverage'        => 10,
+            ],[
+                'rkh_maintain_id' => 'edd39e38-d07b-4b78-b689-43b1b66b5452',
+                'employee_name'   => 'Alfin',
+                'amount_used'     => 30,
+                'coverage'        => 15,
             ]
         ];
-        HarvestMaintain::insert($data);
+        DB::table('harvest_maintains')->insert($data);
     }
 }

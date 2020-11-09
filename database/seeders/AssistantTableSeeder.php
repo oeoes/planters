@@ -3,8 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Assistant;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class AssistantTableSeeder extends Seeder
 {
@@ -15,13 +14,11 @@ class AssistantTableSeeder extends Seeder
      */
     public function run()
     {
-        Assistant::create([
+        DB::table('assistants')->insert([
             'name' => 'assistant',
             'email' => 'assistant@planterdev.com',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
-            'role' => 'assistant',
-            'super' => 1
+            'role' => 1
         ]);
     }
 }

@@ -22,7 +22,7 @@ class FarmFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->countryCode
+            'name' => $this->faker->ean8,
         ];
     }
 }

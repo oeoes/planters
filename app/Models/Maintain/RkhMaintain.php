@@ -9,9 +9,8 @@ class RkhMaintain extends Model
 {
     use HasFactory;
 
-    protected $table = 'rkh_maintain';
     protected $guarded = [];
-    protected $primaryKey = 'uuid';
+    protected $primaryKey = 'id';
 
     public $incrementing = false;
 

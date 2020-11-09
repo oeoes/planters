@@ -1,37 +1,61 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AreaController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\MaintainController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::get('/', function() {
+    return redirect('/login');
+});
+Route::get('/login', [AuthController::class, 'loginform'])->middleware('guest');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('login.process');
+Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:assistant')->name('logout');
 
-use App\Http\Controllers\Web\AuthUserController;
-use App\Http\Controllers\Web\RkhMaintainController;
+Route::group(['middleware' => ['auth:assistant']], function () {
 
-    Route::get('/', [AuthUserController::class, 'index'])->middleware('guest');
-    // Route::get('/login', 'LoginController@login');
-    Route::post('/login', [AuthUserController::class, 'process']);
-    Route::get('/logout', [AuthUserController::class, 'logout']);
-
-    Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], function () {
-      Route::group(['prefix' => 'rkh'], function() {
-        Route::get('/rawat', [RkhMaintainController::class, 'rawat'])->name('rkh.rawat');
-        Route::post('/rawat', [RkhMaintainController::class, 'store'])->name('rkh.rawat.store');
-        Route::get('/test', [RkhMaintainController::class, 'test']);
-      });
-      Route::get('/', function () {
-        return view('assistant.welcome');
-      });
+    Route::group(['prefix' => 'dashboard'], function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');    
     });
 
-    Route::get('/clear', function() {
-      Session::flush();
+    Route::group(['prefix' => 'area'], function () {
+        Route::group(['prefix' => 'farm'], function () {
+            Route::get('/', [AreaController::class, 'farm'])->name('farm');
+            Route::post('/', [AreaController::class, 'farm_store'])->name('farm.store');
+        });
+        Route::group(['prefix' => 'afdelling'], function () {
+            Route::get('/', [AreaController::class, 'afdelling'])->name('afdelling');
+            Route::post('/', [AreaController::class, 'afdelling_store'])->name('afdelling.store');
+            Route::post('/getafdelling', [AreaController::class, 'getAfdelling']);
+        });
+        Route::group(['prefix' => 'block'], function () {
+            Route::get('/', [AreaController::class, 'block'])->name('block');
+            Route::post('/', [AreaController::class, 'block_store'])->name('block.store');
+            Route::post('/getblock', [AreaController::class, 'getBlock']);
+        });
     });
+
+    Route::group(['prefix' => 'foreman'], function () {
+        
+    });
+
+    Route::group(['prefix' => 'maintain'], function () {
+        Route::get('/', [MaintainController::class, 'index'])->name('maintain.index');
+        Route::post('/filter', [MaintainController::class, 'filter'])->name('maintain.filter');
+    });
+
+    Route::group(['prefix' => 'harvest'], function () {
+        
+    });
+
+});
+
+Route::get('/clear', function() {
+    return session()->flush();
+});
+
+Route::get('/test', [TestController::class, 'each']);
+// 
+

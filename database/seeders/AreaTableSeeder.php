@@ -3,10 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Farm;
-use App\Models\Afdelling;
-use App\Models\Block;
-use App\Models\Area;
+use Illuminate\Support\Facades\DB;
 
 class AreaTableSeeder extends Seeder
 {
@@ -17,21 +14,23 @@ class AreaTableSeeder extends Seeder
      */
     public function run()
     {
-        $data = [
-            [
-                'farm_id' => 1,
-                'afdelling_id' => 1,
-                'block_id' => 1
-            ], [
-                'farm_id' => 2,
-                'afdelling_id' => 2,
-                'block_id' => 2
-            ], [
-                'farm_id' => 3,
-                'afdelling_id' => 3,
-                'block_id' => 3
-            ]
-            ];
-        Area::insert($data);
+        $seeds = [
+            [1, 1, 1],
+            [1, 1, 2],
+            [1, 2, 3],
+            [1, 2, 4],
+            [2, 3, 5],
+            [2, 3, 6],
+            [2, 4, 7],
+            [2, 4, 8]
+        ];
+        foreach ($seeds as $key => $val) {
+                DB::table('areas')->insert([
+                    'farm_id' => $seeds[$key][0],
+                    'afdelling_id' => $seeds[$key][1],
+                    'block_id' => $seeds[$key][2]
+                ]);
+        }
+        
     }
 }

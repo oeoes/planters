@@ -8,20 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Area extends Model
 {
     use HasFactory;
-
-    protected $table = 'area';
     protected $guarded = [];
-
-    public function farm() {
-
-    }
-
-    public function afdelling() {
-
-    }
-
-    public function block() {
-        
-    }
-
 }

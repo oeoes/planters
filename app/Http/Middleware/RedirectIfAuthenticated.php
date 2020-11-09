@@ -18,11 +18,12 @@ class RedirectIfAuthenticated
      * @return mixed
      */
     public function handle(Request $request, Closure $next, ...$guards)
-    {
+    {   
+
         if (Auth::guard('assistant')->check()) {
-            return redirect('/assistant');
-        } 
-      
-          return $next($request);
+            return redirect('/dashboard');
+        }
+
+        return $next($request);
     }
 }
