@@ -13,7 +13,7 @@ class CreateAreaTable extends Migration
      */
     public function up()
     {
-        Schema::create('Areas', function (Blueprint $table) {
+        Schema::create('areas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('farm_id')->constrained();
             $table->foreignId('afdelling_id')->constrained();
