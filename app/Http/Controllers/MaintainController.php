@@ -35,6 +35,10 @@ class MaintainController extends Controller
                     ->where('block_id', $request->block)
                     ->first();
 
+        $farm = Farm::find($request->farm)->name;
+        $afdelling = Afdelling::find($request->afdelling)->name;
+        $block = Block::find($request->block)->name;
+
         $area_id  = $area->id;
         $rkh_maintains = RkhMaintain::where('area_id', $area_id)->get(); // area_id = 1;
 
@@ -120,9 +124,24 @@ class MaintainController extends Controller
         $total_pruning_coverage_final  /= $rkh_length;
         $total_gawangan_completeness   /= $rkh_length;
 
-        // return view('maintain.index', [
-        //     'aa' => 'dadah'
-        // ]);
+        $data = [
+            'farm' => $farm,
+            'afdelling' => $afdelling,
+            'block' => $block,
+            'total_harvest_completeness' => $total_gawangan_completeness,
+            'total_harvest_coverage_final' => $total_harvest_coverage_final,
+            'total_spraying_completeness' => $total_spraying_completeness,
+            'total_spraying_coverage_final' => $total_spraying_coverage_final,
+            'total_circle_completeness' => $total_circle_completeness,
+            'total_circle_coverage_final' => $total_circle_coverage_final,
+            'total_pruning_completeness' => $total_pruning_completeness,
+            'total_pruning_coverage_final' => $total_pruning_coverage_final,
+            'total_gawangan_completeness' => $total_gawangan_completeness,
+        ];
+
+        return back()->with([
+            'data' => $data
+        ]);
 
     }
 }

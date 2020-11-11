@@ -45,7 +45,7 @@ return [
             'model' => App\Models\Foreman1::class,
         ],
 
-        'foremans1' => [
+        'foremans2' => [
             'driver' => 'eloquent',
             'model' => App\Models\Foreman2::class,
         ]

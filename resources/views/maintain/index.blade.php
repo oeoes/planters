@@ -40,6 +40,76 @@
     </form>
   </div>
 </div>
+<div class="card">
+  <div class="card-body">
+    {{-- 
+      'farm' => $farm,
+      'afdelling' => $afdelling,
+      'block' => $block,
+      'total_harvest_completeness' => $total_gawangan_completeness,
+      'total_harvest_coverage_final' => $total_harvest_coverage_final,
+      'total_spraying_completeness' => $total_spraying_completeness,
+      'total_spraying_coverage_final' => $total_spraying_coverage_final,
+      'total_circle_completeness' => $total_circle_completeness,
+      'total_circle_coverage_final' => $total_circle_coverage_final,
+      'total_pruning_completeness' => $total_pruning_completeness,
+      'total_pruning_coverage_final' => $total_pruning_coverage_final,
+      'total_gawangan_completeness' => $total_gawangan_completeness,
+      --}}
+    @if (session()->has('data'))
+      <div class="text-muted h5">
+        <h5>
+          <span class="badge badge-primary">
+          Pencarian untuk Kebun: {{ session('data')['farm'] }}, Afdelling {{ session('data')['afdelling'] }}, Blok {{ session('data')['block'] }}
+          </span>
+        </h5>
+      </div>
+      <table class="table col-8">
+        <tr>
+          <td rowspan="2">Pupuk</td>
+          <td>Ketuntasan pekerjaan</td>
+          <td>{{ session('data')['total_harvest_completeness'] }}</td>
+        </tr>
+        <tr>
+          <td>Coverage</td>
+          <td>{{ session('data')['total_harvest_coverage_final'] }}</td>
+        </tr>
+        <tr>
+          <td rowspan="2">Spraying</td>
+          <td>Ketuntasan pekerjaan</td>
+          <td>{{ session('data')['total_spraying_completeness'] }}</td>
+        </tr>
+        <tr>
+          <td>Coverage</td>
+          <td>{{ session('data')['total_spraying_coverage_final'] }}</td>
+        </tr>
+        <tr>
+          <td rowspan="2">Manual Circle</td>
+          <td>Ketuntasan pekerjaan</td>
+          <td>{{ session('data')['total_circle_completeness'] }}</td>
+        </tr>
+        <tr>
+          <td>Coverage</td>
+          <td>{{ session('data')['total_circle_coverage_final'] }}</td>
+        </tr>
+        <tr>
+          <td rowspan="2">Manual Pruning</td>
+          <td>Ketuntasan pekerjaan</td>
+          <td>{{ session('data')['total_pruning_completeness'] }}</td>
+        </tr>
+        <tr>
+          <td>Coverage</td>
+          <td>{{ session('data')['total_pruning_coverage_final'] }}</td>
+        </tr>
+        <tr>
+          <td>Manual Gawangan</td>
+          <td>Ketuntasan pekerjaan</td>
+          <td>{{ session('data')['total_gawangan_completeness'] }}</td>
+        </tr>
+      </table>
+    @endif
+  </div>
+</div>
 @endsection
 
 @section('js')

@@ -13,4 +13,9 @@ class TestController extends Controller
         $area = Area::where('farm_id', 1)->select('afdelling_id')->distinct()->get()->toArray();
         dd($area);
     }
+
+    public function test() {
+        $data = Area::all();
+        return $data;
+    }
 }
