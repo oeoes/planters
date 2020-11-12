@@ -18,7 +18,7 @@ class AuthController extends Controller
         } else if ($token = Auth::guard('foreman2')->attempt($request->all())) {
             return $this->respondWithToken($token, 'foreman2');
         }
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return res(false, 401, 'Unauthorized');
     }
 
     public function logout() {
@@ -29,7 +29,7 @@ class AuthController extends Controller
         if (Auth::guard('foreman2')->check()) {
             Auth::guard('foreman2')->logout();
         }
-        return response()->json(['message' => 'Successfully logged out'], 200);
+        return res(true, 200, 'Successfully logged out');
     }
 
     protected function respondWithToken($token, $guard)

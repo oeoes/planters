@@ -25,7 +25,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($request->wantsJson()) {   //add Accept: application/json in request
-            return response()->json(['error' => $exception->getMessage()], 200);
+            return res(false, 400, $exception->getMessage());
             // return $this->handleApiException($request, $exception);
         }
         // For web
