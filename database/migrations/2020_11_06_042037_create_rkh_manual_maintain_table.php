@@ -22,8 +22,6 @@ class CreateRkhManualMaintainTable extends Migration
             $table->integer('circle');
             $table->integer('pruning');
             $table->integer('gawangan');
-            $table->decimal('lat', 10, 8)->nullable();
-            $table->decimal('lng', 11, 8)->nullable();
             $table->timestamps();
         });
     }

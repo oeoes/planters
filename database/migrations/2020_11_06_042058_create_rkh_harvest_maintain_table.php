@@ -20,8 +20,6 @@ class CreateRkhHarvestMaintainTable extends Migration
             $table->string('fertilizer_type');
             $table->integer('fertilizer_amount');
             $table->enum('fertilizer_period', [1, 2]);
-            $table->decimal('lat', 10, 8)->nullable();
-            $table->decimal('lng', 11, 8)->nullable();
             $table->timestamps();
         });
     }

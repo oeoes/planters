@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\Block::factory(15)->create();
         \App\Models\Foreman1::factory(2)->create();
         \App\Models\Foreman2::factory(2)->create();
+        \App\Models\Employee::factory(10)->create();
 
         $this->call([
             AreaTableSeeder::class,

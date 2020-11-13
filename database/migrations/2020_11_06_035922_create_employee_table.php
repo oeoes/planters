@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateForeman1Table extends Migration
+class CreateEmployeeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateForeman1Table extends Migration
      */
     public function up()
     {
-        Schema::create('foremans1', function (Blueprint $table) {
+        Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->enum('role', [1, 2])->default(1);
-            $table->enum('isactive', [1, 0])->default(0);
-            $table->rememberToken();
+            // $table->string('email')->unique();
+            // $table->string('password');
+            // $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ class CreateForeman1Table extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('foreman1');
+        Schema::dropIfExists('employees');
     }
 }

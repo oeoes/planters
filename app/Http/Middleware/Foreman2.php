@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class Foreman1
+class Foreman2
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class Foreman1
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! Auth::guard('foreman1')->check()) {
+        if (! Auth::guard('foreman2')->check()) {
             return res(false, 400, 'Wrong foreman');
         }
         return $next($request);

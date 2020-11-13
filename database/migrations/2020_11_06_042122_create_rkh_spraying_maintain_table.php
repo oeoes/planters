@@ -21,8 +21,6 @@ class CreateRkhSprayingMaintainTable extends Migration
 
             $table->string('spraying_type');
             $table->string('spraying_amount');
-            $table->decimal('lat', 10, 8)->nullable();
-            $table->decimal('lng', 11, 8)->nullable();
             $table->timestamps();
         });
     }

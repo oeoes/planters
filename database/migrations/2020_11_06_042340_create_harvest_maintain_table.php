@@ -23,6 +23,8 @@ class CreateHarvestMaintainTable extends Migration
             $table->string('image')->nullable();
             $table->time('maintain_date_start')->nullable();
             $table->time('maintain_date_end')->nullable();
+            $table->decimal('lat', 10, 8)->nullable();
+            $table->decimal('lng', 11, 8)->nullable();
             $table->timestamps();
         });
     }

@@ -20,7 +20,8 @@ class CreateRkhMaintainTable extends Migration
             $table->foreignId('foreman2_id')->constrained('foremans2');
             $table->integer('coverage');
             $table->integer('population');
-            $table->date('planting_date');
+            $table->char('period');
+            $table->char('planting_year');
             $table->integer('employees_number');
             $table->char('status')->default(1); // 1 for opened, 2 for closed
             $table->timestamps();
