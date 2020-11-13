@@ -23,6 +23,7 @@ class RkhMaintainTableSeeder extends Seeder
             'foreman2_id' => 2,
             'coverage' => 1000,
             'population' => 100,
+            'period' => 1,
             'planting_year' => '2010',
             'employees_number' => 20,
             'status' => 1 //active
@@ -33,6 +34,7 @@ class RkhMaintainTableSeeder extends Seeder
             'foreman2_id' => 2,
             'coverage' => 2000,
             'population' => 200,
+            'period' => 2,
             'planting_year' => '2010',
             'employees_number' => 40,
             'status' => 1 //active
