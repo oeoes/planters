@@ -33,11 +33,13 @@ class AuthController extends Controller
     }
 
     protected function respondWithToken($token, $guard)
-    {   return response()->json([
+    {   
+        $data = [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => Auth::guard($guard)->factory()->getTTL() * 60,
             'account' => Auth::guard($guard)->user()
-        ]);
+        ];
+        return res(true, 200, 'Successfully log in', $data);
     }
 }
