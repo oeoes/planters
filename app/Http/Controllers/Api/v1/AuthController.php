@@ -18,7 +18,7 @@ class AuthController extends Controller
         } else if ($token = Auth::guard('foreman2')->attempt($request->all())) {
             return $this->respondWithToken($token, 'foreman2');
         }
-        return res(false, 401, 'Unauthorized');
+        return res(false, 401, 'Unauthorized, invalid email or password');
     }
 
     public function logout() {

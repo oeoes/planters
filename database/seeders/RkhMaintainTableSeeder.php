@@ -26,7 +26,7 @@ class RkhMaintainTableSeeder extends Seeder
             'period' => 1,
             'planting_year' => '2010',
             'employees_number' => 20,
-            'status' => 1 //active
+            'active' => 1 //active
           ],[
             'id' => 'edd39e38-d07b-4b78-b689-43b1b66b5452',
             'area_id' => 1,
@@ -37,7 +37,7 @@ class RkhMaintainTableSeeder extends Seeder
             'period' => 2,
             'planting_year' => '2010',
             'employees_number' => 40,
-            'status' => 1 //active
+            'active' => 1 //active
           ],
         ];
         DB::table('rkh_maintains')->insert($data);

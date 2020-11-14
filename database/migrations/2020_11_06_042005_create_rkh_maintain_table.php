@@ -23,7 +23,7 @@ class CreateRkhMaintainTable extends Migration
             $table->char('period');
             $table->char('planting_year');
             $table->integer('employees_number');
-            $table->char('status')->default(1); // 1 for opened, 2 for closed
+            $table->char('active')->default(1); // 1 for opened, 2 for closed
             $table->timestamps();
         });
     }
