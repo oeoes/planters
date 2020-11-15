@@ -19,7 +19,7 @@ class CreateForeman1Table extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->enum('role', [1, 2])->default(1);
-            $table->enum('isactive', [1, 0])->default(0);
+            // $table->char('isactive')->default(0); // 1 & 0
             $table->rememberToken();
             $table->timestamps();
         });

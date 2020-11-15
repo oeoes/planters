@@ -16,6 +16,9 @@ class CreateRkhMaintainTable extends Migration
         Schema::create('rkh_maintains', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignId('area_id')->constrained();
+            $table->foreignId('farm_id')->constrained();
+            $table->foreignId('afdelling_id')->constrained();
+            $table->foreignId('block_id')->constrained();
             $table->foreignId('foreman1_id')->constrained('foremans1');
             $table->foreignId('foreman2_id')->constrained('foremans2');
             $table->integer('coverage');

@@ -20,7 +20,7 @@ class RkhManualMaintainTableSeeder extends Seeder
                 'circle' => 100,
                 'pruning' => 100,
                 'gawangan' => 100,
-            ],            [
+            ],  [
                 'rkh_maintain_id' => 'edd39e38-d07b-4b78-b689-43b1b66b5452',
                 'circle' => 90,
                 'pruning' => 90,

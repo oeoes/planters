@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\v1\Foreman1Controller;
 use App\Http\Controllers\Api\v1\Foreman2Controller;
 use App\Http\Controllers\Api\v1\RkhmaintainController;
 use App\Http\Controllers\Api\v1\AreaController;
+use App\Models\Maintain\RkhMaintain;
 use App\Models\Maintain\RkhManualMaintain;
 
 Route::post('login', [AuthController::class, 'login']);
@@ -22,8 +23,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
         Route::group(['prefix' => 'maintain', 'middleware' => 'foreman1'], function () {
             Route::post('store', [RkhmaintainController::class, 'store']);
-            Route::post('check', [RkhmaintainController::class, 'check']);
             Route::post('close', [RkhmaintainController::class, 'close']);
+            Route::get('/foreman2/available', [RkhmaintainController::class, 'foreman2_available']);
         });
 
     });

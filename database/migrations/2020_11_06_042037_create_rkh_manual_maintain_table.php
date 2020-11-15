@@ -17,7 +17,7 @@ class CreateRkhManualMaintainTable extends Migration
             $table->id();
 
             $table->uuid('rkh_maintain_id');
-            $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains');
+            $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains')->onDelete('cascade');
 
             $table->integer('circle');
             $table->integer('pruning');
