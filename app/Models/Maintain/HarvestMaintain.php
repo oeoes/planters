@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class HarvestMaintain extends Model
 {
     use HasFactory;
+
+    protected $table = 'harvest_maintains';
+    protected $guarded = [];
 }

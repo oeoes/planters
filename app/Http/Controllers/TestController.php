@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Afdelling;
 use App\Models\Area;
+use Illuminate\Support\Facades\Storage;
 
 class TestController extends Controller
 {
@@ -17,5 +18,10 @@ class TestController extends Controller
     public function test() {
         $data = Area::all();
         return $data;
+    }
+
+    public function img() {
+        $a = Storage::disk('public')->put('/images/file.txt', 'contents');
+        return Storage::get('images/file.txt');
     }
 }

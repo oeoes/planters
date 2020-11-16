@@ -11,6 +11,7 @@ class RkhMaintain extends Model
 
     protected $guarded = [];
     protected $primaryKey = 'id';
+    protected $table = 'rkh_maintains';
 
     public $incrementing = false;
 

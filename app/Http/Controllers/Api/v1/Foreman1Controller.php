@@ -33,14 +33,16 @@ class Foreman1Controller extends Controller
             'password_confirmation' => 'required|min:8',
         ]);
         $now_password = $request->now_password;
+        // password [yg lama] saat ini yg diinput apakah sesuai dgn di tabel
+        // $h = Hash::check($now_password, Auth::guard('foreman1')->user()->password);
+        // return $h;
         if(Hash::check($now_password, Auth::guard('foreman1')->user()->password)){
             Foreman1::find($request->id)->update([ 
                 'password' => Hash::make($request->password)
             ]);
             return res(true, 200, 'Password updated successfully', Foreman1::find($request->id));
             
-        } else {
-            return res(true, 403, 'Unable to change password');
         }
+            return res(false, 403, 'Unable to change password');
     }
 }

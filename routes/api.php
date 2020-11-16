@@ -33,6 +33,11 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::post('update/name', [Foreman2Controller::class, 'update_name_foreman']);
         Route::post('update/email', [Foreman2Controller::class, 'update_email_foreman']);
         Route::post('update/password', [Foreman2Controller::class, 'update_password_foreman']);
+
+        Route::group(['prefix' => 'maintain', 'middleware' => 'foreman2'], function () {
+            Route::post('/store/harvest-spraying', [RkhmaintainController::class, 'store_harvest_spraying']);
+            Route::post('/store/manual', [RkhmaintainController::class, 'store_manual_maintain']);
+        });
     });
     
     Route::group(['prefix' => 'area', 'middleware' => 'foreman1'], function () {

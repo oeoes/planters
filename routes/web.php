@@ -52,10 +52,7 @@ Route::group(['middleware' => ['auth:assistant']], function () {
 
 });
 
-Route::get('/clear', function() {
-    return session()->flush();
-});
-
+Route::get('/clear', function() { return session()->flush();});
 Route::get('/test', [TestController::class, 'each']);
-// 
+Route::get('/img', [TestController::class, 'img']);
 

@@ -28,13 +28,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AreaTableSeeder::class,
             AssistantTableSeeder::class,
-            // RkhMaintainTableSeeder::class,
-            // RkhManualMaintainTableSeeder::class,
-            // RkhHarvestMaintainTableSeeder::class,
-            // RkhSprayingMaintainTableSeeder::class,
-            // HarvestMaintainTableSeeder::class,
-            // SprayingMaintainTableSeeder::class,
-            // ManualMaintainTableSeeder::class,
+            RkhMaintainTableSeeder::class,
+            RkhManualMaintainTableSeeder::class,
+            RkhHarvestMaintainTableSeeder::class,
+            RkhSprayingMaintainTableSeeder::class,
+            HarvestMaintainTableSeeder::class,
+            SprayingMaintainTableSeeder::class,
+            ManualMaintainTableSeeder::class,
         ]);
     }
 }

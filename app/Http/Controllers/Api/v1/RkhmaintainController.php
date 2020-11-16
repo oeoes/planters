@@ -4,17 +4,24 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Validator;
+use Ramsey\Uuid\Uuid;
+
 use App\Models\Farm;
 use App\Models\Afdelling;
 use App\Models\Block;
 use App\Models\Area;
+use App\Models\Foreman1;
+use App\Models\Foreman2;
+
 use App\Models\Maintain\RkhMaintain;
 use App\Models\Maintain\RkhHarvestMaintain;
 use App\Models\Maintain\RkhSprayingMaintain;
 use App\Models\Maintain\RkhManualMaintain;
-use Ramsey\Uuid\Uuid;
-use App\Models\Foreman1;
-use App\Models\Foreman2;
+use App\Models\Maintain\HarvestMaintain;
+use App\Models\Maintain\SprayingMaintain;
+use App\Models\Maintain\ManualMaintain;
 
 class RkhmaintainController extends Controller
 {
@@ -195,6 +202,157 @@ class RkhmaintainController extends Controller
             if ($foremans2->isEmpty()) 
                 return res(false, 404, 'Foreman2 empty');
                 return res(true, 200, 'Foreman2 listed', $foremans2);
+    }
+
+    public function store_harvest_spraying(Request $request) {
+        // return $request->All();
+        $request->validate([
+            'rkh_maintain_id' => 'required',
+            'employee_id' => 'required',
+            'harvest_amount_used' => 'required|numeric|min:1',
+            'harvest_coverage' => 'required|numeric|min:1',
+            'spraying_amount_used' => 'required|numeric|min:1',
+            'spraying_coverage' => 'required|numeric|min:1',
+            'maintain_time_start' => 'required',
+            'maintain_time_end' => 'required',
+        ]);
+
+        $check_rkh_maintain_closed = RkhMaintain::where('id', $request->rkh_maintain_id)->where('active', 0)->first();
+            if($check_rkh_maintain_closed) return res(false, 404, 'Work plan already closed');
+
+        $check_maintain_harvest_existed = HarvestMaintain::where('rkh_maintain_id', $request->rkh_maintain_id)->where('employee_id', $request->employee_id)->first();
+        $check_maintain_spraying_existed = SprayingMaintain::where('rkh_maintain_id', $request->rkh_maintain_id)->where('employee_id', $request->employee_id)->first();
+            if($check_maintain_harvest_existed && $check_maintain_spraying_existed) 
+                    return res(false, 404, 'Work plan already registered');
+
+        // Check file image for harvest_image
+        if ($request->hasFile('harvest_image')) {
+            $request->validate([ 'harvest_image' => 'image:jpeg,png,jpg|max:2048'  ]);
+            $harvest_image = $request->file('harvest_image');
+            $harvest_image_folder = 'public/maintain/harvest';
+            $harvest_image_name = Uuid::uuid4() . '.' . $harvest_image->getClientOriginalExtension();
+            $harvest_image_mime_type = $harvest_image->getClientMimeType();
+            $harvest_image_url = Storage::putFileAs($harvest_image_folder, $harvest_image, $harvest_image_name);
+        } else {
+            $harvest_image_name = null;
+            $harvest_image_mime_type = null;
+            $harvest_image_url = null;
+        }
+
+        // Check file image for harvest_image
+        if ($request->hasFile('spraying_image')) {
+            $request->validate([ 'spraying_image' => 'image:jpeg,png,jpg|max:2048'  ]);
+            $spraying_image = $request->file('spraying_image');
+            $spraying_image_folder = 'public/maintain/spraying';
+            $spraying_image_name = Uuid::uuid4() . '.' . $spraying_image->getClientOriginalExtension();
+            $spraying_image_mime_type = $spraying_image->getClientMimeType();
+            $spraying_image_url = Storage::putFileAs($spraying_image_folder, $spraying_image, $spraying_image_name);
+        } else {
+            $spraying_image_name = null;
+            $spraying_image_mime_type = null;
+            $spraying_image_url = null;
+        }
+
+        HarvestMaintain::create([
+            'rkh_maintain_id' => $request->rkh_maintain_id,
+            'employee_id' => $request->employee_id,
+            'amount_used' => $request->harvest_amount_used,
+            'coverage' => $request->harvest_coverage,
+            'maintain_time_start' => $request->maintain_time_start,
+            'maintain_time_end' => $request->maintain_time_end,
+            'image' => $harvest_image_name,
+            'lat' => $request->lat,
+            'lng' => $request->lng
+        ]);
+
+        SprayingMaintain::create([
+            'rkh_maintain_id' => $request->rkh_maintain_id,
+            'employee_id' => $request->employee_id,
+            'amount_used' => $request->spraying_amount_used,
+            'coverage' => $request->spraying_coverage,
+            'maintain_time_start' => $request->maintain_time_start,
+            'maintain_time_end' => $request->maintain_time_end,
+            'image' => $spraying_image_name,
+            'lat' => $request->lat,
+            'lng' => $request->lng
+        ]);
+
+        $data = [
+            'harvest_maintain' => [
+                'rkh_maintain_id' => $request->rkh_maintain_id,
+                'employee_id' => $request->employee_id,
+                'amount_used' => $request->harvest_amount_used,
+                'coverage' => $request->harvest_coverage,
+                'maintain_time_start' => $request->maintain_time_start,
+                'maintain_time_end' => $request->maintain_time_end,
+                'image' => [
+                    'name' => $harvest_image_name,
+                    'url'  => $harvest_image_url,
+                    'mime' => $harvest_image_mime_type
+                ],
+                'lat' => $request->lat,
+                'lng' => $request->lng
+            ],
+            'spraying_maintain' => [
+                'rkh_maintain_id' => $request->rkh_maintain_id,
+                'employee_id' => $request->employee_id,
+                'amount_used' => $request->spraying_amount_used,
+                'coverage' => $request->spraying_coverage,
+                'maintain_time_start' => $request->maintain_time_start,
+                'maintain_time_end' => $request->maintain_time_end,
+                'image' => [
+                    'name' => $spraying_image_name,
+                    'url'  => $spraying_image_url,
+                    'mime' => $spraying_image_mime_type
+                ],
+                'lat' => $request->lat,
+                'lng' => $request->lng
+            ],
+            
+        ];
+
+        return res(true, 200, 'Work plan added successfully', $data);
+
+    }
+
+    public function store_manual_maintain(Request $request) {
+        $request->validate([
+            'rkh_maintain_id'  => 'required',
+            'employee_id'      => 'required|numeric',
+            'circle'           => 'required|numeric|min:1',
+            'circle_coverage'  => 'required|numeric|min:1',
+            'pruning'          => 'required|numeric|min:1',
+            'pruning_coverage' => 'required|numeric|min:1',
+            'gawangan'         => 'required|numeric|min:1',
+            'maintain_time_start' => 'required',
+            'maintain_time_end'   => 'required',
+        ]);
+
+        $check_rkh_maintain_closed = RkhMaintain::where('id', $request->rkh_maintain_id)->where('active', 0)->first();
+            if($check_rkh_maintain_closed) return res(false, 404, 'Work plan already closed');
+
+        $check_maintain_manual_existed = ManualMaintain::where('rkh_maintain_id', $request->rkh_maintain_id)->where('employee_id', $request->employee_id)->first();
+            if($check_maintain_manual_existed) return res(false, 404, 'Work plan already registered');
+
+        try {
+            $store_manual_maintain = ManualMaintain::create([
+                'rkh_maintain_id'   => $request->rkh_maintain_id,
+                'employee_id'       => $request->employee_id,
+                'circle'            => $request->circle,
+                'circle_coverage'   => $request->circle_coverage,
+                'pruning'           => $request->pruning,
+                'pruning_coverage'  => $request->pruning_coverage,
+                'gawangan'          => $request->gawangan,
+                'maintain_time_start' => $request->maintain_time_start,
+                'maintain_time_end' => $request->maintain_time_end,
+                'lat' => $request->lat,
+                'lng' => $request->lng
+            ]);
+         } catch ( \Exception $e) {
+            return res(false, 404, 'Work plan invalid', $e->errorInfo);
+         }
+            return res(true, 200, 'Work plan added successfully', $store_manual_maintain);
+
     }
 
 }

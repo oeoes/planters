@@ -17,7 +17,7 @@ class ManualMaintainTableSeeder extends Seeder
         $data = [
             [
                 'rkh_maintain_id' => '3ede7405-5cdc-49a5-9556-9b3688e10721',
-                'employee_name' => 'Sabbat',
+                'employee_id'   => 1,
                 'circle' => 20,
                 'circle_coverage' => 20,
                 'pruning' => 15,
@@ -25,7 +25,7 @@ class ManualMaintainTableSeeder extends Seeder
                 'gawangan' => 6
             ],[
                 'rkh_maintain_id' => '3ede7405-5cdc-49a5-9556-9b3688e10721',
-                'employee_name' => 'Dander',
+                'employee_id'   => 1,
                 'circle' => 11,
                 'circle_coverage' => 6,
                 'pruning' => 20,
@@ -33,7 +33,7 @@ class ManualMaintainTableSeeder extends Seeder
                 'gawangan' => 13
             ],            [
                 'rkh_maintain_id' => 'edd39e38-d07b-4b78-b689-43b1b66b5452',
-                'employee_name' => 'Sabbat',
+                'employee_id'   => 1,
                 'circle' => 10,
                 'circle_coverage' => 30,
                 'pruning' => 6,
@@ -41,7 +41,7 @@ class ManualMaintainTableSeeder extends Seeder
                 'gawangan' => 6
             ],[
                 'rkh_maintain_id' => 'edd39e38-d07b-4b78-b689-43b1b66b5452',
-                'employee_name' => 'Dander',
+                'employee_id'   => 1,
                 'circle' => 10,
                 'circle_coverage' => 12,
                 'pruning' => 12,
