@@ -12,6 +12,7 @@ use App\Models\Farm;
 use App\Models\Afdelling;
 use App\Models\Block;
 use App\Models\Area;
+use App\Models\Employee;
 use App\Models\Foreman1;
 use App\Models\Foreman2;
 
@@ -25,6 +26,60 @@ use App\Models\Maintain\ManualMaintain;
 
 class RkhmaintainController extends Controller
 {
+    /*
+    ------------------------------------
+        THIS CODE BELOW IS FOR FOREMAN 1
+    ------------------------------------
+    */
+
+    public function foreman1_active_rkh($foreman1_id) {
+        $rkhs = RkhMaintain::where('foreman1_id', $foreman1_id)->where('active', 1)->get();
+        if ($rkhs->isEmpty()) {
+            return res(false, 404, 'There is no active daily work plan');
+        }
+        $data = [];
+        foreach ($rkhs as $value) {
+            $data [] = [
+                'id'   => $value['id'],
+                'farm' => $this->str_farm($value['farm_id']),
+                'afdelling' => $this->str_afdelling($value['afdelling_id']),
+                'block' => $this->str_block($value['block_id']),
+                'foreman1' => $this->str_foreman1($value['foreman1_id']),
+                'foreman2' => $this->str_foreman2($value['foreman2_id']),
+                'coverage' => $value['coverage'],
+                'population' => $value['population'],
+                'period'   => $value['period'],
+                'planting_year' => $value['planting_year'],
+                'employees_number' => $value['employees_number']
+            ];
+        }
+        return res(true, 200, 'Daily work plan listed', $data);
+    }
+    
+    public function foreman1_inactive_rkh($foreman1_id) {
+        $rkhs = RkhMaintain::where('foreman1_id', $foreman1_id)->where('active', 0)->get();
+        if ($rkhs->isEmpty()) {
+            return res(false, 400, 'There is no inactive daily work plan');
+        }
+        $data = [];
+        foreach ($rkhs as $value) {
+            $data [] = [
+                'id'   => $value['id'],
+                'farm' => $this->str_farm($value['farm_id']),
+                'afdelling' => $this->str_afdelling($value['afdelling_id']),
+                'block' => $this->str_block($value['block_id']),
+                'foreman1' => $this->str_foreman1($value['foreman1_id']),
+                'foreman2' => $this->str_foreman2($value['foreman2_id']),
+                'coverage' => $value['coverage'],
+                'population' => $value['population'],
+                'period'   => $value['period'],
+                'planting_year' => $value['planting_year'],
+                'employees_number' => $value['employees_number']
+            ];
+        }
+        return res(true, 200, 'Inactive daily work plan listed', $data);
+    }
+
     public function store(Request $request) {
         // return response()->json($request->all(), 200);
 
@@ -37,7 +92,8 @@ class RkhmaintainController extends Controller
             'coverage'         => 'required|numeric',
             'population'       => 'required|numeric',
             'planting_year'    => 'required|numeric',
-            'employees_number' => 'required|numeric'
+            'employees_number' => 'required|numeric',
+            'date'             => 'required',
         ]);
 
         $foreman2_exist = Foreman2::find($request->foreman2_id);
@@ -82,6 +138,7 @@ class RkhmaintainController extends Controller
             'coverage'    => $request->coverage,
             'population'  => $request->population,
             'period'      => $request->fertilizer_period,
+            'date'        => $request->date,
             'planting_year'    => $request->planting_year,
             'employees_number' => $request->employees_number,
             'active' => 1,
@@ -116,30 +173,30 @@ class RkhmaintainController extends Controller
 
                     if ($rkh_manual_maintain) {
                         // Store data
-                        $data = [
-                            'daily_work_plan' => [ 
-                                'id'          => $last_rkh_maintain->id,
-                                'area_id'     => $selected_area->id,
-                                'farm_id'     => $request->farm_id,
-                                'afdelling_id'=> $request->afdelling_id,
-                                'block_id'    => $request->block_id,
-                                'foreman1_id' => $request->foreman1_id,
-                                'foreman1_name' => $foreman1->name,
-                                'foreman2_id' => $request->foreman2_id,
-                                'foreman2_name' => $foreman2->name,
-                                'coverage'    => $request->coverage,
-                                'population'  => $request->population,
-                                'period'      => $request->fertilizer_period,
-                                'planting_year'    => $request->planting_year,
-                                'employees_number' => $request->employees_number,
-                                'active'   => 1,
-                                'harvest'  => $rkh_harvest_maintain,
-                                'spraying' => $rkh_spraying_maintain,
-                                'manual'   => $rkh_manual_maintain
-                            ],
-                        ];
+                        // $data = [
+                        //     'daily_work_plan' => [ 
+                        //         'id'          => $last_rkh_maintain->id,
+                        //         'area_id'     => $selected_area->id,
+                        //         'farm'     => $this->str_farm($request->farm_id),
+                        //         'afdelling'=> $this->str_afdelling($request->afdelling_id),
+                        //         'block'    => $this->str_block($request->block_id),
+                        //         'foreman1_id' => $request->foreman1_id,
+                        //         'foreman2_id' => $request->foreman2_id,
+                        //         'foreman1' => $foreman1->name,
+                        //         'foreman2' => $foreman2->name,
+                        //         'coverage'    => $request->coverage,
+                        //         'population'  => $request->population,
+                        //         'period'      => $request->fertilizer_period,
+                        //         'planting_year'    => $request->planting_year,
+                        //         'employees_number' => $request->employees_number,
+                        //         'active'   => 1,
+                        //         'harvest'  => $rkh_harvest_maintain,
+                        //         'spraying' => $rkh_spraying_maintain,
+                        //         'manual'   => $rkh_manual_maintain
+                        //     ],
+                        // ];
         
-                        return res(true, 200, 'Daily work plan successfully created', $data); 
+                        return res(true, 200, 'Daily work plan successfully created'); 
                     }
                 }
             }
@@ -154,46 +211,15 @@ class RkhmaintainController extends Controller
                             
         if (! $close_rkh_maintain)
             return res(false, 400, 'Daily work plan not found');
-        
-
-        $foreman1 = Foreman1::find($request->foreman1_id);
-        $foreman2 = Foreman2::find($close_rkh_maintain->foreman2_id);
-        $harvest  = RkhHarvestMaintain::where('rkh_maintain_id', $close_rkh_maintain->id)->first();
-        $spraying = RkhSprayingMaintain::where('rkh_maintain_id', $close_rkh_maintain->id)->first();
-        $manual   = RkhManualMaintain::where('rkh_maintain_id', $close_rkh_maintain->id)->first();
-        $area     = Area::find($close_rkh_maintain->area_id);
 
         // Set inactive Foreman2
+        $foreman2 = Foreman2::find($close_rkh_maintain->foreman2_id);
         $foreman2->isactive = 0;
         $foreman2->save();
 
         // Set inactive RKH Maintain
         $close_rkh_maintain->decrement('active');
-
-        $data = [
-            'daily_work_plan' => [ 
-                'id'            => $close_rkh_maintain->id,
-                'area_id'       => $area->id,
-                'farm_id'       => $area->farm_id,
-                'afdelling_id'  => $area->afdelling_id,
-                'block_id'      => $area->block_id,
-                'foreman1_id'   => $close_rkh_maintain->foreman1_id,
-                'foreman1_name' => $foreman1->name,
-                'foreman2_id'   => $close_rkh_maintain->foreman2_id,
-                'foreman2_name' => $foreman2->name,
-                'coverage'      => $close_rkh_maintain->coverage,
-                'population'    => $close_rkh_maintain->population,
-                'period'        => $harvest->fertilizer_period,
-                'planting_year'    => $close_rkh_maintain->planting_year,
-                'employees_number' => $close_rkh_maintain->employees_number,
-                'active'   => 1,
-                'harvest'  => $harvest,
-                'spraying' => $spraying,
-                'manual'   => $manual
-            ],
-        ];
-
-            return res(true, 200, 'Daily work plan successfully closed', $data);
+        return res(true, 200, 'Daily work plan successfully closed');
 
     }
 
@@ -201,7 +227,52 @@ class RkhmaintainController extends Controller
         $foremans2 = Foreman2::where('isactive', 0)->get();
             if ($foremans2->isEmpty()) 
                 return res(false, 404, 'Foreman2 empty');
-                return res(true, 200, 'Foreman2 listed', $foremans2);
+                return res(true, 200, 'Foreman2 listed');
+    }
+
+    /*
+    ------------------------------------
+        THIS CODE BELOW IS FOR FOREMAN 2
+    ------------------------------------
+    */
+
+    public function foreman2_active_rkh($foreman2_id) {
+        $rkh = RkhMaintain::where('foreman2_id', $foreman2_id)->where('active', 1)->first();
+        if (! $rkh) {
+            return res(false, 400, 'There is no active work plan');
+        } else {
+            $data = [
+                'rkh_maintain_id' => $rkh->id,
+                'farm' => $this->str_farm($rkh->farm_id),
+                'afdelling' => $this->str_afdelling($rkh->afdelling_id),
+                'block' => $this->str_block($rkh->block_id)
+            ];
+            return res(true, 200, 'Active work plan found', $data);
+        }
+    }
+
+    public function foreman2_inactive_rkh($foreman2_id) {
+        $rkhs = RkhMaintain::where('foreman2_id', $foreman2_id)->where('active', 0)->get();
+        if ($rkhs->isEmpty()) {
+            return res(false, 400, 'There is no inactive work plan');
+        }
+        $data = [];
+        foreach ($rkhs as $value) {
+            $data [] = [
+                'id'   => $value['id'],
+                'farm' => $this->str_farm($value['farm_id']),
+                'afdelling' => $this->str_afdelling($value['afdelling_id']),
+                'block' => $this->str_block($value['block_id']),
+                'foreman1' => $this->str_foreman1($value['foreman1_id']),
+                'foreman2' => $this->str_foreman2($value['foreman2_id']),
+                'coverage' => $value['coverage'],
+                'population' => $value['population'],
+                'period'   => $value['period'],
+                'planting_year' => $value['planting_year'],
+                'employees_number' => $value['employees_number']
+            ];
+        }
+        return res(true, 200, 'Inactive work plan listed', $data);
     }
 
     public function store_harvest_spraying(Request $request) {
@@ -213,6 +284,7 @@ class RkhmaintainController extends Controller
             'harvest_coverage' => 'required|numeric|min:1',
             'spraying_amount_used' => 'required|numeric|min:1',
             'spraying_coverage' => 'required|numeric|min:1',
+            'date' => 'required',
             'maintain_time_start' => 'required',
             'maintain_time_end' => 'required',
         ]);
@@ -258,6 +330,7 @@ class RkhmaintainController extends Controller
             'employee_id' => $request->employee_id,
             'amount_used' => $request->harvest_amount_used,
             'coverage' => $request->harvest_coverage,
+            'date' => $request->date,
             'maintain_time_start' => $request->maintain_time_start,
             'maintain_time_end' => $request->maintain_time_end,
             'image' => $harvest_image_name,
@@ -270,6 +343,7 @@ class RkhmaintainController extends Controller
             'employee_id' => $request->employee_id,
             'amount_used' => $request->spraying_amount_used,
             'coverage' => $request->spraying_coverage,
+            'date' => $request->date,
             'maintain_time_start' => $request->maintain_time_start,
             'maintain_time_end' => $request->maintain_time_end,
             'image' => $spraying_image_name,
@@ -277,41 +351,43 @@ class RkhmaintainController extends Controller
             'lng' => $request->lng
         ]);
 
-        $data = [
-            'harvest_maintain' => [
-                'rkh_maintain_id' => $request->rkh_maintain_id,
-                'employee_id' => $request->employee_id,
-                'amount_used' => $request->harvest_amount_used,
-                'coverage' => $request->harvest_coverage,
-                'maintain_time_start' => $request->maintain_time_start,
-                'maintain_time_end' => $request->maintain_time_end,
-                'image' => [
-                    'name' => $harvest_image_name,
-                    'url'  => $harvest_image_url,
-                    'mime' => $harvest_image_mime_type
-                ],
-                'lat' => $request->lat,
-                'lng' => $request->lng
-            ],
-            'spraying_maintain' => [
-                'rkh_maintain_id' => $request->rkh_maintain_id,
-                'employee_id' => $request->employee_id,
-                'amount_used' => $request->spraying_amount_used,
-                'coverage' => $request->spraying_coverage,
-                'maintain_time_start' => $request->maintain_time_start,
-                'maintain_time_end' => $request->maintain_time_end,
-                'image' => [
-                    'name' => $spraying_image_name,
-                    'url'  => $spraying_image_url,
-                    'mime' => $spraying_image_mime_type
-                ],
-                'lat' => $request->lat,
-                'lng' => $request->lng
-            ],
+        // $data = [
+        //     'harvest_maintain' => [
+        //         'rkh_maintain_id' => $request->rkh_maintain_id,
+        //         'employee_name' => $this->str_employee($request->employee_id),
+        //         'amount_used' => $request->harvest_amount_used,
+        //         'coverage' => $request->harvest_coverage,
+        //         'date' => $request->date,
+        //         'maintain_time_start' => $request->maintain_time_start,
+        //         'maintain_time_end' => $request->maintain_time_end,
+        //         'image' => [
+        //             'name' => $harvest_image_name,
+        //             'url'  => $harvest_image_url,
+        //             'mime' => $harvest_image_mime_type
+        //         ],
+        //         'lat' => $request->lat,
+        //         'lng' => $request->lng
+        //     ],
+        //     'spraying_maintain' => [
+        //         'rkh_maintain_id' => $request->rkh_maintain_id,
+        //         'employee_name' => $this->str_employee($request->employee_id),
+        //         'amount_used' => $request->spraying_amount_used,
+        //         'coverage' => $request->spraying_coverage,
+        //         'date' => $request->date,
+        //         'maintain_time_start' => $request->maintain_time_start,
+        //         'maintain_time_end' => $request->maintain_time_end,
+        //         'image' => [
+        //             'name' => $spraying_image_name,
+        //             'url'  => $spraying_image_url,
+        //             'mime' => $spraying_image_mime_type
+        //         ],
+        //         'lat' => $request->lat,
+        //         'lng' => $request->lng
+        //     ],
             
-        ];
+        // ];
 
-        return res(true, 200, 'Work plan added successfully', $data);
+        return res(true, 200, 'Work plan added successfully');
 
     }
 
@@ -324,6 +400,7 @@ class RkhmaintainController extends Controller
             'pruning'          => 'required|numeric|min:1',
             'pruning_coverage' => 'required|numeric|min:1',
             'gawangan'         => 'required|numeric|min:1',
+            'date'             => 'required',
             'maintain_time_start' => 'required',
             'maintain_time_end'   => 'required',
         ]);
@@ -335,14 +412,15 @@ class RkhmaintainController extends Controller
             if($check_maintain_manual_existed) return res(false, 404, 'Work plan already registered');
 
         try {
-            $store_manual_maintain = ManualMaintain::create([
+            ManualMaintain::create([
                 'rkh_maintain_id'   => $request->rkh_maintain_id,
-                'employee_id'       => $request->employee_id,
+                'employee_id' => $request->employee_id,
                 'circle'            => $request->circle,
                 'circle_coverage'   => $request->circle_coverage,
                 'pruning'           => $request->pruning,
                 'pruning_coverage'  => $request->pruning_coverage,
                 'gawangan'          => $request->gawangan,
+                'date' => $request->date,
                 'maintain_time_start' => $request->maintain_time_start,
                 'maintain_time_end' => $request->maintain_time_end,
                 'lat' => $request->lat,
@@ -351,8 +429,44 @@ class RkhmaintainController extends Controller
          } catch ( \Exception $e) {
             return res(false, 404, 'Work plan invalid', $e->errorInfo);
          }
-            return res(true, 200, 'Work plan added successfully', $store_manual_maintain);
+            return res(true, 200, 'Work plan added successfully');
 
+    }
+
+    /*
+    ------------------------------------
+        THIS CODE BELOW IS FOR SUPPORTING FUNCTION
+    ------------------------------------
+    */
+
+    private function str_farm($farm_id) {
+        $farm = Farm::find($farm_id);
+        return $farm->name;
+    }
+
+    private function str_afdelling($afdelling_id) {
+        $afdelling = Afdelling::find($afdelling_id);
+        return $afdelling->name;
+    }
+
+    private function str_block($block_id) {
+        $block = Block::find($block_id);
+        return $block->name;
+    }
+
+    private function str_employee($employee_id) {
+        $employee = Employee::find($employee_id);
+        return $employee->name;
+    }
+
+    private function str_foreman1($foreman1_id) {
+        $foreman1 = Foreman1::find($foreman1_id);
+        return $foreman1->name;
+    }
+
+    private function str_foreman2($foreman2_id) {
+        $foreman2 = Foreman2::find($foreman2_id);
+        return $foreman2->name;
     }
 
 }

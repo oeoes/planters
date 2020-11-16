@@ -18,21 +18,25 @@ class SprayingMaintainTableSeeder extends Seeder
             [
                 'rkh_maintain_id' => '3ede7405-5cdc-49a5-9556-9b3688e10721',
                 'employee_id'   => 1,
+                'date' => date('Y-m-d'),
                 'amount_used'     => 12,
                 'coverage'        => 10,
             ],[
                 'rkh_maintain_id' => '3ede7405-5cdc-49a5-9556-9b3688e10721',
                 'employee_id'   => 1,
+                'date' => date('Y-m-d'),
                 'amount_used'     => 35,
                 'coverage'        => 6,
             ],            [
                 'rkh_maintain_id' => 'edd39e38-d07b-4b78-b689-43b1b66b5452',
                 'employee_id'   => 1,
+                'date' => date('Y-m-d'),
                 'amount_used'     => 22,
                 'coverage'        => 12,
             ],[
                 'rkh_maintain_id' => 'edd39e38-d07b-4b78-b689-43b1b66b5452',
                 'employee_id'   => 1,
+                'date' => date('Y-m-d'),
                 'amount_used'     => 20,
                 'coverage'        => 15,
             ]

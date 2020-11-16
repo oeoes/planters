@@ -15,16 +15,15 @@ class CreateManualMaintainTable extends Migration
     {
         Schema::create('manual_maintains', function (Blueprint $table) {
             $table->id();
-
             $table->uuid('rkh_maintain_id');
-            $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains');
-
+            $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains')->onDelete('cascade');;
             $table->foreignId('employee_id')->constrained();
             $table->integer('circle');
-            $table->integer('circle_coverage');
+            $table->decimal('circle_coverage', 8, 2);
             $table->integer('pruning');
-            $table->integer('pruning_coverage');
+            $table->decimal('pruning_coverage', 8, 2);
             $table->integer('gawangan');
+            $table->date('date');
             $table->time('maintain_time_start')->nullable();
             $table->time('maintain_time_end')->nullable();
             $table->decimal('lat', 10, 8)->nullable();

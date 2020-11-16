@@ -24,7 +24,10 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::group(['prefix' => 'maintain', 'middleware' => 'foreman1'], function () {
             Route::post('store', [RkhmaintainController::class, 'store']);
             Route::post('close', [RkhmaintainController::class, 'close']);
-            Route::get('/foreman2/available', [RkhmaintainController::class, 'foreman2_available']);
+            Route::get('{foreman1_id}/active', [RkhmaintainController::class, 'foreman1_active_rkh']);
+            Route::get('{foreman1_id}/inactive', [RkhmaintainController::class, 'foreman1_inactive_rkh']);
+
+            Route::get('foreman2/available', [RkhmaintainController::class, 'foreman2_available']);
         });
 
     });
@@ -35,8 +38,10 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::post('update/password', [Foreman2Controller::class, 'update_password_foreman']);
 
         Route::group(['prefix' => 'maintain', 'middleware' => 'foreman2'], function () {
-            Route::post('/store/harvest-spraying', [RkhmaintainController::class, 'store_harvest_spraying']);
-            Route::post('/store/manual', [RkhmaintainController::class, 'store_manual_maintain']);
+            Route::post('store/harvest-spraying', [RkhmaintainController::class, 'store_harvest_spraying']);
+            Route::post('store/manual', [RkhmaintainController::class, 'store_manual_maintain']);
+            Route::get('{foreman2_id}/active', [RkhmaintainController::class, 'foreman2_active_rkh']);
+            Route::get('{foreman2_id}/inactive', [RkhmaintainController::class, 'foreman2_inactive_rkh']);
         });
     });
     

@@ -27,6 +27,7 @@ class RkhMaintainTableSeeder extends Seeder
             'coverage'    => 1000,
             'population'  => 100,
             'period' => 1,
+            'date' => date('Y-m-d'),
             'planting_year'    => '2010',
             'employees_number' => 20,
             'active' => 1 //active
@@ -41,6 +42,7 @@ class RkhMaintainTableSeeder extends Seeder
             'coverage'    => 2000,
             'population'  => 200,
             'period'      => 1,
+            'date' => date('Y-m-d'),
             'planting_year'    => '2010',
             'employees_number' => 40,
             'active' => 1 //active
