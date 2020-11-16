@@ -35,6 +35,8 @@ class DatabaseSeeder extends Seeder
             HarvestMaintainTableSeeder::class,
             SprayingMaintainTableSeeder::class,
             ManualMaintainTableSeeder::class,
+            Foreman1TableSeeder::class,
+            Foreman2TableSeeder::class
         ]);
     }
 }
