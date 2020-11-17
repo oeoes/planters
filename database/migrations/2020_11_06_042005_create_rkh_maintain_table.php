@@ -21,7 +21,7 @@ class CreateRkhMaintainTable extends Migration
             $table->foreignId('block_id')->constrained();
             $table->foreignId('foreman1_id')->constrained('foremans1');
             $table->foreignId('foreman2_id')->constrained('foremans2');
-            $table->decimal('coverage', 8, 2);
+            $table->float('coverage', 8, 2);
             $table->integer('population');
             $table->integer('period');
             $table->date('date');

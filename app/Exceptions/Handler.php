@@ -5,6 +5,13 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\JWTException;
+
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class Handler extends ExceptionHandler
 {
@@ -25,74 +32,22 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($request->wantsJson()) {   //add Accept: application/json in request
+            try {
+                JWTAuth::parseToken()->authenticate();
+            } catch (Throwable $e) {
+                if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
+                    return res(false, 400, 'Token invalid');
+                }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
+                    return res(false, 400, 'Token expired');
+                }else if($e instanceof \Tymon\JWTAuth\Exceptions\TokenBlacklistedException) {
+                    return res(false, 400, 'Token blacklisted');
+                } else {
+                    return res(false, 400, 'Token not found');
+                }
+            }
+
             return res(false, 404, $exception->getMessage());
-            // return $this->handleApiException($request, $exception);
         }
-        // For web
-        if (! $request->wantsJson()) {
-            return redirect('/login');
-        }
-    
-    }
-
-    private function handleApiException($request, Throwable $exception)
-    {
-        $exception = $this->prepareException($exception);
-
-        if ($exception instanceof HttpResponseException) {
-            $exception = $exception->getResponse();
-        }
-
-        if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
-            $exception = $this->unauthenticated($request, $exception);
-        }
-
-        if ($exception instanceof \Illuminate\Validation\ValidationException) {
-            $exception = $this->convertValidationExceptionToResponse($exception, $request);
-        }
-
-        return $this->customApiResponse($exception);
-    }
-
-    private function customApiResponse($exception)
-    {
-        if (method_exists($exception, 'getStatusCode')) {
-            $statusCode = $exception->getStatusCode();
-        } else {
-            $statusCode = 500;
-        }
-
-        $response = [];
-
-        switch ($statusCode) {
-            case 401:
-                $response['message'] = 'Unauthorized';
-                break;
-            case 403:
-                $response['message'] = 'Forbidden';
-                break;
-            case 404:
-                $response['message'] = 'Not Found';
-                break;
-            case 405:
-                $response['message'] = 'Method Not Allowed';
-                break;
-            case 422:
-                $response['message'] = $exception->original['message'];
-                $response['errors'] = $exception->original['errors'];
-                break;
-            default:
-                $response['message'] = ($statusCode == 500) ? 'Whoops, looks like something went wrong' : $exception->getMessage();
-                break;
-        }
-
-        if (config('app.debug')) {
-            $response['trace'] = $exception->getTrace();
-            $response['code'] = $exception->getCode();
-        }
-
-        $response['status'] = $statusCode;
-
-        return response()->json($response, $statusCode);
+        if (! $request->wantsJson()) return redirect('/login');
     }
 }

@@ -21,7 +21,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::post('update/email', [Foreman1Controller::class, 'update_email_foreman']);
         Route::post('update/password', [Foreman1Controller::class, 'update_password_foreman']);
 
-        Route::group(['prefix' => 'maintain', 'middleware' => 'foreman1'], function () {
+        Route::group(['prefix' => 'maintain'], function () {
             Route::post('store', [RkhmaintainController::class, 'store']);
             Route::post('close', [RkhmaintainController::class, 'close']);
             Route::get('{foreman1_id}/active', [RkhmaintainController::class, 'foreman1_active_rkh']);
@@ -42,6 +42,9 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
             Route::post('store/manual', [RkhmaintainController::class, 'store_manual_maintain']);
             Route::get('{foreman2_id}/active', [RkhmaintainController::class, 'foreman2_active_rkh']);
             Route::get('{foreman2_id}/inactive', [RkhmaintainController::class, 'foreman2_inactive_rkh']);
+
+            // List 
+            Route::get('{foreman2_id}/active/{rkh_maintain_id}/list', [RkhmaintainController::class, 'foreman2_active_rkh_list']);
         });
     });
     
@@ -53,4 +56,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
 });
 
+Route::get('fm1', [TestController::class, 'fm1']);
+Route::get('fm2', [TestController::class, 'fm2']);
 
