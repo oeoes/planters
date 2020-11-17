@@ -365,6 +365,11 @@ class RkhmaintainController extends Controller
 
     }
 
+    public function employees () {
+        $employees = Employee::all();
+        return res(true, 200, 'Employees listed', $employees);
+    }
+
     /*
     ------------------------------------
         THIS CODE BELOW IS FOR SUPPORTING FUNCTION

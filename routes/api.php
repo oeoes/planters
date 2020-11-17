@@ -44,7 +44,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
             Route::get('{foreman2_id}/active/{rkh_maintain_id}/list', [RkhmaintainController::class, 'foreman2_active_rkh_list']);
 
             // List 
-            Route::get('{foreman2_id}/active/{rkh_maintain_id}/list', [RkhmaintainController::class, 'foreman2_active_rkh_list']);
+            Route::get('employees', [RkhmaintainController::class, 'employees']);
         });
     });
     

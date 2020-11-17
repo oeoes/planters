@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePalmHarvestingTable extends Migration
+class CreateFruitlistTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreatePalmHarvestingTable extends Migration
      */
     public function up()
     {
-        Schema::create('palms', function (Blueprint $table) {
+        Schema::create('fruit_lists', function (Blueprint $table) {
             $table->id();
-            $table->uuid('rkh_maintain_id');
-            $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains')->onDelete('cascade');
-            $table->foreignId('employee_id')->constrained();
-            $table->date('date');
-            
+            $table->
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ class CreatePalmHarvestingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('palms');
+        Schema::dropIfExists('fruit_lists');
     }
 }
