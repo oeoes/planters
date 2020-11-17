@@ -20,9 +20,8 @@ use App\Models\Maintain\RkhMaintain;
 use App\Models\Maintain\RkhHarvestMaintain;
 use App\Models\Maintain\RkhSprayingMaintain;
 use App\Models\Maintain\RkhManualMaintain;
-use App\Models\Maintain\HarvestMaintain;
-use App\Models\Maintain\SprayingMaintain;
 use App\Models\Maintain\ManualMaintain;
+use App\Models\Maintain\HarvestSpraying;
 
 class RkhmaintainController extends Controller
 {
@@ -38,13 +37,7 @@ class RkhmaintainController extends Controller
             return res(false, 404, 'There is no active daily work plan');
         }
         $data = [];
-        $harvest = [];
-        $spraying = [];
-        $manual = [];
         foreach ($rkhs as $value) {
-            $selected_harvest = RkhHarvestMaintain::where('rkh_maintain_id', $value['id'])->first();
-            $selected_spraying = RkhSprayingMaintain::where('rkh_maintain_id', $value['id'])->first();
-            $selected_manual = RkhManualMaintain::where('rkh_maintain_id', $value['id'])->first();
             $data [] = [
                 'id'   => $value['id'],
                 'farm' => $this->str_farm($value['farm_id']),
@@ -57,9 +50,20 @@ class RkhmaintainController extends Controller
                 'period'   => $value['period'],
                 'planting_year' => $value['planting_year'],
                 'employees_number' => $value['employees_number'],
-                'harvest' => $selected_harvest,
-                'spraying' => $selected_spraying,
-                'manual' => $selected_manual,
+                'harvest' => [
+                    'type' => $value['fertilizer_type'],
+                    'amount' => $value['fertilizer_amount'],
+                    'period' => $value['fertilizer_period']
+                ],
+                'spraying' => [
+                    'type' => $value['spraying_type'],
+                    'amount' => $value['spraying_amount']
+                ],
+                'manual' => [
+                    'circle' => $value['manual_circle'],
+                    'pruning' => $value['manual_pruning'],
+                    'gawangan' => $value['manual_gawangan']
+                ],
             ];
         }
         return res(true, 200, 'Daily work plan listed', $data);
@@ -83,7 +87,21 @@ class RkhmaintainController extends Controller
                 'population' => $value['population'],
                 'period'   => $value['period'],
                 'planting_year' => $value['planting_year'],
-                'employees_number' => $value['employees_number']
+                'employees_number' => $value['employees_number'],
+                'harvest' => [
+                    'type' => $value['fertilizer_type'],
+                    'amount' => $value['fertilizer_amount'],
+                    'period' => $value['fertilizer_period']
+                ],
+                'spraying' => [
+                    'type' => $value['spraying_type'],
+                    'amount' => $value['spraying_amount']
+                ],
+                'manual' => [
+                    'circle' => $value['manual_circle'],
+                    'pruning' => $value['manual_pruning'],
+                    'gawangan' => $value['manual_gawangan']
+                ],
             ];
         }
         return res(true, 200, 'Inactive daily work plan listed', $data);
@@ -102,14 +120,21 @@ class RkhmaintainController extends Controller
             'planting_year'    => 'required|numeric',
             'employees_number' => 'required|numeric',
             'date'             => 'required',
-        ]);
 
-        // return response()->json($request->all());
-        // 1. generate rkh mainain
-        // 2. generate harvest
-        // 3. generate spray
-        // 4. generate manual
-        // 5. set active foreman 2
+            // Fertilizer mode
+            'fertilizer_type'   => 'required',
+            'fertilizer_amount' => 'required|numeric',
+            'fertilizer_period' => 'required|numeric',
+
+            // Spraying mode
+            'spraying_type'   => 'required',
+            'spraying_amount' => 'required|numeric',
+
+            // Manual mode
+            'manual_circle'   => 'required|numeric',
+            'manual_pruning'  => 'required|numeric',
+            'manual_gawangan' => 'required|numeric',
+        ]);
 
         $foreman2_exist = Foreman2::find($request->foreman2_id);
         if ($foreman2_exist->isactive == 1) 
@@ -123,11 +148,11 @@ class RkhmaintainController extends Controller
         if (! $selected_area) 
             return res(false, 404, 'Invalid selected farm, afdelling, or block.');
 
-        $foreman1 = Foreman1::find($request->foreman1_id);
         $foreman2 = Foreman2::find($request->foreman2_id);
         $foreman2->isactive = 1;
         $foreman2->save();
-        $rkh_maintain = RkhMaintain::create([
+        
+        RkhMaintain::create([
             'id'          => Uuid::uuid4(),
             'area_id'     => $selected_area->id,
             'farm_id'     => $request->farm_id,
@@ -142,40 +167,24 @@ class RkhmaintainController extends Controller
             'planting_year'    => $request->planting_year,
             'employees_number' => $request->employees_number,
             'active' => 1,
+
+            // Fertilizer mode
+            'fertilizer_type' => $request->fertilizer_type,
+            'fertilizer_amount' => $request->fertilizer_amount,
+            'fertilizer_period' => $request->fertilizer_period,
+
+            // Spraying mode
+            'spraying_type'   => $request->spraying_type,
+            'spraying_amount' => $request->spraying_amount,
+
+            // Manual mode
+            'manual_circle' => $request->manual_circle,
+            'manual_pruning' => $request->manual_pruning,
+            'manual_gawangan' => $request->manual_gawangan
         ]);
         
-        if ($rkh_maintain) {
-            // Generate harvest
-            $last_rkh_maintain = RkhMaintain::where('foreman1_id', $request->foreman1_id)->where('active', 1)->latest()->first();
-            $rkh_harvest_maintain = RkhHarvestMaintain::create([
-                'rkh_maintain_id' => $last_rkh_maintain->id,
-                'fertilizer_type' => $request->fertilizer_type,
-                'fertilizer_amount' => $request->fertilizer_amount,
-                'fertilizer_period' => $request->fertilizer_period
-            ]);
-            
-            if ($rkh_harvest_maintain) {
-                // Generate spraying
-                $rkh_spraying_maintain = RkhSprayingMaintain::create([
-                    'rkh_maintain_id' => $last_rkh_maintain->id,
-                    'spraying_type'   => $request->spraying_type,
-                    'spraying_amount' => $request->spraying_amount
-                ]);
+        return res(true, 200, 'Daily work plan successfully created'); 
 
-                if ($rkh_spraying_maintain) {
-                    // Generate manual 
-                    $rkh_manual_maintain = RkhManualMaintain::create([
-                        'rkh_maintain_id' => $last_rkh_maintain->id,
-                        'circle' => $request->manual_circle,
-                        'pruning' => $request->manual_pruning,
-                        'gawangan' => $request->manual_gawangan
-                    ]);
-
-                    if ($rkh_manual_maintain)
-                        return res(true, 200, 'Daily work plan successfully created'); 
-                }
-            }
-        }
     }
 
     public function close(Request $request) {
@@ -194,15 +203,16 @@ class RkhmaintainController extends Controller
 
         // Set inactive RKH Maintain
         $close_rkh_maintain->decrement('active');
-        return res(true, 200, 'Daily work plan successfully closed');
+            return res(true, 200, 'Daily work plan successfully closed');
 
     }
 
     public function foreman2_available() {
         $foremans2 = Foreman2::where('isactive', 0)->get();
-            if ($foremans2->isEmpty()) 
+            if ($foremans2->isEmpty()) {
                 return res(false, 404, 'Foreman2 empty');
-                return res(true, 200, 'Foreman2 listed');
+            }
+                return res(true, 200, 'Foreman2 listed', $foremans2);
     }
 
     /*
@@ -226,28 +236,15 @@ class RkhmaintainController extends Controller
         }
     }
 
-    public function foreman2_inactive_rkh($foreman2_id) {
-        $rkhs = RkhMaintain::where('foreman2_id', $foreman2_id)->where('active', 0)->get();
-        if ($rkhs->isEmpty()) {
-            return res(false, 404, 'There is no inactive work plan');
-        }
-        $data = [];
-        foreach ($rkhs as $value) {
-            $data [] = [
-                'id'   => $value['id'],
-                'farm' => $this->str_farm($value['farm_id']),
-                'afdelling' => $this->str_afdelling($value['afdelling_id']),
-                'block' => $this->str_block($value['block_id']),
-                'foreman1' => $this->str_foreman1($value['foreman1_id']),
-                'foreman2' => $this->str_foreman2($value['foreman2_id']),
-                'coverage' => $value['coverage'],
-                'population' => $value['population'],
-                'period'   => $value['period'],
-                'planting_year' => $value['planting_year'],
-                'employees_number' => $value['employees_number']
-            ];
-        }
-        return res(true, 200, 'Inactive work plan listed', $data);
+    public function foreman2_active_rkh_list($foreman2_id, $rkh_maintain_id) {
+        // return response()->json([$foreman2_id, $rkh_maintain_id], 200);   
+        $valid_rkh = RkhMaintain::where('id', $rkh_maintain_id)->where('foreman2_id', $foreman2_id)->first();
+        if (! $valid_rkh) 
+            return res(false, 404, 'Daily work plan invalid');
+
+        $a = HarvestSpraying::where('rkh_maintain_id', $rkh_maintain_id);
+        $b = ManualMaintain::where('rkh_maintain_id', $rkh_maintain_id)->union($a)->get();
+        
     }
 
     public function store_harvest_spraying(Request $request) {
@@ -255,22 +252,23 @@ class RkhmaintainController extends Controller
         $request->validate([
             'rkh_maintain_id' => 'required',
             'employee_id' => 'required',
-            'harvest_amount_used' => 'required|numeric|min:1',
-            'harvest_coverage' => 'required|numeric|min:1',
-            'spraying_amount_used' => 'required|numeric|min:1',
-            'spraying_coverage' => 'required|numeric|min:1',
             'date' => 'required',
+            'harvest_amount'    => 'required|numeric',
+            'harvest_coverage'  => 'required|numeric',
+            'spraying_amount'   => 'required|numeric',
+            'spraying_coverage' => 'required|numeric',
             'maintain_time_start' => 'required',
             'maintain_time_end' => 'required',
         ]);
 
         $check_rkh_maintain_closed = RkhMaintain::where('id', $request->rkh_maintain_id)->where('active', 0)->first();
-            if($check_rkh_maintain_closed) return res(false, 404, 'Work plan already closed');
+            if($check_rkh_maintain_closed) 
+                return res(false, 404, 'Work plan already closed');
 
-        $check_maintain_harvest_existed = HarvestMaintain::where('rkh_maintain_id', $request->rkh_maintain_id)->where('employee_id', $request->employee_id)->first();
-        $check_maintain_spraying_existed = SprayingMaintain::where('rkh_maintain_id', $request->rkh_maintain_id)->where('employee_id', $request->employee_id)->first();
-            if($check_maintain_harvest_existed && $check_maintain_spraying_existed) 
-                    return res(false, 404, 'Work plan already registered');
+        $check_harvest_spraying_existed = HarvestSpraying::where('rkh_maintain_id', $request->rkh_maintain_id)->where('employee_id', $request->employee_id)->first();
+        $check_manual_maintain_existed  = ManualMaintain::where('rkh_maintain_id', $request->rkh_maintain_id)->where('employee_id', $request->employee_id)->first();
+            if($check_harvest_spraying_existed || $check_manual_maintain_existed) 
+                return res(false, 404, 'Work plan already registered');
 
         // Check file image for harvest_image
         if ($request->hasFile('harvest_image')) {
@@ -300,67 +298,26 @@ class RkhmaintainController extends Controller
             $spraying_image_url = null;
         }
 
-        HarvestMaintain::create([
+        HarvestSpraying::create([
             'rkh_maintain_id' => $request->rkh_maintain_id,
             'employee_id' => $request->employee_id,
-            'amount_used' => $request->harvest_amount_used,
-            'coverage' => $request->harvest_coverage,
             'date' => $request->date,
-            'maintain_time_start' => $request->maintain_time_start,
-            'maintain_time_end' => $request->maintain_time_end,
-            'image' => $harvest_image_name,
-            'lat' => $request->lat,
-            'lng' => $request->lng
-        ]);
 
-        SprayingMaintain::create([
-            'rkh_maintain_id' => $request->rkh_maintain_id,
-            'employee_id' => $request->employee_id,
-            'amount_used' => $request->spraying_amount_used,
-            'coverage' => $request->spraying_coverage,
-            'date' => $request->date,
+            'harvest_amount' => $request->harvest_amount,
+            'harvest_coverage' => $request->harvest_coverage,
+            'harvest_image' => $harvest_image_name,
+
+            'spraying_amount' => $request->spraying_amount,
+            'spraying_coverage' => $request->spraying_coverage,
+            'spraying_image' => $spraying_image_name,
+
             'maintain_time_start' => $request->maintain_time_start,
             'maintain_time_end' => $request->maintain_time_end,
-            'image' => $spraying_image_name,
             'lat' => $request->lat,
             'lng' => $request->lng
         ]);
 
         // $data = [
-        //     'harvest_maintain' => [
-        //         'rkh_maintain_id' => $request->rkh_maintain_id,
-        //         'employee_name' => $this->str_employee($request->employee_id),
-        //         'amount_used' => $request->harvest_amount_used,
-        //         'coverage' => $request->harvest_coverage,
-        //         'date' => $request->date,
-        //         'maintain_time_start' => $request->maintain_time_start,
-        //         'maintain_time_end' => $request->maintain_time_end,
-        //         'image' => [
-        //             'name' => $harvest_image_name,
-        //             'url'  => $harvest_image_url,
-        //             'mime' => $harvest_image_mime_type
-        //         ],
-        //         'lat' => $request->lat,
-        //         'lng' => $request->lng
-        //     ],
-        //     'spraying_maintain' => [
-        //         'rkh_maintain_id' => $request->rkh_maintain_id,
-        //         'employee_name' => $this->str_employee($request->employee_id),
-        //         'amount_used' => $request->spraying_amount_used,
-        //         'coverage' => $request->spraying_coverage,
-        //         'date' => $request->date,
-        //         'maintain_time_start' => $request->maintain_time_start,
-        //         'maintain_time_end' => $request->maintain_time_end,
-        //         'image' => [
-        //             'name' => $spraying_image_name,
-        //             'url'  => $spraying_image_url,
-        //             'mime' => $spraying_image_mime_type
-        //         ],
-        //         'lat' => $request->lat,
-        //         'lng' => $request->lng
-        //     ],
-            
-        // ];
 
         return res(true, 200, 'Work plan added successfully');
 
@@ -402,14 +359,10 @@ class RkhmaintainController extends Controller
                 'lng' => $request->lng
             ]);
          } catch ( \Exception $e) {
-            return res(false, 404, 'Work plan invalid', $e->errorInfo);
+            return res(false, 404, 'Work plan invalid');
          }
             return res(true, 200, 'Work plan added successfully');
 
-    }
-
-    public function foreman2_active_rkh_list($foreman2_id, $rkh_maintain_id) {
-        
     }
 
     /*

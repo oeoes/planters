@@ -41,7 +41,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
             Route::post('store/harvest-spraying', [RkhmaintainController::class, 'store_harvest_spraying']);
             Route::post('store/manual', [RkhmaintainController::class, 'store_manual_maintain']);
             Route::get('{foreman2_id}/active', [RkhmaintainController::class, 'foreman2_active_rkh']);
-            Route::get('{foreman2_id}/inactive', [RkhmaintainController::class, 'foreman2_inactive_rkh']);
+            Route::get('{foreman2_id}/active/{rkh_maintain_id}/list', [RkhmaintainController::class, 'foreman2_active_rkh_list']);
 
             // List 
             Route::get('{foreman2_id}/active/{rkh_maintain_id}/list', [RkhmaintainController::class, 'foreman2_active_rkh_list']);
@@ -58,4 +58,5 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
 Route::get('fm1', [TestController::class, 'fm1']);
 Route::get('fm2', [TestController::class, 'fm2']);
+Route::get('sql', [TestController::class, 'sql']);
 

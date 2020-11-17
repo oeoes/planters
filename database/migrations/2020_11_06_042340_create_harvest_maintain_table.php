@@ -18,9 +18,9 @@ class CreateHarvestMaintainTable extends Migration
             $table->uuid('rkh_maintain_id');
             $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains')->onDelete('cascade');;
             $table->foreignId('employee_id')->constrained();
-            $table->integer('amount_used');
-            $table->float('coverage', 8, 2);
-            $table->string('image')->nullable();
+            $table->integer('harvest_amount_used');
+            $table->float('harvest_coverage', 8, 2);
+            $table->string('harvest_image')->nullable();
             $table->date('date');
             $table->time('maintain_time_start')->nullable();
             $table->time('maintain_time_end')->nullable();
