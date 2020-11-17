@@ -21,10 +21,12 @@ class CreateRkhHarvestingTable extends Migration
             $table->foreignId('block_id')->constrained();
             $table->foreignId('foreman1_id')->constrained('foremans1');
             $table->foreignId('foreman2_id')->constrained('foremans2');
-            $table->integer('coverage');
+            $table->float('coverage', 8, 2);
             $table->integer('population');
-            $table->integer('akp');
-            $table->integer('bjr');
+            $table->date('date');
+            $table->char('planting_year');
+            $table->float('akp', 8, 2);
+            $table->float('bjr', 8, 2);
             $table->integer('employees_number');
             $table->char('active')->default(1); 
             // 1 for opened, 0 for closed

@@ -13,7 +13,7 @@ class CreatePalmHarvestingTable extends Migration
      */
     public function up()
     {
-        Schema::create('palms', function (Blueprint $table) {
+        Schema::create('palms_harvesting', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ class CreatePalmHarvestingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('palms');
+        Schema::dropIfExists('palms_harvesting');
     }
 }
