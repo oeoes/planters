@@ -16,12 +16,12 @@ class CreateRkhManualMaintainTable extends Migration
         Schema::create('rkh_manual_maintains', function (Blueprint $table) {
             $table->id();
 
-            $table->uuid('rkh_maintain_id');
-            $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains')->onDelete('cascade');
+            // $table->uuid('rkh_maintain_id');
+            // $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains')->onDelete('cascade');
 
-            $table->integer('circle');
-            $table->integer('pruning');
-            $table->integer('gawangan');
+            // $table->integer('circle');
+            // $table->integer('pruning');
+            // $table->integer('gawangan');
             $table->timestamps();
         });
     }

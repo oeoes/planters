@@ -8,8 +8,8 @@ use App\Http\Controllers\Api\v1\Foreman1Controller;
 use App\Http\Controllers\Api\v1\Foreman2Controller;
 use App\Http\Controllers\Api\v1\RkhmaintainController;
 use App\Http\Controllers\Api\v1\AreaController;
-use App\Models\Maintain\RkhMaintain;
-use App\Models\Maintain\RkhManualMaintain;
+use App\Http\Controllers\Api\v1\RkhharvestingController;
+
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
@@ -26,10 +26,13 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
             Route::post('close', [RkhmaintainController::class, 'close']);
             Route::get('{foreman1_id}/active', [RkhmaintainController::class, 'foreman1_active_rkh']);
             Route::get('{foreman1_id}/inactive', [RkhmaintainController::class, 'foreman1_inactive_rkh']);
-
             Route::get('foreman2/available', [RkhmaintainController::class, 'foreman2_available']);
         });
 
+        Route::group(['prefix' => 'harvesting'], function () {
+            Route::post('store', [RkhharvestingController::class, 'store']);
+            Route::get('foreman2/available', [RkhharvestingController::class, 'foreman2_available']);
+        });
     });
 
     Route::group(['prefix' => 'foreman2', 'middleware' => 'foreman2'], function () {

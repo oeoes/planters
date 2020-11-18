@@ -15,11 +15,11 @@ class CreateRkhHarvestMaintainTable extends Migration
     {
         Schema::create('rkh_harvest_maintains', function (Blueprint $table) {
             $table->id();
-            $table->uuid('rkh_maintain_id');
-            $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains')->onDelete('cascade');;
-            $table->string('fertilizer_type');
-            $table->integer('fertilizer_amount');
-            $table->enum('fertilizer_period', [1, 2]);
+            // $table->uuid('rkh_maintain_id');
+            // $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains')->onDelete('cascade');;
+            // $table->string('fertilizer_type');
+            // $table->integer('fertilizer_amount');
+            // $table->enum('fertilizer_period', [1, 2]);
             $table->timestamps();
         });
     }

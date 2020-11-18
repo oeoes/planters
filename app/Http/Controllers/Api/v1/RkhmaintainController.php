@@ -119,7 +119,6 @@ class RkhmaintainController extends Controller
             'population'       => 'required|numeric',
             'planting_year'    => 'required|numeric',
             'employees_number' => 'required|numeric',
-            'date'             => 'required',
 
             // Fertilizer mode
             'fertilizer_type'   => 'required',
@@ -163,7 +162,6 @@ class RkhmaintainController extends Controller
             'coverage'    => $request->coverage,
             'population'  => $request->population,
             'period'      => $request->fertilizer_period,
-            'date'        => $request->date,
             'planting_year'    => $request->planting_year,
             'employees_number' => $request->employees_number,
             'active' => 1,

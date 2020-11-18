@@ -24,7 +24,6 @@ class CreateRkhMaintainTable extends Migration
             $table->float('coverage', 8, 2);
             $table->integer('population');
             $table->integer('period');
-            $table->date('date');
             $table->char('planting_year');
 
             // Fertilizer mode

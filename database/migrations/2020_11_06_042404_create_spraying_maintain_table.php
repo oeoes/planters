@@ -15,17 +15,17 @@ class CreateSprayingMaintainTable extends Migration
     {
         Schema::create('spraying_maintains', function (Blueprint $table) {
             $table->id();
-            $table->uuid('rkh_maintain_id');
-            $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains')->onDelete('cascade');;
-            $table->foreignId('employee_id')->constrained();
-            $table->integer('amount_used');
-            $table->float('coverage', 8, 2);
-            $table->string('image')->nullable();
-            $table->date('date');
-            $table->time('maintain_time_start')->nullable();
-            $table->time('maintain_time_end')->nullable();
-            $table->float('lat', 10, 8)->nullable();
-            $table->float('lng', 11, 8)->nullable();
+            // $table->uuid('rkh_maintain_id');
+            // $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains')->onDelete('cascade');;
+            // $table->foreignId('employee_id')->constrained();
+            // $table->integer('amount_used');
+            // $table->float('coverage', 8, 2);
+            // $table->string('image')->nullable();
+            // $table->date('date');
+            // $table->time('maintain_time_start')->nullable();
+            // $table->time('maintain_time_end')->nullable();
+            // $table->float('lat', 10, 8)->nullable();
+            // $table->float('lng', 11, 8)->nullable();
             $table->timestamps();
         });
     }
