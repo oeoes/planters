@@ -13,11 +13,7 @@ class CreateFruitlistTable extends Migration
      */
     public function up()
     {
-<<<<<<< HEAD:database/migrations/2020_11_17_081417_create_palm_harvesting_table.php
-        Schema::create('palms_harvesting', function (Blueprint $table) {
-=======
         Schema::create('fruit_lists', function (Blueprint $table) {
->>>>>>> rkh-maintain:database/migrations/2020_11_16_124807_create_fruitlist_table.php
             $table->id();
             $table->string('name');
             $table->timestamps();
@@ -31,10 +27,6 @@ class CreateFruitlistTable extends Migration
      */
     public function down()
     {
-<<<<<<< HEAD:database/migrations/2020_11_17_081417_create_palm_harvesting_table.php
-        Schema::dropIfExists('palms_harvesting');
-=======
         Schema::dropIfExists('fruit_lists');
->>>>>>> rkh-maintain:database/migrations/2020_11_16_124807_create_fruitlist_table.php
     }
 }
