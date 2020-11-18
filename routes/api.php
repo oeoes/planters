@@ -57,6 +57,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
             Route::post('store/fruit-type', [RkhharvestingController::class, 'store_fruit_type']);
             Route::get('fruits', [RkhharvestingController::class, 'fruit_lists']);
             Route::get('{foreman2_id}/active', [RkhharvestingController::class, 'foreman2_active_rkh']);
+            Route::get('{foreman2_id}/active/{rkh_harvesting_id}/list', [RkhharvestingController::class, 'foreman2_active_rkh_list']);
         });
     });
     

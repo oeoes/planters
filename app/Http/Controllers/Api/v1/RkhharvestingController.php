@@ -208,15 +208,37 @@ class RkhharvestingController extends Controller
     }
 
     public function foreman2_active_rkh($foreman2_id) {
-        $rkh_harvesting = RkhHarvesting::where('foreman2_id', $foreman2_id)->where('active', 1)->first();
-        $rkhs = FruitHarvesting::where('rkh_harvesting_id', $rkh_harvesting->id)->get();
-        if ($rkhs->isEmpty()) 
+        $rkh = RkhHarvesting::where('foreman2_id', $foreman2_id)->where('active', 1)->first();
+        if (! $rkh) {
             return res(false, 404, 'There is no active work plan');
+        } else {
+            $data = [
+                'rkh_harvesting_id' => $rkh->id,
+                'farm' => str_farm($rkh->farm_id),
+                'afdelling' => str_afdelling($rkh->afdelling_id),
+                'block' => str_block($rkh->block_id)
+            ];
+            return res(true, 200, 'Active work plan found', $data);
+        }
+    }
+
+    public function foreman2_active_rkh_list($foreman2_id, $rkh_harvesting_id) {
+        $rkh_harvesting = RkhHarvesting::where('foreman2_id', $foreman2_id)
+                                        ->where('active', 1)
+                                        ->where('id', $rkh_harvesting_id)
+                                        ->first();
+                                    // return $rkh_harvesting;
+
+        if (! $rkh_harvesting) 
+            return res(false, 404, 'Daily work plan invalid');
+
+        $rkhs = FruitHarvesting::where('rkh_harvesting_id', $rkh_harvesting->id)->get();
+        // return $rkhs;
 
         $data = [];
         foreach ($rkhs as $value) {
             $data [] = [
-                'rkh_harvesting_id' => $value['id'],
+                'rkh_harvesting_id' => $value['rkh_harvesting_id'],
                 'employee' => str_employee($value['employee_id']),
                 'date'  => $value['date'],
                 'fruit' =>  str_fruit($value['fruit_id']),
