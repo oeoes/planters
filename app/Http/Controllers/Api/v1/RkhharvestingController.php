@@ -90,7 +90,78 @@ class RkhharvestingController extends Controller
         return res(true, 200, 'Daily work plan successfully closed');
     }
 
-    public function foreman1_active_rkh() {
+    public function foreman1_active_rkh($foreman1_id) {
+        $rkhs = RkhHarvesting::where('foreman1_id', $foreman1_id)->where('active', 1)->get();
+        if ($rkhs->isEmpty()) 
+            return res(false, 404, 'There is no active daily work plan');
+
+        $data = [];
+        foreach ($rkhs as $value) {
+            $data [] =[
+                'id' => $value['id'],
+                'farm' => str_farm($value['farm_id']),
+                'afdelling' => str_afdelling($value['afdelling_id']),
+                'block'     => str_block($value['block_id']),
+                'foreman1' => str_foreman1($value['foreman1_id']),
+                'foreman2' => str_foreman2($value['foreman2_id']),
+                'coverage' => $value['coverage'],
+                'population' => $value['population'],
+                'akp' => $value['akp'],
+                'bjr' => $value['bjr'],
+                'date' => $value['date'],
+                'employees_number' => $value['employees_number'],
+            ];
+        }
+        return res(true, 200, 'Active daily work plan listed', $data);
+    }
+
+    public function foreman1_inactive_rkh($foreman1_id) {
+        $rkhs = RkhHarvesting::where('foreman1_id', $foreman1_id)->where('active', 0)->get();
+        if ($rkhs->isEmpty()) 
+            return res(false, 404, 'There is no inactive daily work plan');
+        
+        $data = [];
+        foreach ($rkhs as $value) {
+            $data [] =[
+                'id' => $value['id'],
+                'farm' => str_farm($value['farm_id']),
+                'afdelling' => str_afdelling($value['afdelling_id']),
+                'block'     => str_block($value['block_id']),
+                'foreman1' => str_foreman1($value['foreman1_id']),
+                'foreman2' => str_foreman2($value['foreman2_id']),
+                'coverage' => $value['coverage'],
+                'population' => $value['population'],
+                'akp' => $value['akp'],
+                'bjr' => $value['bjr'],
+                'date' => $value['date'],
+                'employees_number' => $value['employees_number'],
+            ];
+        }
+        return res(true, 200, 'Inactive daily work plan listed', $data);
+    }
+
+    /*
+    ------------------------------------
+        THIS CODE BELOW IS FOR FOREMAN 2
+    ------------------------------------
+    */
+
+    public function store_fruit_type(Request $request) {
+        return $request->all();
+
+        // rkh_harvesting_id:c6c088bb-68b6-476e-a2f8-f8608efa6e5a
+        // empoyee_id:1
+        // date:2012-10-24
+        // fruit_id:1
+        // harvest_target:10
+        // harvest_amount:10
+        // harvest_lines:12
+        // coverage_area:120
+        // harvest_time_start:09:00
+        // harvest_time_end:14:30
+        //lat:
+        //lng:
+
         
     }
 }

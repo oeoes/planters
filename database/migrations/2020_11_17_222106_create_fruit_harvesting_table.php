@@ -15,11 +15,11 @@ class CreateFruitHarvestingTable extends Migration
     {
         Schema::create('fruit_harvesting', function (Blueprint $table) {
             $table->id();
-            $table->uuid('rkh_maintain_id');
-            $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains')->onDelete('cascade');
+            $table->uuid('rkh_harvesting_id');
+            $table->foreign('rkh_harvesting_id')->references('id')->on('rkh_harvestings')->onDelete('cascade');
             $table->foreignId('employee_id')->constrained();
             $table->date('date');
-            $table->foreignId('fruit_list_id')->constrained('fruit_lists');
+            $table->foreignId('fruit_id')->constrained('fruit_lists');
             $table->integer('harvest_target');
             $table->integer('harvest_amount');
             $table->integer('harvest_lines');

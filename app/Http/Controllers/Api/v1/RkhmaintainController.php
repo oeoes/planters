@@ -66,7 +66,7 @@ class RkhmaintainController extends Controller
                 ],
             ];
         }
-        return res(true, 200, 'Daily work plan listed', $data);
+        return res(true, 200, 'Active daily work plan listed', $data);
     }
     
     public function foreman1_inactive_rkh($foreman1_id) {

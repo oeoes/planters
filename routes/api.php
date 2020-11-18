@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\v1\Foreman2Controller;
 use App\Http\Controllers\Api\v1\RkhmaintainController;
 use App\Http\Controllers\Api\v1\AreaController;
 use App\Http\Controllers\Api\v1\RkhharvestingController;
-
+use App\Models\Harvesting\RkhHarvesting;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
@@ -51,6 +51,10 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
             // List 
             Route::get('employees', [RkhmaintainController::class, 'employees']);
+        });
+
+        Route::group(['prefix' => 'harvesting'], function () {
+            Route::post('store/fruit-type', [RkhharvestingController::class, 'store_fruit_type']);
         });
     });
     
