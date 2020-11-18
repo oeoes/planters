@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Models\Block;
 use App\Models\Foreman2;
+use App\Models\Harvesting\FruitHarvesting;
 use App\Models\Harvesting\RkhHarvesting;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\Storage;
 
 class RkhharvestingController extends Controller
 {
@@ -147,21 +149,54 @@ class RkhharvestingController extends Controller
     */
 
     public function store_fruit_type(Request $request) {
-        return $request->all();
+        // return $request->all();
 
-        // rkh_harvesting_id:c6c088bb-68b6-476e-a2f8-f8608efa6e5a
-        // empoyee_id:1
-        // date:2012-10-24
-        // fruit_id:1
-        // harvest_target:10
-        // harvest_amount:10
-        // harvest_lines:12
-        // coverage_area:120
-        // harvest_time_start:09:00
-        // harvest_time_end:14:30
-        //lat:
-        //lng:
+        $this->validate($request, [
+            'rkh_harvesting_id' => 'required',
+            'employee_id' => 'required',
+            'date' => 'required|date|after:yesterday|date_format:Y-m-d',
+            'fruit_id' => 'required',
+            'harvest_target' => 'required|min:1',
+            'harvest_amount' => 'required|min:1',
+            'harvest_lines'  => 'required|min:1',
+            'coverage_area' => 'required|min:1',
+            'harvest_time_start' => 'required',
+            'harvest_time_end' => 'required',
+            'lat' => 'required',
+            'lng' => 'required',
+        ]);
 
+        // Check file image for harvest_image
+        if ($request->hasFile('report_image')) {
+            $request->validate([ 'report_image' => 'image:jpeg,png,jpg|max:2048'  ]);
+            $report_image = $request->file('report_image');
+            $report_image_folder = 'public/harvesting/';
+            $report_image_name = Uuid::uuid4() . '.' . $report_image->getClientOriginalExtension();
+            $report_image_mime_type = $report_image->getClientMimeType();
+            $report_image_url = Storage::putFileAs($report_image_folder, $report_image, $report_image_name);
+        } else {
+            $report_image_name = null;
+            $report_image_mime_type = null;
+            $report_image_url = null;
+        }
+
+        FruitHarvesting::create([
+            'rkh_harvesting_id' => $request->rkh_harvesting_id,
+            'employee_id' => $request->employee_id,
+            'date' => $request->date,
+            'fruit_id' => $request->fruit_id,
+            'harvest_target' => $request->harvest_target,
+            'harvest_amount' => $request->harvest_amount,
+            'harvest_lines'  => $request->harvest_lines,
+            'coverage_area' => $request->coverage_area,
+            'report_image' => $report_image_name,
+            'harvest_time_start' => $request->harvest_time_start,
+            'harvest_time_end' => $request->harvest_time_end,
+            'lat' => $request->lat,
+            'lng' => $request->lng
+        ]);
         
+        return res(true, 200, 'Work plan added successfully');
+
     }
 }
