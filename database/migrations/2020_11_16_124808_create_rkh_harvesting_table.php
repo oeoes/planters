@@ -24,7 +24,6 @@ class CreateRkhHarvestingTable extends Migration
             $table->float('coverage', 8, 2);
             $table->integer('population');
             $table->date('date');
-            $table->char('planting_year');
             $table->float('akp', 8, 2);
             $table->float('bjr', 8, 2);
             $table->integer('employees_number');

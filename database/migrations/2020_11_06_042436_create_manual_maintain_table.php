@@ -18,12 +18,12 @@ class CreateManualMaintainTable extends Migration
             $table->uuid('rkh_maintain_id');
             $table->foreign('rkh_maintain_id')->references('id')->on('rkh_maintains')->onDelete('cascade');;
             $table->foreignId('employee_id')->constrained();
+            $table->date('date');
             $table->integer('circle');
             $table->float('circle_coverage', 8, 2);
             $table->integer('pruning');
             $table->float('pruning_coverage', 8, 2);
             $table->integer('gawangan');
-            $table->date('date');
             $table->time('maintain_time_start')->nullable();
             $table->time('maintain_time_end')->nullable();
             $table->float('lat', 10, 8)->nullable();
