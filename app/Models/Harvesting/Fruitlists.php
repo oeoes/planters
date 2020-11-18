@@ -10,5 +10,5 @@ class Fruitlists extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $table = 'fruit_list';
+    protected $table = 'fruit_lists';
 }

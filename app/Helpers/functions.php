@@ -44,3 +44,8 @@ function res($status, $code, $message, $data = null) {
       $foreman2 = App\Models\Foreman2::find($foreman2_id);
       return $foreman2->name;
   }
+
+  function str_fruit($fruit_id) {
+      $fruit = App\Models\Harvesting\Fruitlists::find($fruit_id);
+      return $fruit->name;
+  }

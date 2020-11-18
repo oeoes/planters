@@ -7,6 +7,7 @@ use App\Models\Area;
 use App\Models\Block;
 use App\Models\Foreman2;
 use App\Models\Harvesting\FruitHarvesting;
+use App\Models\Harvesting\Fruitlists;
 use App\Models\Harvesting\RkhHarvesting;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
@@ -198,5 +199,52 @@ class RkhharvestingController extends Controller
         
         return res(true, 200, 'Work plan added successfully');
 
+    }
+
+    public function fruit_lists() {
+        $fruits = Fruitlists::all();
+        // return $fruits;
+        return res(true, 200, 'Fruits listed', $fruits);
+    }
+
+    public function foreman2_active_rkh($foreman2_id) {
+        $rkh_harvesting = RkhHarvesting::where('foreman2_id', $foreman2_id)->where('active', 1)->first();
+        $rkhs = FruitHarvesting::where('rkh_harvesting_id', $rkh_harvesting->id)->get();
+        if ($rkhs->isEmpty()) 
+            return res(false, 404, 'There is no active work plan');
+
+        $data = [];
+        foreach ($rkhs as $value) {
+            $data [] = [
+                'rkh_harvesting_id' => $value['id'],
+                'employee' => str_employee($value['employee_id']),
+                'date'  => $value['date'],
+                'fruit' =>  str_fruit($value['fruit_id']),
+                'harvest_target' => $value['harvest_target'],
+                'harvest_amount' => $value['harvest_amount'],
+                'harvest_lines'  => $value['harvest_lines'],
+                'coverage_area'  => $value['coverage_area'],
+                'report_image'   => $value['report_image'],
+                'harvest_time_start' => $value['harvest_time_start'],
+                'harvest_time_end'   => $value['harvest_time_end'],
+                'lat' => $value['lat'],
+                'lng' => $value['lng']
+            ];
+        }
+
+        // rkh_harvesting_id:ef9ba537-1caa-4703-b138-7bb77be96582
+        // employee_id:1
+        // date:2020-11-18
+        // fruit_id:1
+        // harvest_target:10
+        // harvest_amount:10
+        // harvest_lines:12
+        // coverage_area:120
+        // harvest_time_start:09:00
+        // harvest_time_end:14:30
+        // lat:-1.9183828382
+        // lng:6.7277373882
+
+        return res(true, 200, 'Active work plan listed', $data);
     }
 }
