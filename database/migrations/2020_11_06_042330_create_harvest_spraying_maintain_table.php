@@ -32,8 +32,8 @@ class CreateHarvestSprayingMaintainTable extends Migration
 
             $table->time('maintain_time_start')->nullable();
             $table->time('maintain_time_end')->nullable();
-            $table->float('lat', 10, 8)->nullable();
-            $table->float('lng', 11, 8)->nullable();
+            $table->decimal('lat', 10, 8)->nullable();
+            $table->decimal('lng', 11, 8)->nullable();
             $table->timestamps();
         });
     }

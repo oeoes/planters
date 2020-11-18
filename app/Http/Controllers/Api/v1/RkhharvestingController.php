@@ -48,7 +48,7 @@ class RkhharvestingController extends Controller
             return res(false, 404, 'Invalid selected farm, afdelling, or block.');
 
         RkhHarvesting::create([
-            'id'          => Uuid::uuid4(),
+           'id'      => Uuid::uuid4(),
            'area_id' => $selected_area->id,
            'farm_id'     => $request->farm_id,
            'afdelling_id'=> $request->afdelling_id,
@@ -99,7 +99,7 @@ class RkhharvestingController extends Controller
 
         $data = [];
         foreach ($rkhs as $value) {
-            $data [] =[
+            $data [] = [
                 'id' => $value['id'],
                 'farm' => str_farm($value['farm_id']),
                 'afdelling' => str_afdelling($value['afdelling_id']),

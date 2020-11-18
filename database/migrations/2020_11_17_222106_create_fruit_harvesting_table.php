@@ -27,8 +27,8 @@ class CreateFruitHarvestingTable extends Migration
             $table->string('report_image');
             $table->time('harvest_time_start')->nullable();
             $table->time('harvest_time_end')->nullable();
-            $table->float('lat', 10, 8)->nullable();
-            $table->float('lng', 11, 8)->nullable();
+            $table->decimal('lat', 10, 8)->nullable();
+            $table->decimal('lng', 11, 8)->nullable();
             $table->timestamps();
         });
     }

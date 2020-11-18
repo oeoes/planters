@@ -10,6 +10,9 @@ class RkhHarvesting extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $primaryKey = 'id';
     protected $table = 'rkh_harvestings';
+
+    public $incrementing = false;
 
 }

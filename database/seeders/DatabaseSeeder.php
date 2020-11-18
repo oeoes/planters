@@ -21,16 +21,17 @@ class DatabaseSeeder extends Seeder
         \App\Models\Farm::factory(5)->create();
         \App\Models\Afdelling::factory(10)->create();
         \App\Models\Block::factory(15)->create();
-        \App\Models\Foreman1::factory(100)->create();
-        \App\Models\Foreman2::factory(100)->create();
-        \App\Models\Employee::factory(100)->create();
+        \App\Models\Foreman1::factory(20)->create();
+        \App\Models\Foreman2::factory(20)->create();
+        \App\Models\Employee::factory(20)->create();
         
         $this->call([
             AreaTableSeeder::class,
             AssistantTableSeeder::class,
             Foreman1TableSeeder::class,
             Foreman2TableSeeder::class,
-            FruitlistsTableSeeder::class
+            FruitlistsTableSeeder::class,
+            RkhHarvestingTableSeeder::class
         ]);
     }
 }
