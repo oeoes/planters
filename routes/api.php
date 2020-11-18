@@ -31,6 +31,9 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
         Route::group(['prefix' => 'harvesting'], function () {
             Route::post('store', [RkhharvestingController::class, 'store']);
+            Route::post('close', [RkhharvestingController::class, 'close']);
+            Route::get('{foreman1_id}/active', [RkhharvestingController::class, 'foreman1_active_rkh']);
+            Route::get('{foreman1_id}/inactive', [RkhharvestingController::class, 'foreman1_inactive_rkh']);
             Route::get('foreman2/available', [RkhharvestingController::class, 'foreman2_available']);
         });
     });

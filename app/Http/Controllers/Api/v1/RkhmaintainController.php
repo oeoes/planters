@@ -40,11 +40,11 @@ class RkhmaintainController extends Controller
         foreach ($rkhs as $value) {
             $data [] = [
                 'id'   => $value['id'],
-                'farm' => $this->str_farm($value['farm_id']),
-                'afdelling' => $this->str_afdelling($value['afdelling_id']),
-                'block'     => $this->str_block($value['block_id']),
-                'foreman1' => $this->str_foreman1($value['foreman1_id']),
-                'foreman2' => $this->str_foreman2($value['foreman2_id']),
+                'farm' => str_farm($value['farm_id']),
+                'afdelling' => str_afdelling($value['afdelling_id']),
+                'block'     => str_block($value['block_id']),
+                'foreman1' => str_foreman1($value['foreman1_id']),
+                'foreman2' => str_foreman2($value['foreman2_id']),
                 'coverage' => $value['coverage'],
                 'population' => $value['population'],
                 'period'   => $value['period'],
@@ -78,11 +78,11 @@ class RkhmaintainController extends Controller
         foreach ($rkhs as $value) {
             $data [] = [
                 'id'   => $value['id'],
-                'farm' => $this->str_farm($value['farm_id']),
-                'afdelling' => $this->str_afdelling($value['afdelling_id']),
-                'block' => $this->str_block($value['block_id']),
-                'foreman1' => $this->str_foreman1($value['foreman1_id']),
-                'foreman2' => $this->str_foreman2($value['foreman2_id']),
+                'farm' => str_farm($value['farm_id']),
+                'afdelling' => str_afdelling($value['afdelling_id']),
+                'block' => str_block($value['block_id']),
+                'foreman1' => str_foreman1($value['foreman1_id']),
+                'foreman2' => str_foreman2($value['foreman2_id']),
                 'coverage' => $value['coverage'],
                 'population' => $value['population'],
                 'period'   => $value['period'],
@@ -226,9 +226,9 @@ class RkhmaintainController extends Controller
         } else {
             $data = [
                 'rkh_maintain_id' => $rkh->id,
-                'farm' => $this->str_farm($rkh->farm_id),
-                'afdelling' => $this->str_afdelling($rkh->afdelling_id),
-                'block' => $this->str_block($rkh->block_id)
+                'farm' => str_farm($rkh->farm_id),
+                'afdelling' => str_afdelling($rkh->afdelling_id),
+                'block' => str_block($rkh->block_id)
             ];
             return res(true, 200, 'Active work plan found', $data);
         }
@@ -366,42 +366,6 @@ class RkhmaintainController extends Controller
     public function employees () {
         $employees = Employee::all();
         return res(true, 200, 'Employees listed', $employees);
-    }
-
-    /*
-    ------------------------------------
-        THIS CODE BELOW IS FOR SUPPORTING FUNCTION
-    ------------------------------------
-    */
-
-    private function str_farm($farm_id) {
-        $farm = Farm::find($farm_id);
-        return $farm->name;
-    }
-
-    private function str_afdelling($afdelling_id) {
-        $afdelling = Afdelling::find($afdelling_id);
-        return $afdelling->name;
-    }
-
-    private function str_block($block_id) {
-        $block = Block::find($block_id);
-        return $block->name;
-    }
-
-    private function str_employee($employee_id) {
-        $employee = Employee::find($employee_id);
-        return $employee->name;
-    }
-
-    private function str_foreman1($foreman1_id) {
-        $foreman1 = Foreman1::find($foreman1_id);
-        return $foreman1->name;
-    }
-
-    private function str_foreman2($foreman2_id) {
-        $foreman2 = Foreman2::find($foreman2_id);
-        return $foreman2->name;
     }
 
 }
