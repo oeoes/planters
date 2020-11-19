@@ -171,13 +171,9 @@ class RkhharvestingController extends Controller
         if ($request->hasFile('report_image')) {
             $request->validate([ 'report_image' => 'image:jpeg,png,jpg|max:2048'  ]);
             $report_image = $request->file('report_image');
-            $report_image_folder = 'public/harvesting/';
-            $report_image_name = Uuid::uuid4() . '.' . $report_image->getClientOriginalExtension();
-            $report_image_mime_type = $report_image->getClientMimeType();
-            $report_image_url = Storage::putFileAs($report_image_folder, $report_image, $report_image_name);
+            $report_image_folder = 'harvesting';
+            $report_image_url = Storage::disk('public')->put($report_image_folder, $report_image);
         } else {
-            $report_image_name = null;
-            $report_image_mime_type = null;
             $report_image_url = null;
         }
 
@@ -190,7 +186,7 @@ class RkhharvestingController extends Controller
             'harvest_amount' => $request->harvest_amount,
             'harvest_lines'  => $request->harvest_lines,
             'coverage_area' => $request->coverage_area,
-            'report_image' => $report_image_name,
+            'report_image' => asset('/storage/'.$report_image_url),
             'harvest_time_start' => $request->harvest_time_start,
             'harvest_time_end' => $request->harvest_time_end,
             'lat' => $request->lat,

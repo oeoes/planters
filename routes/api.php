@@ -72,4 +72,5 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 Route::get('fm1', [TestController::class, 'fm1']);
 Route::get('fm2', [TestController::class, 'fm2']);
 Route::get('sql', [TestController::class, 'sql']);
+Route::get('arr', [TestController::class, 'arr']);
 

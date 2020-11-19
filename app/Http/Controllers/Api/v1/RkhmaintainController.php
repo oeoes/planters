@@ -238,10 +238,56 @@ class RkhmaintainController extends Controller
         // return response()->json([$foreman2_id, $rkh_maintain_id], 200);   
         $valid_rkh = RkhMaintain::where('id', $rkh_maintain_id)->where('foreman2_id', $foreman2_id)->first();
         if (! $valid_rkh) 
-            return res(false, 404, 'Daily work plan invalid');
+            return res(false, 404, 'work plan invalid');
 
-        $a = HarvestSpraying::where('rkh_maintain_id', $rkh_maintain_id);
-        $b = ManualMaintain::where('rkh_maintain_id', $rkh_maintain_id)->union($a)->get();
+        $hs_s = HarvestSpraying::where('rkh_maintain_id', $rkh_maintain_id)->get()->toArray();
+        $hs = [];
+        foreach ($hs_s as $value) {
+            $hs [] =[
+                'rkh_maintain_id' => $value['rkh_maintain_id'],
+                'employee_name' => str_employee($value['employee_id']),
+                'date' => $value['date'],
+                'harvest_amount' => $value['harvest_amount'],
+                'harvest_coverage' => $value['harvest_coverage'],
+                'harvest_image' => $value['harvest_image'],
+                'spraying_amount' => $value['spraying_amount'],
+                'spraying_coverage' => $value['spraying_coverage'],
+                'spraying_image' => $value['spraying_image'],
+                'maintain_time_start' => $value['maintain_time_start'],
+                'maintain_time_end' => $value['maintain_time_end'],
+                'lat' => $value['lat'],
+                'lng' => $value['lng'],
+                'created_at' => date("Y-m-d H:i:s", strtotime($value['created_at'])),
+                'updated_at' => date("Y-m-d H:i:s", strtotime($value['updated_at'])),
+            ];
+        }
+
+        $mm_s = ManualMaintain::where('rkh_maintain_id', $rkh_maintain_id)->get()->toArray();
+        $mm = [] ;
+        foreach ($mm_s as $value) {
+            $mm [] =[
+                'rkh_maintain_id' => $value['rkh_maintain_id'],
+                'employee_name' => str_employee($value['employee_id']),
+                'date' => $value['date'],
+                'circle' => $value['circle'],
+                'circle_coverage' => $value['circle_coverage'],
+                'pruning' => $value['pruning'],
+                'pruning_coverage' => $value['pruning_coverage'],
+                'gawangan' => $value['gawangan'],
+                'maintain_time_start' => $value['maintain_time_start'],
+                'maintain_time_end' => $value['maintain_time_end'],
+                'lat' => $value['lat'],
+                'lng' => $value['lng'],
+                'created_at' => date("Y-m-d H:i:s", strtotime($value['created_at'])),
+                'updated_at' => date("Y-m-d H:i:s", strtotime($value['updated_at'])),
+            ];
+        }
+
+
+        $results = collect(array_merge($hs, $mm))->sortByDesc('created_at');
+        $results = $results->values();
+        // return $results->values();
+            return res(true, 200, 'Work plan listed', $results);
         
     }
 
@@ -272,13 +318,11 @@ class RkhmaintainController extends Controller
         if ($request->hasFile('harvest_image')) {
             $request->validate([ 'harvest_image' => 'image:jpeg,png,jpg|max:2048'  ]);
             $harvest_image = $request->file('harvest_image');
-            $harvest_image_folder = 'public/maintain/harvest';
+            $harvest_image_folder = 'maintain/harvest';
             $harvest_image_name = Uuid::uuid4() . '.' . $harvest_image->getClientOriginalExtension();
             $harvest_image_mime_type = $harvest_image->getClientMimeType();
-            $harvest_image_url = Storage::putFileAs($harvest_image_folder, $harvest_image, $harvest_image_name);
+            $harvest_image_url = Storage::disk('public')->put($harvest_image_folder, $harvest_image);
         } else {
-            $harvest_image_name = null;
-            $harvest_image_mime_type = null;
             $harvest_image_url = null;
         }
 
@@ -286,13 +330,10 @@ class RkhmaintainController extends Controller
         if ($request->hasFile('spraying_image')) {
             $request->validate([ 'spraying_image' => 'image:jpeg,png,jpg|max:2048'  ]);
             $spraying_image = $request->file('spraying_image');
-            $spraying_image_folder = 'public/maintain/spraying';
+            $spraying_image_folder = 'maintain/spraying';
             $spraying_image_name = Uuid::uuid4() . '.' . $spraying_image->getClientOriginalExtension();
-            $spraying_image_mime_type = $spraying_image->getClientMimeType();
-            $spraying_image_url = Storage::putFileAs($spraying_image_folder, $spraying_image, $spraying_image_name);
+            $spraying_image_url = Storage::disk('public')->put($spraying_image_folder, $spraying_image);
         } else {
-            $spraying_image_name = null;
-            $spraying_image_mime_type = null;
             $spraying_image_url = null;
         }
 
@@ -303,11 +344,11 @@ class RkhmaintainController extends Controller
 
             'harvest_amount' => $request->harvest_amount,
             'harvest_coverage' => $request->harvest_coverage,
-            'harvest_image' => $harvest_image_name,
+            'harvest_image' => asset('/storage/'.$harvest_image_url),
 
             'spraying_amount' => $request->spraying_amount,
             'spraying_coverage' => $request->spraying_coverage,
-            'spraying_image' => $spraying_image_name,
+            'spraying_image' => asset('/storage/'.$spraying_image_url),
 
             'maintain_time_start' => $request->maintain_time_start,
             'maintain_time_end' => $request->maintain_time_end,
