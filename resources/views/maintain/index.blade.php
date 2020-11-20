@@ -31,11 +31,33 @@
             <option value="#">Select block</option>
           </select>
         </div>
-          @csrf
+        <div class="col-auto">
+          <select class="form-control form-control-sm" id="period" name="period">
+            <option value="#">Select Period</option>
+            <option value="1">Period: 1</option>
+            <option value="2">Period: 2</option>
+            {{-- <option value="3">Period: 1 & 2</option> --}}
+          </select>
+        </div>
+        <div class="col-auto">
+          <select class="form-control form-control-sm" id="pyear" name="pyear">
+            <option value="#">Select year</option>
+            @php
+                $old_date = date('Y') -1;
+                $current_date = date('Y');
+            @endphp
+            <option value="{{ $old_date }}">{{ $old_date }}</option>
+            <option value="{{ $current_date }}">{{ $current_date }}</option>
+
+          </select>
+        </div>
           <button type="submit" class="btn btn-primary btn-sm">
             <i class="fa fa-filter" aria-hidden="true"></i>
             Filter
           </button>
+          <a href="{{ route('maintain.index') }}" class="btn btn-sm"> 
+            Refresh
+          </a>
       </div>
     </form>
   </div>

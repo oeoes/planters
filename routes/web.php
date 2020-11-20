@@ -46,7 +46,7 @@ Route::group(['middleware' => ['auth:assistant']], function () {
         Route::post('/filter', [MaintainController::class, 'filter'])->name('maintain.filter');
     });
 
-    Route::group(['prefix' => 'harvest'], function () {
+    Route::group(['prefix' => 'harvesting'], function () {
         
     });
 

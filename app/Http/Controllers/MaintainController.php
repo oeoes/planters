@@ -12,6 +12,7 @@ use App\Models\Maintain\RkhHarvestMaintain;
 use App\Models\Maintain\RkhSprayingMaintain;
 use App\Models\Maintain\RkhManualMaintain;
 use App\Models\Maintain\HarvestMaintain;
+use App\Models\Maintain\HarvestSpraying;
 use App\Models\Maintain\SprayingMaintain;
 use App\Models\Maintain\ManualMaintain;
 
@@ -28,12 +29,8 @@ class MaintainController extends Controller
         ]);
     }
 
-    public function filter(Request $request) {
-
-        $area = Area::where('farm_id', $request->farm)
-                    ->where('afdelling_id', $request->afdelling)
-                    ->where('block_id', $request->block)
-                    ->first();
+    public function filter1(Request $request) {
+        $area = Area::where('farm_id', $request->farm)->where('afdelling_id', $request->afdelling)->where('block_id', $request->block)->first();
 
         $farm = Farm::find($request->farm)->name;
         $afdelling = Afdelling::find($request->afdelling)->name;
@@ -58,34 +55,34 @@ class MaintainController extends Controller
             $rkhm_coverage = $rkh_maintain->coverage;
 
             // Harvest Amount Used
-            $rkh_harvest_maintain = RkhHarvestMaintain::where('rkh_maintain_id', $rkhm_id)->first();
+            $rkh_harvest_maintain = RkhMaintain::where('rkh_maintain_id', $rkhm_id)->first();
             $harvest_amount_allocation = $rkh_harvest_maintain->fertilizer_amount;
-            $harvest_amount_used = HarvestMaintain::where('rkh_maintain_id', $rkhm_id)->sum('amount_used');
+            $harvest_amount_used = $harvest_spraying->sum('harvest_amount');
             $harvest_completeness = $harvest_amount_used / $harvest_amount_allocation * 100;
             $total_harvest_completeness += $harvest_completeness;
 
             // Harvest Coverage
-            $harvest_coverage = HarvestMaintain::where('rkh_maintain_id', $rkhm_id)->sum('coverage');
+            $harvest_coverage = HarvestSpraying::where('rkh_maintain_id', $rkhm_id)->sum('harvest_coverage');
             $harvest_coverage_final = $harvest_coverage / $rkhm_coverage * 100;
             $total_harvest_coverage_final += $harvest_coverage_final;
 
             // Spraying amount used
-            $rkh_spraying_maintain = RkhSprayingMaintain::where('rkh_maintain_id', $rkhm_id)->first();
+            $rkh_spraying_maintain = RkhMaintain::where('rkh_maintain_id', $rkhm_id)->first();
             $spraying_amount_allocation = $rkh_spraying_maintain->spraying_amount;
-            $spraying_amount_used = SprayingMaintain::where('rkh_maintain_id', $rkhm_id)->sum('amount_used');
+            $spraying_amount_used = HarvestSpraying::where('rkh_maintain_id', $rkhm_id)->sum('spraying_amount');
             $spraying_completeness = $spraying_amount_used / $spraying_amount_allocation * 100;
             $total_spraying_completeness += $spraying_completeness;
 
             // Spraying coverage
-            $spraying_coverage = SprayingMaintain::where('rkh_maintain_id', $rkhm_id)->sum('coverage');
+            $spraying_coverage = HarvestSpraying::where('rkh_maintain_id', $rkhm_id)->sum('spraying_coverage');
             $spraying_coverage_final = $spraying_coverage / $rkhm_coverage * 100;
             $total_spraying_coverage_final += $spraying_coverage_final;
 
-            $rkh_manual_maintain = RkhManualMaintain::where('rkh_maintain_id', $rkhm_id)->first();
-            $manual_maintain = ManualMaintain::where('rkh_maintain_id', $rkhm_id);
+            $rkh_maintain = RkhMaintain::where('rkh_maintain_id', $rkhm_id)->first();
+            $manual_maintain = ManualMaintain::where('rkh_maintain_id', $rkhm_id)->get();
 
             // Manual Circle
-            $circle_allocation = $rkh_manual_maintain->circle;
+            $circle_allocation = $rkh_maintain->circle;
             $circle_used = $manual_maintain->sum('circle');
             $circle_completeness = $circle_used / $circle_allocation * 100;
             $total_circle_completeness += $circle_completeness;
@@ -96,7 +93,7 @@ class MaintainController extends Controller
             $total_circle_coverage_final += $circle_coverage_final;
 
             // Manual Pruning
-            $pruning_allocation = $rkh_manual_maintain->pruning;
+            $pruning_allocation = $rkh_maintain->pruning;
             $pruning_used = $manual_maintain->sum('pruning');
             $pruning_completeness = $pruning_used / $pruning_allocation * 100;
             $total_pruning_completeness += $pruning_completeness;
@@ -107,7 +104,7 @@ class MaintainController extends Controller
             $total_pruning_coverage_final += $pruning_coverage_final;
 
             // manual gawangan
-            $gawangan_allocation = $rkh_manual_maintain->gawangan;
+            $gawangan_allocation = $rkh_maintain->gawangan;
             $gawangan_used = $manual_maintain->sum('gawangan');
             $gawangan_completeness = $gawangan_used / $gawangan_allocation * 100;
             $total_gawangan_completeness += $gawangan_completeness;
@@ -128,15 +125,97 @@ class MaintainController extends Controller
             'farm' => $farm,
             'afdelling' => $afdelling,
             'block' => $block,
-            'total_harvest_completeness' => $total_gawangan_completeness,
+            'total_harvest_completeness'   => $total_gawangan_completeness,
             'total_harvest_coverage_final' => $total_harvest_coverage_final,
-            'total_spraying_completeness' => $total_spraying_completeness,
-            'total_spraying_coverage_final' => $total_spraying_coverage_final,
-            'total_circle_completeness' => $total_circle_completeness,
-            'total_circle_coverage_final' => $total_circle_coverage_final,
-            'total_pruning_completeness' => $total_pruning_completeness,
+            'total_spraying_completeness'  => $total_spraying_completeness,
+            'total_spraying_coverage_final'=> $total_spraying_coverage_final,
+            'total_circle_completeness'    => $total_circle_completeness,
+            'total_circle_coverage_final'  => $total_circle_coverage_final,
+            'total_pruning_completeness'   => $total_pruning_completeness,
             'total_pruning_coverage_final' => $total_pruning_coverage_final,
-            'total_gawangan_completeness' => $total_gawangan_completeness,
+            'total_gawangan_completeness'  => $total_gawangan_completeness,
+        ];
+
+        return back()->with([
+            'data' => $data
+        ]);
+
+    }
+
+    public function filter(Request $request) {
+        $area = Area::where('farm_id', $request->farm)->where('afdelling_id', $request->afdelling)->where('block_id', $request->block)->first();
+
+        $farm = Farm::find($request->farm)->name;
+        $afdelling = Afdelling::find($request->afdelling)->name;
+        $block = Block::find($request->block)->name;
+
+        $area_id  = $area->id;
+        $rkh_maintain = RkhMaintain::where('area_id', $area_id)->where('period', $request->period)->where('planting_year', $request->pyear)->first();
+        if (! $rkh_maintain) 
+            return back()->withError('There is not daily work plan');
+
+        dd($rkh_maintain, $area_id, $request->all());
+        $rkhm_id = $rkh_maintain->id;
+        $rkhm_coverage = $rkh_maintain->coverage;
+        $harvest_spraying = HarvestSpraying::where('rkh_maintain_id', $rkhm_id);
+        $manual_maintain  = ManualMaintain::where('rkh_maintain_id', $rkhm_id);
+
+
+            // Harvest Amount Used
+            $harvest_amount_allocation = $rkh_maintain->fertilizer_amount;
+            $harvest_amount_used = $harvest_spraying->sum('harvest_amount');
+            $harvest_completeness = $harvest_amount_used / $harvest_amount_allocation * 100;
+
+            // Harvest Coverage
+            $harvest_coverage = $harvest_spraying->sum('harvest_coverage');
+            $harvest_coverage_final = $harvest_coverage / $rkhm_coverage * 100;
+
+            // Spraying amount used
+            $spraying_amount_allocation = $rkh_maintain->spraying_amount;
+            $spraying_amount_used = $harvest_spraying->sum('spraying_amount');
+            $spraying_completeness = $spraying_amount_used / $spraying_amount_allocation * 100;
+
+            // Spraying coverage
+            $spraying_coverage = $harvest_spraying->sum('spraying_coverage');
+            $spraying_coverage_final = $spraying_coverage / $rkhm_coverage * 100;
+
+
+            // Manual Circle
+            $circle_allocation = $rkh_maintain->manual_circle;
+            $circle_used = $manual_maintain->sum('circle');
+            $circle_completeness = $circle_used / $circle_allocation * 100;
+
+            // Manual Circle Coverage
+            $circle_coverage = $manual_maintain->sum('circle_coverage');
+            $circle_coverage_final = $circle_coverage / $rkhm_coverage * 100;
+
+            // Manual Pruning
+            $pruning_allocation = $rkh_maintain->manual_pruning;
+            $pruning_used = $manual_maintain->sum('pruning');
+            $pruning_completeness = $pruning_used / $pruning_allocation * 100;
+            
+            //Manual Pruning Coverage
+            $pruning_coverage = $manual_maintain->sum('pruning_coverage');
+            $pruning_coverage_final = $pruning_coverage / $rkhm_coverage * 100;
+
+            // manual gawangan
+            $gawangan_allocation = $rkh_maintain->manual_gawangan;
+            $gawangan_used = $manual_maintain->sum('gawangan');
+            $gawangan_completeness = $gawangan_used / $gawangan_allocation * 100;
+
+        $data = [
+            'farm' => $farm,
+            'afdelling' => $afdelling,
+            'block' => $block,
+            'total_harvest_completeness'   => $gawangan_completeness,
+            'total_harvest_coverage_final' => $harvest_coverage_final,
+            'total_spraying_completeness'  => $spraying_completeness,
+            'total_spraying_coverage_final'=> $spraying_coverage_final,
+            'total_circle_completeness'    => $circle_completeness,
+            'total_circle_coverage_final'  => $circle_coverage_final,
+            'total_pruning_completeness'   => $pruning_completeness,
+            'total_pruning_coverage_final' => $pruning_coverage_final,
+            'total_gawangan_completeness'  => $gawangan_completeness,
         ];
 
         return back()->with([

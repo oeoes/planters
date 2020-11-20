@@ -155,17 +155,20 @@ class RkhharvestingController extends Controller
         $this->validate($request, [
             'rkh_harvesting_id' => 'required',
             'employee_id' => 'required',
-            'date' => 'required|date|after:yesterday|date_format:Y-m-d',
             'fruit_id' => 'required',
             'harvest_target' => 'required|min:1',
             'harvest_amount' => 'required|min:1',
             'harvest_lines'  => 'required|min:1',
             'coverage_area' => 'required|min:1',
-            'harvest_time_start' => 'required',
-            'harvest_time_end' => 'required',
+            'time_start' => 'required',
+            'time_end' => 'required',
             'lat' => 'required',
             'lng' => 'required',
         ]);
+
+        $check_fruit_harvesting_existed = FruitHarvesting::where('rkh_harvesting_id', $request->rkh_harvesting_id)->where('employee_id', $request->employee_id)->first();
+            if($check_fruit_harvesting_existed) 
+                return res(false, 404, 'Work plan already registered');
 
         // Check file image for harvest_image
         if ($request->hasFile('report_image')) {
@@ -180,15 +183,14 @@ class RkhharvestingController extends Controller
         FruitHarvesting::create([
             'rkh_harvesting_id' => $request->rkh_harvesting_id,
             'employee_id' => $request->employee_id,
-            'date' => $request->date,
             'fruit_id' => $request->fruit_id,
             'harvest_target' => $request->harvest_target,
             'harvest_amount' => $request->harvest_amount,
             'harvest_lines'  => $request->harvest_lines,
             'coverage_area' => $request->coverage_area,
             'report_image' => asset('/storage/'.$report_image_url),
-            'harvest_time_start' => $request->harvest_time_start,
-            'harvest_time_end' => $request->harvest_time_end,
+            'time_start' => $request->time_start,
+            'time_end' => $request->time_end,
             'lat' => $request->lat,
             'lng' => $request->lng
         ]);
@@ -209,7 +211,7 @@ class RkhharvestingController extends Controller
             return res(false, 404, 'There is no active work plan');
         } else {
             $data = [
-                'rkh_harvesting_id' => $rkh->id,
+                'id' => $rkh->id,
                 'farm' => str_farm($rkh->farm_id),
                 'afdelling' => str_afdelling($rkh->afdelling_id),
                 'block' => str_block($rkh->block_id)
@@ -234,17 +236,16 @@ class RkhharvestingController extends Controller
         $data = [];
         foreach ($rkhs as $value) {
             $data [] = [
-                'rkh_harvesting_id' => $value['rkh_harvesting_id'],
-                'employee' => str_employee($value['employee_id']),
-                'date'  => $value['date'],
+                'id' => $value['rkh_harvesting_id'],
+                'employee_name' => str_employee($value['employee_id']),
                 'fruit' =>  str_fruit($value['fruit_id']),
                 'harvest_target' => $value['harvest_target'],
                 'harvest_amount' => $value['harvest_amount'],
                 'harvest_lines'  => $value['harvest_lines'],
                 'coverage_area'  => $value['coverage_area'],
                 'report_image'   => $value['report_image'],
-                'harvest_time_start' => $value['harvest_time_start'],
-                'harvest_time_end'   => $value['harvest_time_end'],
+                'time_start' => $value['time_start'],
+                'time_end'   => $value['time_end'],
                 'lat' => $value['lat'],
                 'lng' => $value['lng']
             ];

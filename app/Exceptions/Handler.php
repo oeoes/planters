@@ -48,6 +48,7 @@ class Handler extends ExceptionHandler
 
             return res(false, 404, $exception->getMessage());
         }
-        if (! $request->wantsJson()) return redirect('/login');
+        if (! $request->wantsJson()) 
+            return redirect('/login');
     }
 }

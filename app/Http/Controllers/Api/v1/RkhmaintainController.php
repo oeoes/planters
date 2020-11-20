@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Validator;
 use Ramsey\Uuid\Uuid;
 
 use App\Models\Farm;
@@ -17,9 +16,6 @@ use App\Models\Foreman1;
 use App\Models\Foreman2;
 
 use App\Models\Maintain\RkhMaintain;
-use App\Models\Maintain\RkhHarvestMaintain;
-use App\Models\Maintain\RkhSprayingMaintain;
-use App\Models\Maintain\RkhManualMaintain;
 use App\Models\Maintain\ManualMaintain;
 use App\Models\Maintain\HarvestSpraying;
 
@@ -225,7 +221,7 @@ class RkhmaintainController extends Controller
             return res(false, 404, 'There is no active work plan');
         } else {
             $data = [
-                'rkh_maintain_id' => $rkh->id,
+                'id' => $rkh->id,
                 'farm' => str_farm($rkh->farm_id),
                 'afdelling' => str_afdelling($rkh->afdelling_id),
                 'block' => str_block($rkh->block_id)
@@ -244,7 +240,7 @@ class RkhmaintainController extends Controller
         $hs = [];
         foreach ($hs_s as $value) {
             $hs [] =[
-                'rkh_maintain_id' => $value['rkh_maintain_id'],
+                'id' => $value['rkh_maintain_id'],
                 'employee_name' => str_employee($value['employee_id']),
                 'date' => $value['date'],
                 'harvest_amount' => $value['harvest_amount'],
@@ -253,8 +249,8 @@ class RkhmaintainController extends Controller
                 'spraying_amount' => $value['spraying_amount'],
                 'spraying_coverage' => $value['spraying_coverage'],
                 'spraying_image' => $value['spraying_image'],
-                'maintain_time_start' => $value['maintain_time_start'],
-                'maintain_time_end' => $value['maintain_time_end'],
+                'time_start' => $value['time_start'],
+                'time_end' => $value['time_end'],
                 'lat' => $value['lat'],
                 'lng' => $value['lng'],
                 'created_at' => date("Y-m-d H:i:s", strtotime($value['created_at'])),
@@ -266,7 +262,7 @@ class RkhmaintainController extends Controller
         $mm = [] ;
         foreach ($mm_s as $value) {
             $mm [] =[
-                'rkh_maintain_id' => $value['rkh_maintain_id'],
+                'id' => $value['rkh_maintain_id'],
                 'employee_name' => str_employee($value['employee_id']),
                 'date' => $value['date'],
                 'circle' => $value['circle'],
@@ -274,8 +270,8 @@ class RkhmaintainController extends Controller
                 'pruning' => $value['pruning'],
                 'pruning_coverage' => $value['pruning_coverage'],
                 'gawangan' => $value['gawangan'],
-                'maintain_time_start' => $value['maintain_time_start'],
-                'maintain_time_end' => $value['maintain_time_end'],
+                'time_start' => $value['time_start'],
+                'time_end' => $value['time_end'],
                 'lat' => $value['lat'],
                 'lng' => $value['lng'],
                 'created_at' => date("Y-m-d H:i:s", strtotime($value['created_at'])),
@@ -283,10 +279,12 @@ class RkhmaintainController extends Controller
             ];
         }
 
-
         $results = collect(array_merge($hs, $mm))->sortByDesc('created_at');
         $results = $results->values();
-        // return $results->values();
+
+        if (!$mm_s && !$hs_s) {
+            return res(false, 400, 'Work plan not defined');
+        }
             return res(true, 200, 'Work plan listed', $results);
         
     }
@@ -301,8 +299,8 @@ class RkhmaintainController extends Controller
             'harvest_coverage'  => 'required|numeric',
             'spraying_amount'   => 'required|numeric',
             'spraying_coverage' => 'required|numeric',
-            'maintain_time_start' => 'required',
-            'maintain_time_end' => 'required',
+            'time_start' => 'required',
+            'time_end' => 'required',
         ]);
 
         $check_rkh_maintain_closed = RkhMaintain::where('id', $request->rkh_maintain_id)->where('active', 0)->first();
@@ -350,8 +348,8 @@ class RkhmaintainController extends Controller
             'spraying_coverage' => $request->spraying_coverage,
             'spraying_image' => asset('/storage/'.$spraying_image_url),
 
-            'maintain_time_start' => $request->maintain_time_start,
-            'maintain_time_end' => $request->maintain_time_end,
+            'time_start' => $request->time_start,
+            'time_end' => $request->time_end,
             'lat' => $request->lat,
             'lng' => $request->lng
         ]);
@@ -372,8 +370,8 @@ class RkhmaintainController extends Controller
             'pruning_coverage' => 'required|numeric|min:1',
             'gawangan'         => 'required|numeric|min:1',
             'date'             => 'required',
-            'maintain_time_start' => 'required',
-            'maintain_time_end'   => 'required',
+            'time_start' => 'required',
+            'time_end'   => 'required',
         ]);
 
         $check_rkh_maintain_closed = RkhMaintain::where('id', $request->rkh_maintain_id)->where('active', 0)->first();
@@ -392,8 +390,8 @@ class RkhmaintainController extends Controller
                 'pruning_coverage'  => $request->pruning_coverage,
                 'gawangan'          => $request->gawangan,
                 'date' => $request->date,
-                'maintain_time_start' => $request->maintain_time_start,
-                'maintain_time_end' => $request->maintain_time_end,
+                'time_start' => $request->time_start,
+                'time_end' => $request->time_end,
                 'lat' => $request->lat,
                 'lng' => $request->lng
             ]);

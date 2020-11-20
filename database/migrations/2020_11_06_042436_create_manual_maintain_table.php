@@ -24,8 +24,8 @@ class CreateManualMaintainTable extends Migration
             $table->integer('pruning');
             $table->float('pruning_coverage', 8, 2);
             $table->integer('gawangan');
-            $table->time('maintain_time_start')->nullable();
-            $table->time('maintain_time_end')->nullable();
+            $table->time('time_start')->nullable();
+            $table->time('time_end')->nullable();
             $table->decimal('lat', 10, 8)->nullable();
             $table->decimal('lng', 11, 8)->nullable();
             $table->timestamps();
