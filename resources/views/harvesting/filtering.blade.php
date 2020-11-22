@@ -43,12 +43,14 @@
           <button type="submit" class="btn btn-primary btn-sm">
             <i class="fa fa-filter" aria-hidden="true"></i>
           </button>
-          <a href="{{ route('maintain.index') }}" class="btn btn-sm"> 
+          <a href="{{ route('harvesting.index') }}" class="btn btn-sm"> 
             Refresh
           </a>
       </div>
     </form>
     <small class="font-wight-bold text-danger">*Filtering work only for Inactive RKH</small>
+    <br/>
+    <small class="font-wight-bold">Hint: Farm-1, Afdelling-1, Block-1, 19-11 s.d. 22-11</small>
   </div>
 </div>
 

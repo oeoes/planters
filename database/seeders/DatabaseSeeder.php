@@ -31,7 +31,8 @@ class DatabaseSeeder extends Seeder
             Foreman1TableSeeder::class,
             Foreman2TableSeeder::class,
             FruitlistsTableSeeder::class,
-            RkhHarvestingTableSeeder::class
+            RkhHarvestingTableSeeder::class,
+            FruitHarvestingTableSeeder::class,
         ]);
     }
 }

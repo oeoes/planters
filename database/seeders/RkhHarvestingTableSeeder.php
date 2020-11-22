@@ -23,12 +23,13 @@ class RkhHarvestingTableSeeder extends Seeder
                 'block_id'    => 1,
                 'foreman1_id' => 1,
                 'foreman2_id' => 2,
-                'coverage'    => 1000,
-                'population'  => 100,
-                'date' => date('Y-m-d'),
+                'coverage'    => 100,
+                'population'  => 50,
+                'date' => '2019-11-19',
                 'akp' => 1,
                 'bjr' => 1,
-                'employees_number' => 1
+                'active' => 0,
+                'employees_number' => 100
             ],[
                 'id' => 'popi7405-5cdc-49a5-9556-9b3688e55555',
                 'area_id' => 1,
@@ -37,12 +38,13 @@ class RkhHarvestingTableSeeder extends Seeder
                 'block_id'    => 1,
                 'foreman1_id' => 1,
                 'foreman2_id' => 2,
-                'coverage'    => 1000,
-                'population'  => 100,
-                'date' => date('Y-m-d'),
+                'coverage'    => 100,
+                'population'  => 50,
+                'date' => '2019-11-19',
                 'akp' => 1,
                 'bjr' => 1,
-                'employees_number' => 1
+                'active' => 0,
+                'employees_number' => 100
             ]
         ];
 

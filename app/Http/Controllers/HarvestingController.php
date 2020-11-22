@@ -66,7 +66,6 @@ class HarvestingController extends Controller
             // 1 rkh = 1 employee
             $employees_used = $feeds->get()->count();
             $employees_percentage_per_block = $employees_used / $employees_allocation * 100;
-
             $total_harvest_production_per_block = $feeds->sum('harvest_amount');
 
             $harvest_completeness  = 0;
@@ -86,13 +85,12 @@ class HarvestingController extends Controller
             }
 
             $harvest_completeness_per_block = ($harvest_completeness / $feeds->get()->count()) * 100;
-
             $results [] = [
                 'employee_used' => $employees_used,
                 'employee_allocation' => $employees_allocation,
                 'employee_percentage' => $employees_percentage_per_block,
                 'total_harvest_production' => $total_harvest_production_per_block,
-                'harvest_completeness' => $harvest_completeness,
+                'harvest_completeness' => $harvest_completeness_per_block,
                 'harvest_total_minutes' => $harvest_total_minutes
             ];
 
