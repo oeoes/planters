@@ -6,6 +6,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\MaintainController;
+use App\Http\Controllers\HarvestingController;
 
 Route::get('/', function() {
     return redirect('/login');
@@ -47,12 +48,14 @@ Route::group(['middleware' => ['auth:assistant']], function () {
     });
 
     Route::group(['prefix' => 'harvesting'], function () {
-        
+        Route::get('/', [HarvestingController::class, 'index'])->name('harvesting.index');
+        Route::get('/filter', [HarvestingController::class, 'filter_form'])->name('harvesting.filter');
+        Route::post('/filter', [HarvestingController::class, 'filter_process'])->name('harvesting.filter.process');
     });
 
 });
 
 Route::get('/clear', function() { return session()->flush();});
-Route::get('/test', [TestController::class, 'each']);
-Route::get('/img', [TestController::class, 'img']);
+// Route::get('/test', [TestController::class, 'each']);
+// Route::get('/img', [TestController::class, 'img']);
 

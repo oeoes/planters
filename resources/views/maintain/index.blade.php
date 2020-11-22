@@ -53,7 +53,6 @@
         </div>
           <button type="submit" class="btn btn-primary btn-sm">
             <i class="fa fa-filter" aria-hidden="true"></i>
-            Filter
           </button>
           <a href="{{ route('maintain.index') }}" class="btn btn-sm"> 
             Refresh
@@ -64,71 +63,63 @@
 </div>
 <div class="card">
   <div class="card-body">
-    {{-- 
-      'farm' => $farm,
-      'afdelling' => $afdelling,
-      'block' => $block,
-      'total_harvest_completeness' => $total_gawangan_completeness,
-      'total_harvest_coverage_final' => $total_harvest_coverage_final,
-      'total_spraying_completeness' => $total_spraying_completeness,
-      'total_spraying_coverage_final' => $total_spraying_coverage_final,
-      'total_circle_completeness' => $total_circle_completeness,
-      'total_circle_coverage_final' => $total_circle_coverage_final,
-      'total_pruning_completeness' => $total_pruning_completeness,
-      'total_pruning_coverage_final' => $total_pruning_coverage_final,
-      'total_gawangan_completeness' => $total_gawangan_completeness,
-      --}}
     @if (session()->has('data'))
-      <div class="text-muted h5">
-        <h5>
-          <span class="badge badge-primary">
-          Pencarian untuk Kebun: {{ session('data')['farm'] }}, Afdelling {{ session('data')['afdelling'] }}, Blok {{ session('data')['block'] }}
-          </span>
-        </h5>
+    @php
+        $data = session('data')
+    @endphp
+      <div>
+        <div class="h5">
+          Pencarian untuk  
+            <span class="badge badge-primary">Kebun:{{ $data['farm'] }}</span> -
+            <span class="badge badge-primary">Afdelling: {{ $data['afdelling'] }}</span> -
+            <span class="badge badge-primary">Blok: {{ $data['block'] }}</span> -
+            <span class="badge badge-primary">Periode: {{ $data['period'] }}</span> -
+            <span class="badge badge-primary">Tahun: {{ $data['planting_year'] }}</span>
+        </div>
+        <table class="table col-8">
+          <tr>
+            <td rowspan="2">Pupuk</td>
+            <td>Ketuntasan pekerjaan <b>{{ (int) $data['harvest_amount_used'] }} / {{  $data['harvest_amount_allocation'] }}</b></td>
+            <td>{{ number_format($data['total_harvest_completeness'], 2, '.', '') }} %</td>
+          </tr>
+          <tr>
+            <td>Coverage <b>{{ (int) $data['harvest_coverage'] }} / {{  $data['rkh_coverage'] }}</b></td>
+            <td>{{ number_format($data['total_harvest_coverage_final'], 2, '.', '') }} %</td>
+          </tr>
+          <tr>
+            <td rowspan="2">Spraying</td>
+            <td>Ketuntasan pekerjaan <b>{{ (int) $data['spraying_amount_used'] }} / {{  $data['spraying_amount_allocation'] }}</b></td>
+            <td>{{ number_format($data['total_spraying_completeness'], 2, '.', '') }} %</td>
+          </tr>
+          <tr>
+            <td>Coverage <b>{{ (int) $data['spraying_coverage'] }} / {{  $data['rkh_coverage'] }}</b></td>
+            <td>{{ number_format($data['total_spraying_coverage_final'], 2, '.', '') }} %</td>
+          </tr>
+          <tr>
+            <td rowspan="2">Manual Circle</td>
+            <td>Ketuntasan pekerjaan <b>{{ (int) $data['circle_used'] }} / {{  $data['circle_allocation'] }}</b></td>
+            <td>{{ number_format($data['total_circle_completeness'], 2, '.', '') }} %</td>
+          </tr>
+          <tr>
+            <td>Coverage <b>{{ (int) $data['circle_coverage'] }} / {{  $data['rkh_coverage'] }}</b></td>
+            <td>{{ number_format($data['total_circle_coverage_final'], 2, '.', '') }} %</td>
+          </tr>
+          <tr>
+            <td rowspan="2">Manual Pruning</td>
+            <td>Ketuntasan pekerjaan <b>{{ (int) $data['pruning_used'] }} / {{  $data['pruning_allocation'] }}</b></td>
+            <td>{{ number_format($data['total_pruning_completeness'], 2, '.', '') }} %</td>
+          </tr>
+          <tr>
+            <td>Coverage <b>{{ (int) $data['pruning_coverage'] }} / {{  $data['rkh_coverage'] }}</b></td>
+            <td>{{ number_format($data['total_pruning_coverage_final'], 2, '.', '') }} %</td>
+          </tr>
+          <tr>
+            <td>Manual Gawangan</td>
+            <td>Ketuntasan pekerjaan <b>{{ (int) $data['gawangan_used'] }} / {{  $data['gawangan_allocation'] }}</b></td>
+            <td>{{ number_format($data['total_gawangan_completeness'], 2, '.', '') }} %</td>
+          </tr>
+        </table>
       </div>
-      <table class="table col-8">
-        <tr>
-          <td rowspan="2">Pupuk</td>
-          <td>Ketuntasan pekerjaan</td>
-          <td>{{ session('data')['total_harvest_completeness'] }}</td>
-        </tr>
-        <tr>
-          <td>Coverage</td>
-          <td>{{ session('data')['total_harvest_coverage_final'] }}</td>
-        </tr>
-        <tr>
-          <td rowspan="2">Spraying</td>
-          <td>Ketuntasan pekerjaan</td>
-          <td>{{ session('data')['total_spraying_completeness'] }}</td>
-        </tr>
-        <tr>
-          <td>Coverage</td>
-          <td>{{ session('data')['total_spraying_coverage_final'] }}</td>
-        </tr>
-        <tr>
-          <td rowspan="2">Manual Circle</td>
-          <td>Ketuntasan pekerjaan</td>
-          <td>{{ session('data')['total_circle_completeness'] }}</td>
-        </tr>
-        <tr>
-          <td>Coverage</td>
-          <td>{{ session('data')['total_circle_coverage_final'] }}</td>
-        </tr>
-        <tr>
-          <td rowspan="2">Manual Pruning</td>
-          <td>Ketuntasan pekerjaan</td>
-          <td>{{ session('data')['total_pruning_completeness'] }}</td>
-        </tr>
-        <tr>
-          <td>Coverage</td>
-          <td>{{ session('data')['total_pruning_coverage_final'] }}</td>
-        </tr>
-        <tr>
-          <td>Manual Gawangan</td>
-          <td>Ketuntasan pekerjaan</td>
-          <td>{{ session('data')['total_gawangan_completeness'] }}</td>
-        </tr>
-      </table>
     @endif
   </div>
 </div>

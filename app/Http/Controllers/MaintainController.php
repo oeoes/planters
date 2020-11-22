@@ -145,21 +145,24 @@ class MaintainController extends Controller
     public function filter(Request $request) {
         $area = Area::where('farm_id', $request->farm)->where('afdelling_id', $request->afdelling)->where('block_id', $request->block)->first();
 
-        $farm = Farm::find($request->farm)->name;
-        $afdelling = Afdelling::find($request->afdelling)->name;
-        $block = Block::find($request->block)->name;
+        $farm = Farm::find($request->farm);
+        $afdelling = Afdelling::find($request->afdelling);
+        $block = Block::find($request->block);
 
         $area_id  = $area->id;
-        $rkh_maintain = RkhMaintain::where('area_id', $area_id)->where('period', $request->period)->where('planting_year', $request->pyear)->first();
+        $rkh_maintain = RkhMaintain::where('area_id', $area_id)
+                        ->where('period', $request->period)
+                        ->where('planting_year', $request->pyear)
+                        ->first();
+                        
         if (! $rkh_maintain) 
             return back()->withError('There is not daily work plan');
 
-        dd($rkh_maintain, $area_id, $request->all());
+
         $rkhm_id = $rkh_maintain->id;
         $rkhm_coverage = $rkh_maintain->coverage;
         $harvest_spraying = HarvestSpraying::where('rkh_maintain_id', $rkhm_id);
         $manual_maintain  = ManualMaintain::where('rkh_maintain_id', $rkhm_id);
-
 
             // Harvest Amount Used
             $harvest_amount_allocation = $rkh_maintain->fertilizer_amount;
@@ -204,9 +207,13 @@ class MaintainController extends Controller
             $gawangan_completeness = $gawangan_used / $gawangan_allocation * 100;
 
         $data = [
-            'farm' => $farm,
-            'afdelling' => $afdelling,
-            'block' => $block,
+            'farm' => $farm->name,
+            'afdelling' => $afdelling->name,
+            'block' => $block->name,
+            'rkh_coverage' => $rkhm_coverage,
+            'period' => $request->period,
+            'planting_year' => $request->pyear,
+
             'total_harvest_completeness'   => $gawangan_completeness,
             'total_harvest_coverage_final' => $harvest_coverage_final,
             'total_spraying_completeness'  => $spraying_completeness,
@@ -216,6 +223,26 @@ class MaintainController extends Controller
             'total_pruning_completeness'   => $pruning_completeness,
             'total_pruning_coverage_final' => $pruning_coverage_final,
             'total_gawangan_completeness'  => $gawangan_completeness,
+
+            'harvest_amount_allocation' => $harvest_amount_allocation,
+            'harvest_amount_used'       => (int) $harvest_amount_used,
+            'harvest_coverage'          => $harvest_coverage,
+            
+            'spraying_amount_allocation' => $spraying_amount_allocation,
+            'spraying_amount_used'       => $spraying_amount_used,
+            'spraying_coverage'          => $spraying_coverage,
+    
+            'circle_allocation' => $circle_allocation,
+            'circle_used'       => $circle_used,
+            'circle_coverage'   => $circle_coverage,
+            
+            'pruning_allocation' => $pruning_allocation,
+            'pruning_used'       => $pruning_used,
+            'pruning_coverage'   => $pruning_coverage,
+            
+            'gawangan_allocation' => $gawangan_allocation,
+            'gawangan_used'       => $gawangan_used
+
         ];
 
         return back()->with([

@@ -36,9 +36,9 @@
       </div>
     </div>
     <div class="content">
-      <div class="container-fluid"> 
+      <div class="container-fluid" style="min-height: 1000px"> 
         
-        @include('layouts.app')
+        @include('layouts.messages')
 
         @yield('content') 
       </div>

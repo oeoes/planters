@@ -16,11 +16,18 @@ class FruitlistsTableSeeder extends Seeder
     {
         $data = [
             [
+                'farm_id' => 1,
                 'name' => 'sawit'
-            ],
-            [
+            ],[
+                'farm_id' => 2,
                 'name' => 'apel'
-            ],
+            ],[
+                'farm_id' => 3,
+                'name' => 'Mangga'
+            ],[
+                'farm_id' => 4,
+                'name' => 'Markisa'
+            ]
 
         ];
         DB::table('fruit_lists')->insert($data);

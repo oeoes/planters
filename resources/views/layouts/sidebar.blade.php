@@ -32,7 +32,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('harvesting.index') }}" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
               <p>R. Kerja Panen</p>
             </a>

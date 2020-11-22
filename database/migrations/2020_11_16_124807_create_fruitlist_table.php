@@ -15,6 +15,7 @@ class CreateFruitlistTable extends Migration
     {
         Schema::create('fruit_lists', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('farm_id')->constrained();
             $table->string('name');
             $table->timestamps();
         });

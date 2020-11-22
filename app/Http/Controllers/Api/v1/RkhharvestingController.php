@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Models\Block;
+use App\Models\Farm;
 use App\Models\Foreman2;
 use App\Models\Harvesting\FruitHarvesting;
 use App\Models\Harvesting\Fruitlists;
@@ -155,7 +156,7 @@ class RkhharvestingController extends Controller
         $this->validate($request, [
             'rkh_harvesting_id' => 'required',
             'employee_id' => 'required',
-            'fruit_id' => 'required',
+            // 'fruit_id' => 'required',
             'harvest_target' => 'required|min:1',
             'harvest_amount' => 'required|min:1',
             'harvest_lines'  => 'required|min:1',
@@ -180,10 +181,16 @@ class RkhharvestingController extends Controller
             $report_image_url = null;
         }
 
+        $selected_farm = RkhHarvesting::find($request->rkh_harvesting_id);
+        $farm_id = $selected_farm->farm_id;
+
+        $selected_fruit = Fruitlists::find($farm_id);
+        $fruit_id = $selected_fruit->id;
+
         FruitHarvesting::create([
             'rkh_harvesting_id' => $request->rkh_harvesting_id,
             'employee_id' => $request->employee_id,
-            'fruit_id' => $request->fruit_id,
+            'fruit_id' => $fruit_id,
             'harvest_target' => $request->harvest_target,
             'harvest_amount' => $request->harvest_amount,
             'harvest_lines'  => $request->harvest_lines,
@@ -210,11 +217,18 @@ class RkhharvestingController extends Controller
         if (! $rkh) {
             return res(false, 404, 'There is no active work plan');
         } else {
+            $selected_farm = RkhHarvesting::find($rkh->id);
+            $farm_id = $selected_farm->farm_id;
+    
+            $selected_fruit = Fruitlists::find($farm_id);
+            $fruit_id = $selected_fruit->id;
+
             $data = [
                 'id' => $rkh->id,
                 'farm' => str_farm($rkh->farm_id),
                 'afdelling' => str_afdelling($rkh->afdelling_id),
-                'block' => str_block($rkh->block_id)
+                'block' => str_block($rkh->block_id),
+                'fruit' => str_fruit($fruit_id)
             ];
             return res(true, 200, 'Active work plan found', $data);
         }

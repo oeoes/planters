@@ -47,8 +47,12 @@ class Handler extends ExceptionHandler
             }
 
             return res(false, 404, $exception->getMessage());
-        }
-        if (! $request->wantsJson()) 
+        } else {
+            if(auth()->guard('assistant')->check()) {
+                return parent::render($request, $exception);
+            } 
             return redirect('/login');
+        }
+            
     }
 }

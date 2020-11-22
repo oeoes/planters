@@ -15,6 +15,8 @@ class AuthController extends Controller
     public function authenticate(Request $request ) {
         if (Auth::guard('assistant')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->intended('dashboard');
+        } else {
+            return back();
         }
     }
 
