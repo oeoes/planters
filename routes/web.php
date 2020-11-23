@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Foreman1Controller;
+use App\Http\Controllers\Foreman2Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AreaController;
@@ -7,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\MaintainController;
 use App\Http\Controllers\HarvestingController;
+use App\Http\Controllers\EmployeeController;
 
 Route::get('/', function() {
     return redirect('/login');
@@ -38,8 +41,18 @@ Route::group(['middleware' => ['auth:assistant']], function () {
         });
     });
 
-    Route::group(['prefix' => 'foreman'], function () {
-        
+    Route::group(['prefix' => 'foreman1'], function () {
+        route::get('/', [Foreman1Controller::class, 'index'])->name('foreman1.index');
+        Route::post('/store', [Foreman1Controller::class, 'store'])->name('foreman1.store'); 
+    });
+
+    Route::group(['prefix' => 'foreman2'], function () {
+        Route::get('/', [Foreman2Controller::class, 'index'])->name('foreman2.index');
+        Route::post('/store', [Foreman2Controller::class, 'store'])->name('foreman2.store');
+    });
+
+    Route::group(['prefix' => 'employee'], function () {
+        Route::get('/', [EmployeeController::class, 'index'])->name('employee.index');
     });
 
     Route::group(['prefix' => 'maintain'], function () {

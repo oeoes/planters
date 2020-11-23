@@ -72,21 +72,21 @@
 
           <li class="nav-header ml-1">User</li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('foreman1.index') }}" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
               <p>Daftar mandor 1</p>
             </a>
           </li>
 
             <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('foreman2.index') }}" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
               <p>Daftar mandor 2</p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('employee.index') }}" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
               <p>Daftar karyawan</p>
             </a>
