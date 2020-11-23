@@ -9,7 +9,7 @@ class Foreman2Controller extends Controller
 {
     public function index() {
         $foremans1 = Foreman2::orderByDesc('created_at')->get();
-        return view('foreman2.index', [
+        return view('users.foreman2.index', [
             'foremans2' => $foremans1
         ]);
     }

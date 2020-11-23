@@ -19,13 +19,9 @@ use App\Models\Maintain\ManualMaintain;
 class MaintainController extends Controller
 {
     public function index() {
-        $farms = Farm::all();
-        $afdellings = Afdelling::all();
-        $blocks = Block::all();
+        $maintaints = RkhMaintain::orderByDesc('created_at')->get();
         return view('maintain.index', [
-            'farms'      => $farms,
-            'afdellings' => $afdellings,
-            'blocks'     => $blocks
+            'maintains'      => $maintaints,
         ]);
     }
 

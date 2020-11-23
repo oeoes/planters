@@ -9,7 +9,7 @@ class EmployeeController extends Controller
 {
     public function index() {
         $employees = Employee::orderByDesc('created_at')->get();
-        return view('employee.index', [
+        return view('users.employee.index', [
             'employees' => $employees
         ]);
     }

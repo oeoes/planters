@@ -283,7 +283,7 @@ class RkhmaintainController extends Controller
         $results = $results->values();
 
         if (!$mm_s && !$hs_s) {
-            return res(false, 400, 'Work plan not defined');
+            return res(false, 404, 'Work plan not defined');
         }
             return res(true, 200, 'Work plan listed', $results);
         

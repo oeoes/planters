@@ -17,7 +17,7 @@
         </a>
       </div>
     </h5>
-    <table class="table table-hover">
+    <table class="table table-hover" style="font-size:10pt">
       <thead class="bg-primary">
         <tr>
           <th>#</th>
