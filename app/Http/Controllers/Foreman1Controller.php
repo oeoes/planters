@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Foreman1;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class Foreman1Controller extends Controller
 {
@@ -23,7 +24,7 @@ class Foreman1Controller extends Controller
             'name' => $request->foreman1,
             'email' => $request->email,
             'role' => 1,
-            'password' => bcrypt($request->password), // password
+            'password' => Hash::make($request->password), // password
         ]);
 
         return back()->withSuccess('Foreman 1 created!');
