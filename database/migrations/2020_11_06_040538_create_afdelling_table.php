@@ -16,6 +16,7 @@ class CreateAfdellingTable extends Migration
         Schema::create('afdellings', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('farm_id')->constrained();
             $table->timestamps();
         });
     }

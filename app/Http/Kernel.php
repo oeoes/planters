@@ -63,7 +63,9 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
-        'foreman1' => \App\Http\Middleware\Foreman1::class,
-        'foreman2' => \App\Http\Middleware\Foreman2::class
+        'foreman' => \App\Http\Middleware\Foreman::class,
+        'subforeman' => \App\Http\Middleware\Subforeman::class
+        // 'foreman1' => \App\Http\Middleware\Foreman1::class,
+        // 'foreman2' => \App\Http\Middleware\Foreman2::class
     ];
 }

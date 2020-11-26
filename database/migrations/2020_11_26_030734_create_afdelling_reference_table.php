@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBlockTable extends Migration
+class CreateAfdellingReferenceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateBlockTable extends Migration
      */
     public function up()
     {
-        Schema::create('blocks', function (Blueprint $table) {
+        Schema::create('afdelling_references', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('foreman_id')->constrained('foremans');
             $table->foreignId('afdelling_id')->constrained();
+            $table->integer('hk_total');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateBlockTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blocks');
+        Schema::dropIfExists('alfdelling_references');
     }
 }
