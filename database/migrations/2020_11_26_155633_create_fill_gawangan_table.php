@@ -16,9 +16,8 @@ class CreateFillGawanganTable extends Migration
         Schema::create('fill_gawangans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('fertilizer_id')->constrained();
-            $table->float('expectation, 9, 2');
+            $table->float('expectation', 9, 2);
             $table->string('image_url');
-            $table->string('image_cap');
             $table->json('hk_name');
             $table->text('subforeman_note')->nullable();
             $table->timestamps();

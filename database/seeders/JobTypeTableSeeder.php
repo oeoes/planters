@@ -20,16 +20,22 @@ class JobTypeTableSeeder extends Seeder
         // 4. Pengendalian hama&penyakit
         $jobs = [
             [
+                'id'   => 1,
                 'name' => 'Spraying'
             ],[
+                'id'   => 2,
                 'name' => 'Fertilizer'
             ],[
+                'id'   => 3,
                 'name' => 'Manual Circle'
             ],[
+                'id'   => 4,
                 'name' => 'Manual Pruning'
             ],[
+                'id'   => 5,
                 'name' => 'Manual Gawangan'
             ],[
+                'id'   => 6,
                 'name' => 'Pest Control'
             ],
         ];

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGawanganTable extends Migration
+class CreatePestControlTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateGawanganTable extends Migration
      */
     public function up()
     {
-        Schema::create('gawangans', function (Blueprint $table) {
+        Schema::create('pest_controls', function (Blueprint $table) {
             $table->id();
             $table->foreignId('block_ref_id')->constrained('block_references');
             $table->foreignId('foreman_id')->constrained('foremans');
             $table->foreignId('subforeman_id')->constrained('subforemans');
             $table->date('date');
-            $table->float('target', 8, 2);            
+            $table->string('type');
+            $table->string('qty');
+            $table->float('target', 8, 2);
             $table->integer('hk_used');
             $table->text('foreman_note')->nullable();
             $table->char('completed')->default(0);
@@ -34,6 +36,6 @@ class CreateGawanganTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gawangan');
+        Schema::dropIfExists('pest_controls');
     }
 }

@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Maintain;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class JobType extends Model
+class FillPcontrols extends Model
 {
     use HasFactory;
 
-    protected $table = 'job_types';
+    protected $table = 'fill_pcontrols';
     protected $guarded = [];
-    public $incrementing = false;
 }

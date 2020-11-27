@@ -16,14 +16,15 @@ class CreateFertilizerTable extends Migration
         Schema::create('fertilizers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('block_ref_id')->constrained('block_references');
-            $table->date('date');
+            $table->foreignId('foreman_id')->constrained('foremans');
             $table->foreignId('subforeman_id')->constrained('subforemans');
+            $table->date('date');
             $table->string('type');
-            $table->string('materials');
-            $table->float('target, 8, 2');
+            $table->string('qty');
+            $table->float('target', 8, 2);            
             $table->integer('hk_used');
             $table->text('foreman_note')->nullable();
-            $table->char('completed');
+            $table->char('completed')->default(0);
             $table->timestamps();
         });
     }

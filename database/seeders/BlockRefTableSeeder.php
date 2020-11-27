@@ -22,11 +22,13 @@ class BlockRefTableSeeder extends Seeder
         // $table->float('population_perblock', 8, 2);
         $data = [
             'block_id' => 1,
+            'foreman_id' => 1,
             'planting_year' => '2015',
-            'block_coverage' => 12,
-            'population_coverage' => 10,
-            'population_perblock' => 12*10
-            
+            'total_coverage' => 100,
+            'used_coverage' => 0,
+            'population_coverage' => 100,
+            'population_perblock' => 100 / 12,
+            'jobtype_id' => 1,
         ];
 
         DB::table('block_references')->insert($data);

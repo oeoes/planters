@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFillSprayingTable extends Migration
+class CreateFillPcontrolTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateFillSprayingTable extends Migration
      */
     public function up()
     {
-        Schema::create('fill_sprayings', function (Blueprint $table) {
+        Schema::create('fill_pcontrols', function (Blueprint $table) {
             $table->id();
             $table->foreignId('fertilizer_id')->constrained();
             $table->float('expectation', 9, 2);
@@ -32,6 +32,6 @@ class CreateFillSprayingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fill_sprayings');
+        Schema::dropIfExists('pest_controls');
     }
 }

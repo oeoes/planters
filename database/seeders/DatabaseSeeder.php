@@ -24,14 +24,15 @@ class DatabaseSeeder extends Seeder
             AssistantTableSeeder::class,
             FarmTableSeeder::class,
             AfdellingTableSeeder::class,
-
             BlockTableSeeder::class,
             ForemanTableSeeder::class,
-            SubforemanTableSeeder::class,
-            
             AfdellingRefTableSeeder::class,
+            JobTypeTableSeeder::class,
+            SubforemanTableSeeder::class,
             BlockRefTableSeeder::class,
-            JobTypeTableSeeder::class
         ]);
+
+        \App\Models\Subforeman::factory(10)->create();
+
     }
 }

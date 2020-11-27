@@ -18,7 +18,8 @@ class CreateSubforemanTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->foreignId('afdelling_id')->constrained();
+            $table->foreignId('afdelling_id')->constrained('afdellings');
+            $table->foreignId('jobtype_id')->constrained('job_types');
             $table->char('active')->default(0);
             $table->timestamps();
         });
