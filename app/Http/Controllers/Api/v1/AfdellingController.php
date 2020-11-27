@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class AfdellingController extends Controller
 {
-    public function create_afdelling_ref(Request $request) {
+    public function store_afdelling_ref(Request $request) {
         $foreman = Foreman::where('id', $request->foreman_id)->where('afdelling_id', $request->afdelling_id)->first();
         if (! $foreman) 
             return res(false, 404, 'Error invalid foreman');

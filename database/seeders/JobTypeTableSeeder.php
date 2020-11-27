@@ -24,7 +24,11 @@ class JobTypeTableSeeder extends Seeder
             ],[
                 'name' => 'Fertilizer'
             ],[
-                'name' => 'Manual'
+                'name' => 'Manual Circle'
+            ],[
+                'name' => 'Manual Pruning'
+            ],[
+                'name' => 'Manual Gawangan'
             ],[
                 'name' => 'Pest Control'
             ],
