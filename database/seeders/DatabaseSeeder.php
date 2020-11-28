@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             BlockRefTableSeeder::class,
         ]);
 
-        \App\Models\Subforeman::factory(10)->create();
+        \App\Models\Subforeman::factory(100)->create();
 
     }
 }

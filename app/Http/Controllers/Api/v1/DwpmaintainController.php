@@ -12,7 +12,7 @@ use App\Models\Maintain\FillSpraying;
 use App\Models\Maintain\GawanganType;
 use App\Models\Maintain\PruningType;
 use App\Models\Maintain\SprayingType;
-use App\Models\PestControl;
+use App\Models\Maintain\PestControl;
 use App\Models\Subforeman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +27,7 @@ class DwpmaintainController extends Controller
         }
         $request->validate($valids);
 
-        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman()->afdelling_id)->first();
+        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
         if (! $subforeman) 
             return res(false, 404, 'Invalid subforeman');
 
@@ -36,7 +36,7 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Wrong foreman or block references');
 
         if ($blockrefs->jobtype_id != 1 || $subforeman->jobtype_id != 1) 
-                return res(false, 404, 'Wrong job type', [$blockrefs->jobtype_id, $subforeman->jobtype_id]);
+            return res(false, 404, 'Wrong job type', [$blockrefs->jobtype_id, $subforeman->jobtype_id]);
 
         $spraying = SprayingType::where('block_ref_id', $request->block_ref_id)->where('foreman_id', $request->foreman_id)->latest()->first();
         if ($spraying) {
@@ -45,7 +45,7 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        SprayingType::create([
+        $s = SprayingType::create([
             'block_ref_id' => $request->block_ref_id,
             'foreman_id' => $request->foreman_id,
             'subforeman_id'=> $request->subforeman_id,
@@ -59,7 +59,18 @@ class DwpmaintainController extends Controller
         $subforeman->increment('active');
         $subforeman->save();
 
-        return res(true, 200, 'Daily work plan spraying added');
+        $data = [
+            'block_ref_id' => (int) $request->block_ref_id,
+            'foreman_name' => (int) foreman($request->foreman_id)->name,
+            'subforeman_id'=> (int) subforeman($request->subforeman_id)->name,
+            'date' => $request->date,
+            'type' => $request->type,
+            'target'  => (float) $request->target,
+            'hk_used' => (float)$request->hk_used,
+            'foreman_note' => $request->foreman_note
+        ];
+
+        return res(true, 200, 'Daily work plan spraying added', $data);
     }
 
     public function store_fertilizer(Request $request) {
@@ -68,7 +79,7 @@ class DwpmaintainController extends Controller
         }
         $request->validate($valids);
 
-        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman()->afdelling_id)->first();
+        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
         if (! $subforeman) 
             return res(false, 404, 'Invalid subforeman');
 
@@ -100,7 +111,18 @@ class DwpmaintainController extends Controller
         $subforeman->increment('active');
         $subforeman->save();
 
-        return res(true, 200, 'Daily work plan fertilizer added');
+        $data = [
+            'block_ref_id' => (int) $request->block_ref_id,
+            'foreman_name' => (int) foreman($request->foreman_id)->name,
+            'subforeman_id'=> (int) subforeman($request->subforeman_id)->name,
+            'date' => $request->date,
+            'type' => $request->type,
+            'target'  => (float) $request->target,
+            'hk_used' => (float)$request->hk_used,
+            'foreman_note' => $request->foreman_note
+        ];
+
+        return res(true, 200, 'Daily work plan fertilizer added', $data);
     }
 
     public function store_pcontrol(Request $request) {
@@ -109,7 +131,7 @@ class DwpmaintainController extends Controller
         }
         $request->validate($valids);
 
-        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman()->afdelling_id)->first();
+        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
         if (! $subforeman) 
             return res(false, 404, 'Invalid subforeman');
 
@@ -141,7 +163,18 @@ class DwpmaintainController extends Controller
         $subforeman->increment('active');
         $subforeman->save();
 
-        return res(true, 200, 'Daily work plan pest control added');
+        $data = [
+            'block_ref_id' => (int) $request->block_ref_id,
+            'foreman_name' => (int) foreman($request->foreman_id)->name,
+            'subforeman_id'=> (int) subforeman($request->subforeman_id)->name,
+            'date' => $request->date,
+            'type' => $request->type,
+            'target'  => (float) $request->target,
+            'hk_used' => (float)$request->hk_used,
+            'foreman_note' => $request->foreman_note
+        ];
+
+        return res(true, 200, 'Daily work plan pest control added', $data);
     }
 
     public function store_mcircle(Request $request) {
@@ -150,7 +183,7 @@ class DwpmaintainController extends Controller
         }
         $request->validate($valids);
 
-        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman()->afdelling_id)->first();
+        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
         if (! $subforeman) 
             return res(false, 404, 'Invalid subforeman');
 
@@ -178,7 +211,20 @@ class DwpmaintainController extends Controller
             'foreman_note' => $request->foreman_note
         ]);
 
-        return res(true, 200, 'Daily work plan manual circle added');
+        $subforeman->increment('active');
+        $subforeman->save();
+
+        $data = [
+            'block_ref_id' => (int) $request->block_ref_id,
+            'foreman_name' => (int) foreman($request->foreman_id)->name,
+            'subforeman_id'=> (int) subforeman($request->subforeman_id)->name,
+            'date' => $request->date,
+            'target'  => (float) $request->target,
+            'hk_used' => (float)$request->hk_used,
+            'foreman_note' => $request->foreman_note
+        ];
+
+        return res(true, 200, 'Daily work plan manual circle added', $data);
 
     }
 
@@ -188,7 +234,7 @@ class DwpmaintainController extends Controller
         }
         $request->validate($valids);
 
-        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman()->afdelling_id)->first();
+        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
         if (! $subforeman) 
             return res(false, 404, 'Invalid subforeman');
 
@@ -216,7 +262,20 @@ class DwpmaintainController extends Controller
             'foreman_note' => $request->foreman_note
         ]);
 
-        return res(true, 200, 'Daily work plan pruning added');
+        $subforeman->increment('active');
+        $subforeman->save();
+
+        $data = [
+            'block_ref_id' => (int) $request->block_ref_id,
+            'foreman_name' => (int) foreman($request->foreman_id)->name,
+            'subforeman_id'=> (int) subforeman($request->subforeman_id)->name,
+            'date' => $request->date,
+            'target'  => (float) $request->target,
+            'hk_used' => (float)$request->hk_used,
+            'foreman_note' => $request->foreman_note
+        ];
+
+        return res(true, 200, 'Daily work plan pruning added', $data);
     }
 
     public function store_mgawangan(Request $request) {
@@ -225,7 +284,7 @@ class DwpmaintainController extends Controller
         }
         $request->validate($valids);
 
-        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman()->afdelling_id)->first();
+        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
         if (! $subforeman) 
             return res(false, 404, 'Invalid subforeman');
 
@@ -253,7 +312,20 @@ class DwpmaintainController extends Controller
             'foreman_note' => $request->foreman_note
         ]);
 
-        return res(true, 200, 'Daily work plan pruning added');
+        $subforeman->increment('active');
+        $subforeman->save();
+
+        $data = [
+            'block_ref_id' => (int) $request->block_ref_id,
+            'foreman_name' => (int) foreman($request->foreman_id)->name,
+            'subforeman_id'=> (int) subforeman($request->subforeman_id)->name,
+            'date' => $request->date,
+            'target'  => (float) $request->target,
+            'hk_used' => (float)$request->hk_used,
+            'foreman_note' => $request->foreman_note
+        ];
+
+        return res(true, 200, 'Daily work plan pruning added', $data);
     }
 
     public function active_subforeman($jobtype_id, $afdelling_id) { 

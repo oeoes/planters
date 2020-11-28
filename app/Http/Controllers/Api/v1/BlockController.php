@@ -24,7 +24,7 @@ class BlockController extends Controller
         if ($validator->fails())
             return res(false, 404, $validator->errors());
 
-        // $valid_block = Block::where('afdelling_id', foreman()->afdelling_id)->where('id', $request->block_id)->first();
+        // $valid_block = Block::where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->where('id', $request->block_id)->first();
         // if (! $valid_block) 
         //     return res(false, 404, 'Block not allowed');
 
@@ -35,7 +35,7 @@ class BlockController extends Controller
 
         BlockReference::create([
             'block_id' => $request->block_id,
-            'foreman_id' => foreman()->id,
+            'foreman_id' => foreman($request->foreman_id)->id,
             'jobtype_id' => $request->jobtype_id,
             'planting_year' => $request->planting_year,
             'population_coverage' => $request->population_coverage,
@@ -48,7 +48,7 @@ class BlockController extends Controller
         $data = [
             'block_id' => $request->block_id,
             'block_code' => block($request->block_id),
-            'foreman' => foreman()->name,
+            'foreman' => foreman($request->foreman_id)->name,
             'job_type' => jobtype($request->jobtype_id),
             'planting_year' => $request->planting_year,
             'population_coverage' => $request->population_coverage,
@@ -58,11 +58,15 @@ class BlockController extends Controller
             'completed' => 0,
         ];
 
-        return res(true, 200, 'Reference of block created', $a);
+        return res(true, 200, 'Reference of block created', $data);
     }
 
     public function blocks() {
         $blocks = Block::all();
         return res(true, 200, 'Blocks listed', $blocks);
+    }
+
+    public function active_block_reference() {
+
     }
 }

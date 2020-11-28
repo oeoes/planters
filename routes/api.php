@@ -27,6 +27,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         // Route::get(())
 
         Route::get('blocks', [BlockController::class, 'blocks']);
+        Route::get('active-block-reference', [BlockController::class, 'active-block-reference']);
     });
 
     Route::group(['prefix' => 'subforeman'], function () {

@@ -10,4 +10,10 @@ class SprayingType extends Model
 
     protected $table = 'sprayings';
     protected $guarded = [];
+
+    protected $casts = [
+        'block_ref_id' => 'integer',
+        'foreman_id' => 'integer',
+        'subforeman_id' => 'integer',
+    ];
 }

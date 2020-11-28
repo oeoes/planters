@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Block;
+use App\Models\Foreman;
+use App\Models\Subforeman;
+
 function res($status, $code, $message, $data = null) {
   return response()->json([
     'status'   => $status,
@@ -15,12 +19,14 @@ function res($status, $code, $message, $data = null) {
     ------------------------------------
     */
 
-    function foreman() {
-        return auth()->guard('foreman')->user();
+    function foreman($id) {
+      $fm = Foreman::find($id);
+        return $fm;
     }
 
-    function subforeman() {
-      return auth()->guard('subforeman')->user();
+    function subforeman($id) {
+      $sfm = Subforeman::find($id);
+      return $sfm;
     }
 
     function jobtype($jobtypeid) {
@@ -41,6 +47,6 @@ function res($status, $code, $message, $data = null) {
     }
 
     function block($blockid) {
-      $block = App\Models\Block::find($blockid);
+      $block = Block::find($blockid);
       return $block->code;
     }
