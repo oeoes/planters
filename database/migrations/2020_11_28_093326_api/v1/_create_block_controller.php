@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBlockTable extends Migration
+class Api/v1/CreateBlockController extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,7 @@ class CreateBlockTable extends Migration
      */
     public function up()
     {
-        Schema::create('blocks', function (Blueprint $table) {
-            $table->id();
-            $table->string('code');
-            $table->foreignId('afdelling_id')->constrained();
-            $table->timestamps();
-        });
+        //
     }
 
     /**
@@ -28,6 +23,6 @@ class CreateBlockTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blocks');
+        //
     }
 }

@@ -16,19 +16,19 @@ class BlockTableSeeder extends Seeder
     {
         $blocks = [
             [
-                'name' => 'Block AA',
+                'code' => 'Block AA',
                 'afdelling_id' => 1,
             ],
             [
-                'name' => 'Block BB',
+                'code' => 'Block BB',
                 'afdelling_id' => 2,
             ],
             [
-                'name' => 'Block CC',
+                'code' => 'Block CC',
                 'afdelling_id' => 3,
             ],
             [
-                'name' => 'Block DD',
+                'code' => 'Block DD',
                 'afdelling_id' => 4,
             ]
             

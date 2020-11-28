@@ -20,7 +20,6 @@ class CreateFertilizerTable extends Migration
             $table->foreignId('subforeman_id')->constrained('subforemans');
             $table->date('date');
             $table->string('type');
-            $table->string('qty');
             $table->float('target', 8, 2);            
             $table->integer('hk_used');
             $table->text('foreman_note')->nullable();

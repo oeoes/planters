@@ -7,12 +7,17 @@ use App\Models\BlockReference;
 use App\Models\Foreman;
 use App\Models\Maintain\CircleType;
 use App\Models\Maintain\FertilizerType;
+use App\Models\Maintain\FillFertilizer;
+use App\Models\Maintain\FillSpraying;
 use App\Models\Maintain\GawanganType;
 use App\Models\Maintain\PruningType;
 use App\Models\Maintain\SprayingType;
 use App\Models\PestControl;
 use App\Models\Subforeman;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Validator;
+use Ramsey\Uuid\Uuid;
 
 class DwpmaintainController extends Controller
 {
@@ -46,7 +51,6 @@ class DwpmaintainController extends Controller
             'subforeman_id'=> $request->subforeman_id,
             'date' => $request->date,
             'type' => $request->type,
-            'qty' => $request->qty,
             'target'  => $request->target,
             'hk_used' => $request->hk_used,
             'foreman_note' => $request->foreman_note
@@ -88,7 +92,6 @@ class DwpmaintainController extends Controller
             'subforeman_id'=> $request->subforeman_id,
             'date' => $request->date,
             'type' => $request->type,
-            'qty' => $request->qty,
             'target'  => $request->target,
             'hk_used' => $request->hk_used,
             'foreman_note' => $request->foreman_note
@@ -130,7 +133,6 @@ class DwpmaintainController extends Controller
             'subforeman_id'=> $request->subforeman_id,
             'date' => $request->date,
             'type' => $request->type,
-            'qty' => $request->qty,
             'target'  => $request->target,
             'hk_used' => $request->hk_used,
             'foreman_note' => $request->foreman_note
@@ -268,8 +270,138 @@ class DwpmaintainController extends Controller
     }
 
     // For mandor bidang
-    public function fill_spraying() {
+    public function fill_spraying(Request $request) {
+        /*
+            {
+                "spraying_id": "1",
+                "expectation": "12",
+                "subforeman_note": null,
+                "begin": "13:30",
+                "ended": "18:30",
+                "hk_name": [
+                    "diana",
+                    "seredity"
+                ],
+                "image": {}
+            }
+        */
+        $validator = Validator::make($request->all(), [
+            'spraying_id' => 'required',
+            'expectation' => 'required',
+            'begin' => 'required',
+            'ended' => 'required',
+        ]);
+
+        if ($validator->fails())
+            return res(false, 404, $validator->errors());
+
+        $fillspraying = FillSpraying::where('spraying_id', $request->spraying_id)->first();
+        if ($fillspraying->exists()) 
+            return res(false, 404, 'Data for today existed');
+
+        if ($request->hasFile('image')) {
+            $request->validate([ 'image' => 'image:jpeg,png,jpg|max:2048'   ]);
+            $image = $request->file('image');
+            $image_folder = 'maintain/spraying';
+            $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
+            $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
+            $image_url = asset('/storage/' . $image_url);
+        } else {
+            $image_url = null;
+        }
+
+        FillSpraying::create([
+            'spraying_id' => $request->spraying_id,
+            'expectation' => $request->expectation,
+            'image' => $image_url,
+            'subforeman_note' => $request->subforeman_note,
+            'begin' => $request->begin,
+            'ended' => $request->ended,
+            'hk_name' => $request->hk_name
+        ]);
+
         
+        return res(true, 200, 'Spraying report filled successfully');
+    }
+
+    public function fill_fertilizer(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'spraying_id' => 'required',
+            'expectation' => 'required',
+            'begin' => 'required',
+            'ended' => 'required',
+        ]);
+
+        if ($validator->fails())
+            return res(false, 404, $validator->errors());
+
+        $fillfertilizer = FillFertilizer::where('fertilizer_id', $request->fertilizer_id)->first();
+        if ($fillfertilizer->exists()) 
+            return res(false, 404, 'Data for today existed');
+
+        if ($request->hasFile('image')) {
+            $request->validate([ 'image' => 'image:jpeg,png,jpg|max:2048' ]);
+            $image = $request->file('image');
+            $image_folder = 'maintain/fertilizer';
+            $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
+            $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
+            $image_url = asset('/storage/' . $image_url);
+        } else {
+            $image_url = null;
+        }
+
+        FillFertilizer::create([
+            'fertilizer_id' => $request->fertilizer_id,
+            'expectation' => $request->expectation,
+            'image' => $image_url,
+            'subforeman_note' => $request->subforeman_note,
+            'begin' => $request->begin,
+            'ended' => $request->ended,
+            'hk_name' => $request->hk_name
+        ]);
+
+        
+        return res(true, 200, 'fertilizer report filled successfully');
+    }
+
+    public function fill_pcontrol(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'spraying_id' => 'required',
+            'expectation' => 'required',
+            'begin' => 'required',
+            'ended' => 'required',
+        ]);
+
+        if ($validator->fails())
+            return res(false, 404, $validator->errors());
+
+        $fillfertilizer = FillFertilizer::where('fertilizer_id', $request->fertilizer_id)->first();
+        if ($fillfertilizer->exists()) 
+            return res(false, 404, 'Data for today existed');
+
+        if ($request->hasFile('image')) {
+            $request->validate([ 'image' => 'image:jpeg,png,jpg|max:2048' ]);
+            $image = $request->file('image');
+            $image_folder = 'maintain/fertilizer';
+            $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
+            $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
+            $image_url = asset('/storage/' . $image_url);
+        } else {
+            $image_url = null;
+        }
+
+        FillFertilizer::create([
+            'fertilizer_id' => $request->fertilizer_id,
+            'expectation' => $request->expectation,
+            'image' => $image_url,
+            'subforeman_note' => $request->subforeman_note,
+            'begin' => $request->begin,
+            'ended' => $request->ended,
+            'hk_name' => $request->hk_name
+        ]);
+
+        
+        return res(true, 200, 'fertilizer report filled successfully')
     }
 
 }

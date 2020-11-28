@@ -15,12 +15,13 @@ class CreateFillSprayingTable extends Migration
     {
         Schema::create('fill_sprayings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fertilizer_id')->constrained();
+            $table->foreignId('spraying_id')->constrained();
             $table->float('expectation', 9, 2);
-            $table->string('image_url');
-            $table->string('fill_qty');
+            $table->string('image')->nullable();
             $table->json('hk_name');
             $table->text('subforeman_note')->nullable();
+            $table->time('begin');
+            $table->time('ended');
             $table->timestamps();
         });
     }
