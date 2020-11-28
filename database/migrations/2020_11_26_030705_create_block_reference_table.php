@@ -15,14 +15,14 @@ class CreateBlockReferenceTable extends Migration
     {
         Schema::create('block_references', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('block_id')->constrained();
+            $table->foreignId('block_id')->constrained('blocks');
             $table->foreignId('foreman_id')->constrained('foremans');
             $table->foreignId('jobtype_id')->constrained('job_types');
             $table->char('planting_year');
-            $table->float('total_coverage', 8, 2);
-            $table->float('used_coverage');
-            $table->float('population_coverage', 8, 2);
-            $table->float('population_perblock', 8, 2);
+            $table->double('total_coverage', 8, 2);
+            $table->double('available_coverage', 8, 2);
+            $table->double('population_coverage', 8, 2);
+            $table->double('population_perblock', 8, 2);
             $table->char('completed')->default(0);
             $table->timestamps();
         });

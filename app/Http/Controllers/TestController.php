@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Afdelling;
 use App\Models\Area;
+use App\Models\Foreman;
 use App\Models\Foreman1;
 use App\Models\Foreman2;
 use App\Models\Maintain\HarvestSpraying;
 use App\Models\Maintain\ManualMaintain;
+use App\Models\Subforeman;
 use Illuminate\Support\Facades\Storage;
 
 class TestController extends Controller
@@ -29,14 +31,14 @@ class TestController extends Controller
         return Storage::get('images/file.txt');
     }
 
-    public function fm1() {
-        $fms = Foreman1::all();
-        return response()->json($fms);
+    public function fm() {
+        $fm = Foreman::all();
+        return $fm;
     }
 
-    public function fm2 (){
-        $fms = Foreman2::all();
-        return response()->json($fms);
+    public function sfm() {
+        $sfm = Subforeman::all();
+        return $sfm;
     }
 
     public function sql() {

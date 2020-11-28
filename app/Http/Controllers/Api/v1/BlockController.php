@@ -24,13 +24,14 @@ class BlockController extends Controller
         if ($validator->fails())
             return res(false, 404, $validator->errors());
 
-        $valid_block = Block::where('afdelling_id', foreman()->afdelling_id)->where('id', $request->block_id)->first();
-        if (! $valid_block) 
-            return res(false, 404, 'Block not allowed');
+        // $valid_block = Block::where('afdelling_id', foreman()->afdelling_id)->where('id', $request->block_id)->first();
+        // if (! $valid_block) 
+        //     return res(false, 404, 'Block not allowed');
 
-        $block_references = BlockReference::where('block_id', $request->block_id)->where('planting_year', $request->planting_year)->first();
-        if ($block_references) 
-            return res(false, 400, 'Reference of block already created');
+        // $block_references = BlockReference::where('block_id', $request->block_id)->where('planting_year', $request->planting_year)->first();
+        // if ($block_references) 
+        //     return res(false, 400, 'Reference of block already created');
+            $population_perblock = ($request->population_coverage /  $request->total_coverage);
 
         BlockReference::create([
             'block_id' => $request->block_id,
@@ -38,7 +39,7 @@ class BlockController extends Controller
             'jobtype_id' => $request->jobtype_id,
             'planting_year' => $request->planting_year,
             'population_coverage' => $request->population_coverage,
-            'population_perblock' => $request->population_coverage / $request->total_coverage,
+            'population_perblock' => $population_perblock,
             'total_coverage' => $request->total_coverage,
             'used_coverage' => 0,
             'completed' => 0,
@@ -57,7 +58,7 @@ class BlockController extends Controller
             'completed' => 0,
         ];
 
-        return res(true, 200, 'Reference of block created', $data);
+        return res(true, 200, 'Reference of block created', $a);
     }
 
     public function blocks() {

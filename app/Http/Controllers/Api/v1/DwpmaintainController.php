@@ -256,11 +256,11 @@ class DwpmaintainController extends Controller
         return res(true, 200, 'Daily work plan pruning added');
     }
 
-    public function active_subforeman($jobtype_id) { 
+    public function active_subforeman($jobtype_id, $afdelling_id) { 
         // located on foreman route / area
         // active = 0, where standby
         $subforeman = Subforeman::where('jobtype_id', $jobtype_id)
-                     ->where('afdelling_id', foreman()->afdelling_id)
+                     ->where('afdelling_id', $afdelling_id)
                      ->where('active', 0)->get();
         if ($subforeman->isEmpty()) 
             return res(false, 404, "All subforeman were working");
@@ -401,7 +401,7 @@ class DwpmaintainController extends Controller
         ]);
 
         
-        return res(true, 200, 'fertilizer report filled successfully')
+        return res(true, 200, 'fertilizer report filled successfully');
     }
 
 }

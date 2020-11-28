@@ -13,10 +13,9 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('jwt.auth')
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
-
     Route::group(['prefix' => 'foreman', 'middleware' => ['foreman']], function () {
         Route::post('store-afdelling-ref', [AfdellingController::class, 'store_afdelling_ref']);
-        Route::get('sub-foreman/{jobtype}', [DwpmaintainController::class, 'active_subforeman']);
+        Route::get('sub-foreman/{jobtype}/afdelling/{afdelling_id}', [DwpmaintainController::class, 'active_subforeman']);
         
         Route::post('store-spraying',  [DwpmaintainController::class, 'store_spraying']);
         Route::post('store-fertilizer',[DwpmaintainController::class, 'store_fertilizer']);
@@ -25,6 +24,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::post('store-mpruning',  [DwpmaintainController::class, 'store_mpruning']);
         Route::post('store-mgawangan', [DwpmaintainController::class, 'store_mgawangan']);
         Route::post('store-block-references', [BlockController::class, 'store_block_references']);
+        // Route::get(())
 
         Route::get('blocks', [BlockController::class, 'blocks']);
     });
@@ -40,8 +40,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
 });
 
-Route::get('fm1', [TestController::class, 'fm1']);
-Route::get('fm2', [TestController::class, 'fm2']);
+Route::get('fm', [TestController::class, 'fm']);
+Route::get('sfm', [TestController::class, 'sfm']);
 Route::get('sql', [TestController::class, 'sql']);
 Route::get('arr', [TestController::class, 'arr']);
 
