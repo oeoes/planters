@@ -14,8 +14,8 @@
                   <thead class="text-muted">
                       <tr>
                           <th>#</th>
-                          <th>Kebun</th>
                           <th>Afdelling</th>
+                          <th>Kebun</th>
                           <th>HK Total</th>
                           <th>Action</th>
                       </tr>
@@ -24,8 +24,8 @@
                       @foreach ($afdellings as $key => $afdelling)
                       <tr>
                           <td scope="row">{{ $loop->iteration }}</td>
-                          <td>{{ $afdelling->farm }}</td>
                           <td>{{ $afdelling->name }}</td>
+                          <td>{{ $afdelling->farm }}</td>
                           <td>{{ $afdelling->hk_total }}</td>
                           <td>
                               <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"

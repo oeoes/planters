@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ForemanController;
-use App\Http\Controllers\Foreman2Controller;
+use App\Http\Controllers\SubforemanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AreaController;

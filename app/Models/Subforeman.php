@@ -24,11 +24,7 @@ class Subforeman extends Authenticatable implements JWTSubject
         return [];
     }
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = [];
 
     protected $hidden = [
         'password',

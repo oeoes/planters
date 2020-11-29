@@ -3,15 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\SubForeman;
+use App\Models\Subforeman;
+use App\Models\Afdelling;
+use App\Models\JobType;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class SubforemanController extends Controller
 {
     public function index() {
-        $subforemans = SubForeman::orderByDesc('created_at')->get();
+        $afdellings = Afdelling::all();
+        $job_types = JobType::all();
+        $subforemans = DB::table('subforemans')
+                        ->join('afdellings', 'afdellings.id', '=', 'subforemans.afdelling_id')
+                        ->join('job_types', 'job_types.id', '=', 'subforemans.jobtype_id')
+                        ->select('subforemans.*', 'afdellings.name as afdelling', 'afdellings.id as afdelling_id', 'job_types.name as job_type', 'job_types.id as jobtype_id')
+                        ->get();
+
         return view('users.subforeman.index', [
-            'subforemans' => $subforemans
+            'subforemans' => $subforemans,
+            'afdellings' => $afdellings,
+            'job_types' => $job_types,
         ]);
     }
 
@@ -20,7 +32,7 @@ class SubforemanController extends Controller
             'subforeman' => 'required',
         ]);
 
-        SubForeman::create([
+        Subforeman::create([
             'name' => $request->subforeman,
             'email' => $request->email,
             'afdelling_id' => $request->afdelling_id,

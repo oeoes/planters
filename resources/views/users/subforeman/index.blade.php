@@ -20,49 +20,70 @@ Daftar Mandor 2
                         <th>#</th>
                         <th>Nama Mandor</th>
                         <th>Email</th>
+                        <th>Afdelling</th>
+                        <th>Jenis Pekerjaan</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($foremans2 as $key => $foreman2)
+                    @foreach ($subforemans as $key => $subforeman)
                     <tr>
                         <td scope="row">{{ $loop->iteration }}</td>
-                        <td>{{ $foreman2->name }}</td>
-                        <td>{{ $foreman2->email }}</td>
+                        <td>{{ $subforeman->name }}</td>
+                        <td>{{ $subforeman->email }}</td>
+                        <td>{{ $subforeman->afdelling }}</td>
+                        <td>{{ $subforeman->job_type }}</td>
                         <td>
                             <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
-                                data-target="#edit-foreman2{{$key}}"><i class="nav-icon fas fa-pen"></i>
+                                data-target="#edit-subforeman{{$key}}"><i class="nav-icon fas fa-pen"></i>
                             </button>
                             <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"
-                                data-target="#delete-foreman2{{$key}}"><i class="nav-icon fas fa-trash"></i>
+                                data-target="#delete-subforeman{{$key}}"><i class="nav-icon fas fa-trash"></i>
                             </button>
                         </td>
 
-                        <!-- Modal edit foreman2 -->
-                        <div class="modal fade" id="edit-foreman2{{$key}}" tabindex="-1"
-                            aria-labelledby="edit-foreman2Label" aria-hidden="true">
+                        <!-- Modal edit subforeman -->
+                        <div class="modal fade" id="edit-subforeman{{$key}}" tabindex="-1"
+                            aria-labelledby="edit-subforemanLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="edit-foreman2Label">Edit foreman2</h5>
+                                        <h5 class="modal-title" id="edit-subforemanLabel">Edit subforeman</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('foreman2.update', ['foreman2' => $foreman2->id]) }}"
+                                        <form
+                                            action="{{ route('subforeman.update', ['subforeman' => $subforeman->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('PUT')
                                             <div class="form-group">
-                                                <label for="foreman2">Foreman-1</label>
-                                                <input type="text" name="foreman2" id="foreman2" class="form-control"
-                                                    required value="{{ $foreman2->name }}">
+                                                <label for="subforeman">Nama</label>
+                                                <input type="text" name="subforeman" id="subforeman"
+                                                    class="form-control" required value="{{ $subforeman->name }}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="email">Email</label>
                                                 <input type="email" name="email" id="email" class="form-control"
-                                                    required value="{{ $foreman2->email }}">
+                                                    required value="{{ $subforeman->email }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="afdelling_id">Afdelling</label>
+                                                <select name="afdelling_id" id="afdelling_id" class="form-control">
+                                                    @foreach($afdellings as $af)
+                                                    <option <?php if($af->id == $subforeman->afdelling_id) echo "selected"  ?> value="{{ $af->id }}">{{ $af->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="jobtype_id">Afdelling</label>
+                                                <select name="jobtype_id" id="jobtype_id" class="form-control">
+                                                    @foreach($job_types as $jt)
+                                                    <option <?php if($jt->id == $subforeman->jobtype_id) echo "selected"  ?> value="{{ $jt->id }}">{{ $jt->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="password">Password</label>
@@ -83,23 +104,24 @@ Daftar Mandor 2
                             </div>
                         </div>
 
-                        <!-- Modal delete foreman2 -->
-                        <div class="modal fade" id="delete-foreman2{{$key}}" tabindex="-1"
-                            aria-labelledby="delete-foreman2Label" aria-hidden="true">
+                        <!-- Modal delete subforeman -->
+                        <div class="modal fade" id="delete-subforeman{{$key}}" tabindex="-1"
+                            aria-labelledby="delete-subforemanLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="delete-foreman2Label">Delete foreman2</h5>
+                                        <h5 class="modal-title" id="delete-subforemanLabel">Delete subforeman</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('foreman2.delete', ['foreman2' => $foreman2->id]) }}"
+                                        <form
+                                            action="{{ route('subforeman.delete', ['subforeman' => $subforeman->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('DELETE')
-                                            Are you sure to delete selected foreman2 <b>"{{ $foreman2->name }}"</b>?
+                                            Are you sure to delete selected subforeman <b>"{{ $subforeman->name }}"</b>?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button"
@@ -124,15 +146,31 @@ Daftar Mandor 2
                 Tambah Mandor 2
             </div>
             <div class="card-body">
-                <form action="{{ route('foreman2.store') }}" method="post">
+                <form action="{{ route('subforeman.store') }}" method="post">
                     @csrf
                     <div class="form-group">
-                        <label for="foreman2">Nama</label>
-                        <input type="text" name="foreman2" id="foreman2" class="form-control" required>
+                        <label for="subforeman">Nama</label>
+                        <input type="text" name="subforeman" id="subforeman" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" name="email" id="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="afdelling_id">Afdelling</label>
+                        <select name="afdelling_id" id="afdelling_id" class="form-control">
+                            @foreach($afdellings as $af)
+                            <option value="{{ $af->id }}">{{ $af->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="jobtype_id">Afdelling</label>
+                        <select name="jobtype_id" id="jobtype_id" class="form-control">
+                            @foreach($job_types as $jt)
+                            <option value="{{ $jt->id }}">{{ $jt->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
