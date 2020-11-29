@@ -32,7 +32,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('harvesting.index') }}" class="nav-link">
+            <a href="" class="nav-link">
               <i class="nav-icon fas fa-tasks"></i>
               <p>RKH Panen</p>
             </a>
@@ -69,26 +69,32 @@
               <p>Block</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('block_reference') }}" class="nav-link">
+              <i class="nav-icon fas fa-th-large"></i>
+              <p>Block Reference</p>
+            </a>
+          </li>
 
           <li class="nav-header ml-1">User</li>
           <li class="nav-item">
-            <a href="{{ route('foreman1.index') }}" class="nav-link">
+            <a href="{{ route('foreman.index') }}" class="nav-link">
               <i class="nav-icon fas fa-user-tie"></i>
               <p>Mandor 1</p>
             </a>
           </li>
 
             <li class="nav-item">
-            <a href="{{ route('foreman2.index') }}" class="nav-link">
+            <a href="{{ route('subforeman.index') }}" class="nav-link">
               <i class="nav-icon fas fa-users-cog"></i>
               <p>Mandor 2</p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="{{ route('employee.index') }}" class="nav-link">
-              <i class="nav-icon fas fa-poo"></i>
-              <p>Daftar karyawan</p>
+            <a href="{{ route('job_type') }}" class="nav-link">
+              <i class="nav-icon fas fa-user-cog"></i>
+              <p>Job Type</p>
             </a>
           </li>
 

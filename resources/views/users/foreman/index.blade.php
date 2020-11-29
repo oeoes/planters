@@ -24,45 +24,55 @@ Daftar Mandor 1
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($foremans1 as $key => $foreman1)
+                    @foreach ($foremans as $key => $foreman)
                     <tr>
                         <td scope="row">{{ $loop->iteration }}</td>
-                        <td>{{ $foreman1->name }}</td>
-                        <td>{{ $foreman1->email }}</td>
+                        <td>{{ $foreman->name }}</td>
+                        <td>{{ $foreman->email }}</td>
                         <td>
                             <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
-                                data-target="#edit-foreman1{{$key}}"><i class="nav-icon fas fa-pen"></i>
+                                data-target="#edit-foreman{{$key}}"><i class="nav-icon fas fa-pen"></i>
                             </button>
                             <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"
-                                data-target="#delete-foreman1{{$key}}"><i class="nav-icon fas fa-trash"></i>
+                                data-target="#delete-foreman{{$key}}"><i class="nav-icon fas fa-trash"></i>
                             </button>
                         </td>
 
-                        <!-- Modal edit foreman1 -->
-                        <div class="modal fade" id="edit-foreman1{{$key}}" tabindex="-1"
-                            aria-labelledby="edit-foreman1Label" aria-hidden="true">
+                        <!-- Modal edit foreman -->
+                        <div class="modal fade" id="edit-foreman{{$key}}" tabindex="-1"
+                            aria-labelledby="edit-foremanLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="edit-foreman1Label">Edit foreman1</h5>
+                                        <h5 class="modal-title" id="edit-foremanLabel">Edit foreman</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('foreman1.update', ['foreman1' => $foreman1->id]) }}"
+                                        <form action="{{ route('foreman.update', ['foreman' => $foreman->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('PUT')
                                             <div class="form-group">
-                                                <label for="foreman1">Foreman-1</label>
-                                                <input type="text" name="foreman1" id="foreman1" class="form-control"
-                                                    required value="{{ $foreman1->name }}">
+                                                <label for="foreman">Foreman-1</label>
+                                                <input type="text" name="foreman" id="foreman" class="form-control"
+                                                    required value="{{ $foreman->name }}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="email">Email</label>
                                                 <input type="email" name="email" id="email" class="form-control"
-                                                    required value="{{ $foreman1->email }}">
+                                                    required value="{{ $foreman->email }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="afdelling_id">Afdelling</label>
+                                                <select name="afdelling_id" id="afdelling_id" class="form-control">
+                                                    @foreach($afdellings as $af)
+                                                    <option
+                                                        <?php if($af->id == $foreman->afdelling_id) echo "selected" ?>
+                                                        value="{{ $af->id }}">{{ $af->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="password">Password</label>
@@ -83,23 +93,23 @@ Daftar Mandor 1
                             </div>
                         </div>
 
-                        <!-- Modal delete foreman1 -->
-                        <div class="modal fade" id="delete-foreman1{{$key}}" tabindex="-1"
-                            aria-labelledby="delete-foreman1Label" aria-hidden="true">
+                        <!-- Modal delete foreman -->
+                        <div class="modal fade" id="delete-foreman{{$key}}" tabindex="-1"
+                            aria-labelledby="delete-foremanLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="delete-foreman1Label">Delete foreman1</h5>
+                                        <h5 class="modal-title" id="delete-foremanLabel">Delete foreman</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('foreman1.delete', ['foreman1' => $foreman1->id]) }}"
+                                        <form action="{{ route('foreman.delete', ['foreman' => $foreman->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('DELETE')
-                                            Are you sure to delete selected foreman1 <b>"{{ $foreman1->name }}"</b>?
+                                            Are you sure to delete selected foreman <b>"{{ $foreman->name }}"</b>?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button"
@@ -124,15 +134,24 @@ Daftar Mandor 1
                 Tambah Mandor 1
             </div>
             <div class="card-body">
-                <form action="{{ route('foreman1.store') }}" method="post">
+                <form action="{{ route('foreman.store') }}" method="post">
                     @csrf
                     <div class="form-group">
-                        <label for="foreman1">Nama</label>
-                        <input type="text" name="foreman1" id="foreman1" class="form-control" required>
+                        <label for="foreman">Nama</label>
+                        <input type="text" name="foreman" id="foreman" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" name="email" id="email" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="afdelling_id">Afdelling</label>
+                        <select name="afdelling_id" id="afdelling_id" class="form-control">
+                            @foreach($afdellings as $af)
+                            <option value="{{ $af->id }}">{{ $af->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>

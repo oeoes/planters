@@ -28,6 +28,7 @@ class Foreman extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'afdelling_id',
     ];
 
     protected $hidden = [

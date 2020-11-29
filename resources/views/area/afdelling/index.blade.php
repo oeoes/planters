@@ -5,8 +5,6 @@
 @section('content-title')
   Daftar Afdelling
 @endsection
-</div>
-@endsection
 
 @section('content')
   <div class="row">
@@ -16,7 +14,9 @@
                   <thead class="text-muted">
                       <tr>
                           <th>#</th>
+                          <th>Kebun</th>
                           <th>Afdelling</th>
+                          <th>HK Total</th>
                           <th>Action</th>
                       </tr>
                   </thead>
@@ -24,7 +24,9 @@
                       @foreach ($afdellings as $key => $afdelling)
                       <tr>
                           <td scope="row">{{ $loop->iteration }}</td>
+                          <td>{{ $afdelling->farm }}</td>
                           <td>{{ $afdelling->name }}</td>
+                          <td>{{ $afdelling->hk_total }}</td>
                           <td>
                               <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
                                   data-target="#edit-afdelling{{$key}}"><i class="nav-icon fas fa-pen"></i>
@@ -50,6 +52,24 @@
                                               method="post">
                                               @csrf
                                               @method('PUT')
+                                               <div class="form-group">
+                                                   <label for="farm">Farm</label>
+                                                   <select name="farm_id" class="form-control">
+                                                       @foreach ($farms as $f)
+                                                       <option <?php if($f->id == $afdelling->farm_id) echo "selected" ?> value="{{ $f->id }}">{{ $f->name }}</option>
+                                                       @endforeach
+                                                   </select>
+                                               </div>
+                                               <div class="form-group">
+                                                   <label for="afdelling">afdelling</label>
+                                                   <input type="text" name="afdelling" id="afdelling"
+                                                       class="form-control" value="{{ $afdelling->name }}">
+                                               </div>
+                                               <div class="form-group">
+                                                   <label for="hk_total">HK </label>
+                                                   <input type="text" name="hk_total" id="hk_total"
+                                                       class="form-control" value="{{ $afdelling->hk_total }}">
+                                               </div>
                                               <div class="form-group">
                                                   <label for="afdelling">afdelling</label>
                                                   <input type="text" name="afdelling" id="afdelling" class="form-control"
@@ -113,8 +133,20 @@
                   <form action="{{ route('afdelling.store') }}" method="post">
                       @csrf
                       <div class="form-group">
+                          <label for="farm">Farm</label>
+                          <select name="farm_id" class="form-control">
+                              @foreach ($farms as $f)
+                              <option value="{{ $f->id }}">{{ $f->name }}</option>
+                              @endforeach
+                          </select>
+                      </div>
+                      <div class="form-group">
                           <label for="afdelling">afdelling</label>
                           <input type="text" name="afdelling" id="afdelling" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label for="hk_total">HK </label>
+                          <input type="text" name="hk_total" id="hk_total" class="form-control">
                       </div>
                       <button type="submit" class="btn btn-sm rounded-pill btn-outline-primary pl-3 pr-3">Add</button>
                   </form>
