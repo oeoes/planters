@@ -10,8 +10,6 @@ class FillCircle extends Model
 
     protected $table = 'fill_circles';
     protected $guarded = [];
-    protected $casts = [
-        'hk_name' => 'array'
-    ];
+
 }
 

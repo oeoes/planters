@@ -10,7 +10,5 @@ class FillFertilizer extends Model
 
     protected $table = 'fill_fertilizers';
     protected $guarded = [];
-    protected $casts = [
-        'hk_name' => 'array'
-    ];
+
 }

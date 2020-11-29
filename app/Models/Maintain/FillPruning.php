@@ -10,7 +10,5 @@ class FillPruning extends Model
 
     protected $table = 'fill_prunings';
     protected $guarded = [];
-    protected $casts = [
-        'hk_name' => 'array'
-    ];
+
 }

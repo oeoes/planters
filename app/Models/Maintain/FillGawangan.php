@@ -10,7 +10,5 @@ class FillGawangan extends Model
 
     protected $table = 'fill_gawangans';
     protected $guarded = [];
-    protected $casts = [
-        'hk_name' => 'array'
-    ];
+
 }

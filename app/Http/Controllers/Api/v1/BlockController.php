@@ -97,23 +97,15 @@ class BlockController extends Controller
         } else {
             return res(true, 200, 'Empty blocks');
         }
-
-        
     }
 
     // active block references
     public function active_block_references() {
         $refs = BlockReference::where('foreman_id', auth()->guard('foreman')->user()->id)->where('completed', 0)->orderByDesc('created_at')->get();
         $data = [];
-        /*
-            1. blok
-            2. jenis pekerjaan
-            3. available hk
-            4. available coverage
-        */
+
         if (! $refs->isEmpty()) {
             foreach ($refs as $value) {
-                $available_hk = 0;
                 $data [] = [
                     'block_reference_id' => $value['id'],
                     'planting_year' => $value['planting_year'],
@@ -136,36 +128,24 @@ class BlockController extends Controller
         // Jika datanya blm tersedia diinput mandor
         switch($single_ref->jobtype_id) {
             case 1:
-                $check = SprayingType::where('block_ref_id', $block_ref_id)
-                        ->where('date', date('Y-m-d'))->where('completed', 0)->first();
                 // jika job type yg dituju blm diisi mandor 1,
                 // diarahin ke create rkh
-            break;
+                $check = SprayingType::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->where('completed', 0)->first(); break;
 
             case 2:
-                $check = FertilizerType::where('block_ref_id', $block_ref_id)
-                        ->where('date', date('Y-m-d'))->where('completed', 0)->first();
-            break;
+                $check = FertilizerType::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->where('completed', 0)->first(); break;
 
             case 3:
-                $check = CircleType::where('block_ref_id', $block_ref_id)
-                        ->where('date', date('Y-m-d'))->where('completed', 0)->first();
-            break;
+                $check = CircleType::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->where('completed', 0)->first(); break;
 
             case 4:
-                $check = PruningType::where('block_ref_id', $block_ref_id)
-                        ->where('date', date('Y-m-d'))->where('completed', 0)->first();
-            break;
+                $check = PruningType::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->where('completed', 0)->first(); break;
 
             case 5:
-                $check = GawanganType::where('block_ref_id', $block_ref_id)
-                        ->where('date', date('Y-m-d'))->where('completed', 0)->first();
-            break;
+                $check = GawanganType::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->where('completed', 0)->first(); break;
 
             case 6:
-                $check = PestControl::where('block_ref_id', $block_ref_id)
-                        ->where('date', date('Y-m-d'))->where('completed', 0)->first();
-            break;
+                $check = PestControl::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->where('completed', 0)->first(); break;
         }
 
         if (! $check) {
@@ -185,23 +165,30 @@ class BlockController extends Controller
             }
             $data = [
                 'block_code' => block($single_ref->block_id),
-                'jobtype' => $single_ref->jobtype_id,
+                'job_type' => $single_ref->__id,
                 'available_hk' => $available_hk,
                 'available_coverage' => $single_ref->available_coverage
             ];
             return res(true, 200, 'Cannot find RKH for today', $data);
+            
         } else {
 
-            (in_array($single_ref->jobtype_id, [1, 2, 6])) ?
-                $ingredients_amount = $check->ingredients_amount :
+            if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
+                $ingredients_amount = $check->ingredients_amount;
+                $ingredients_type = $check->type;
+            } else {
+                // kalau opsinya ke manual, dia gada jenis dan bahan
                 $ingredients_amount = null;
-            
-            
+                $ingredients_type = null;
+            }
+
             $data = [
                 'date' => date('d-m-Y', strtotime($check->date)),
                 'foreman' => fme()->name,
                 'block_code' => block($single_ref->block_id),
+                'job_type' => $single_ref->jobtype_id,
                 'target_coverage' => $check->target_coverage,
+                'ingredients_type' => $ingredients_type,
                 'ingredients_amount' => $ingredients_amount,
                 'foreman_note' => $check->foreman_note,
                 'hk_used' => $check->hk_used,

@@ -10,7 +10,4 @@ class FillSpraying extends Model
 
     protected $table = 'fill_sprayings';
     protected $guarded = [];
-    protected $casts = [
-        'hk_name' => 'array'
-    ];
 }
