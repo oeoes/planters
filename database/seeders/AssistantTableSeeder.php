@@ -17,7 +17,7 @@ class AssistantTableSeeder extends Seeder
         DB::table('assistants')->insert([
             'name' => 'assistant',
             'email' => 'assistant@planterdev.com',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => bcrypt('password'), // password
             'role' => 1
         ]);
     }

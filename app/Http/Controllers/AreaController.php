@@ -25,6 +25,18 @@ class AreaController extends Controller
         return back()->withSuccess('Farm created');
     }
 
+    public function farm_update (Request $request, Farm $farm) {
+        $farm->update([
+            'name' => $request->farm
+        ]);
+        return back();
+    }
+
+    public function farm_delete (Farm $farm) {
+        $farm->delete();
+        return back();
+    }
+
     public function afdelling() {
         $afdellings = Afdelling::all();
         return view('area.afdelling.index', [
@@ -39,6 +51,18 @@ class AreaController extends Controller
         return back()->withSuccess('Afdelling created');
     }
 
+    public function afdelling_update (Request $request, Afdelling $afdelling) {
+        $afdelling->update([
+            'name' => $request->afdelling
+        ]);
+        return back();
+    }
+
+    public function afdelling_delete (Afdelling $afdelling) {
+        $afdelling->delete();
+        return back();
+    }
+
     public function block() {
         $blocks = Block::all();
         return view('area.block.index', [
@@ -51,6 +75,18 @@ class AreaController extends Controller
             'name' => $request->block
         ]);
         return back()->withSuccess('block created');
+    }
+
+    public function block_update (Request $request, Block $block) {
+        $block->update([
+            'name' => $request->block
+        ]);
+        return back();
+    }
+
+    public function block_delete (Block $block) {
+        $block->delete();
+        return back();
     }
 
     public function getAfdelling(Request $request) {
