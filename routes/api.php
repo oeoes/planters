@@ -38,6 +38,9 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::get('year/{year}/blocks/', [DwpmaintainController::class, 'block']);
         // get all tanggal by block
         Route::get('year/{year}/blocks/{block_code}', [DwpmaintainController::class, 'date']);
+
+        // Set complete rkh for today
+        Route::get('set-complete-rkh/{block_ref_id}', [DwpmaintainController::class, 'set_complete_rkh']);
     });
 
     Route::group(['prefix' => 'subforeman'], function () {

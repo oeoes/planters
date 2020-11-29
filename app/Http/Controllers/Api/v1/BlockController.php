@@ -128,8 +128,7 @@ class BlockController extends Controller
         $single_ref = BlockReference::find($block_ref_id);
         $afdelling_id = auth()->guard('foreman')->user()->afdelling_id;
         $now = date('Y-m-d');
-        $afdelling_ref = AfdellingReference::where('afdelling_id', $afdelling_id)->where('available_date', $now)->first();
-        // Jika datanya blm tersedia diinput mandor
+                // Jika datanya blm tersedia diinput mandor
         switch($single_ref->jobtype_id) {
             case 1:
                 // jika job type yg dituju blm diisi mandor 1,
@@ -175,7 +174,9 @@ class BlockController extends Controller
                         $filling = FillSpraying::find($check->id);
             break;
         }
+
         if (! $check) {
+            $afdelling_ref = AfdellingReference::whereDate('available_date', date('Y-m-d'))->where('afdelling_id', $afdelling_id)->first();
             $afdelling = Afdelling::where('id', fme()->afdelling_id)->first();
             if (! $afdelling_ref) {
                 AfdellingReference::create([
@@ -188,6 +189,7 @@ class BlockController extends Controller
             } else {
                 $available_hk = $afdelling_ref->available_hk;
             }
+
             $data = [
                 'block_code' => block($single_ref->block_id),
                 'job_type' => $single_ref->jobtype_id,

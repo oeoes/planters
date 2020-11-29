@@ -827,7 +827,7 @@ class DwpmaintainController extends Controller
         // target berat
         // catata
         $now = date('Y-m-d');
-        $sfmid = sfme()->id;
+        $sfmid = auth()->guard('subforeman')->user()->id;
         $joblists = [
             SprayingType::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
             FertilizerType::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
@@ -850,6 +850,7 @@ class DwpmaintainController extends Controller
         
         $blockref = BlockReference::where('id', $data->block_ref_id)->first();
         $block = block($blockref->block_id);
+
         if (! $data->ingredients_type) {
             $ingredients_type = null;
             $ingredientes_amount = null;
@@ -857,6 +858,7 @@ class DwpmaintainController extends Controller
             $ingredients_type = $data->ingredients_type;
             $ingredientes_amount = $data->ingredients_amount;
         }
+
         $dataArr = [
             'date' => $data->date,
             'foreman' => foreman($data->foreman_id),
@@ -869,6 +871,49 @@ class DwpmaintainController extends Controller
         ];
 
         return res(true, 200, 'Job today', $dataArr);
+    }
+
+    public function set_complete_rkh($block_ref_id) {
+        $blockref = BlockReference::where('id', $block_ref_id)->first();
+        if (! $blockref) {
+            return res(false, 404, 'Daily work plan not defined');
+        }
+        switch ($blockref->jobtype_id) {
+            case 1:
+                $data = SprayingType::where('block_ref_id', $block_ref_id)->latest()->first();
+                if ($data)  $data->increment('completed');
+                break;
+            
+            case 2:
+                $data = FertilizerType::where('block_ref_id', $block_ref_id)->latest()->first();
+                if ($data)  $data->increment('completed');
+            break;
+
+            case 3:
+                $data = CircleType::where('block_ref_id', $block_ref_id)->latest()->first();
+                if ($data)  $data->increment('completed');
+            break;
+
+            case 4:
+                $data = PruningType::where('block_ref_id', $block_ref_id)->latest()->first();
+                if ($data)  $data->increment('completed');
+            break;
+
+            case 5:
+                $data = GawanganType::where('block_ref_id', $block_ref_id)->latest()->first();
+                if ($data)  $data->increment('completed');
+            break;
+
+            case 6:
+                $data = PestControl::where('block_ref_id', $block_ref_id)->latest()->first();
+                if ($data)  $data->increment('completed');
+            break;
+        }
+        
+        if (! $data) { 
+            return res(false, 404, 'Daily work plan not defined or not available');
+        }
+        return res(true, 200, 'Daily work plan completed');
     }
 
 }
