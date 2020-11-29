@@ -4,7 +4,7 @@
     <a href="index3.html" class="brand-link">
         {{-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
             style="opacity: .8"> --}}
-      <span class="brand-text font-weight-light ml-2">AdminLTE 3</span>
+      <span class="brand-text font-weight-light ml-2">PLANTERS Dashboard</span>
     </a>
 
     <!-- Sidebar -->
@@ -20,7 +20,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
             <a href="{{ route('dashboard') }}" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
+              <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Dashboard</p>
             </a>
           </li>
@@ -53,41 +53,41 @@
           </li> --}}
           <li class="nav-item">
             <a href="{{ route('farm') }}" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
-              <p>Daftar kebun</p>
+              <i class="nav-icon fas fa-tree"></i>
+              <p>Kebun</p>
             </a>
           </li>
           <li class="nav-item">
             <a href="{{ route('afdelling') }}" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
-              <p>Daftar afdelling</p>
+              <i class="nav-icon fas fa-tractor"></i>
+              <p>Afdelling</p>
             </a>
           </li>
           <li class="nav-item">
             <a href="{{ route('block') }}" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
-              <p>Daftar block</p>
+              <i class="nav-icon fas fa-th-large"></i>
+              <p>Block</p>
             </a>
           </li>
 
           <li class="nav-header ml-1">User</li>
           <li class="nav-item">
             <a href="{{ route('foreman1.index') }}" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
-              <p>Daftar mandor 1</p>
+              <i class="nav-icon fas fa-user-tie"></i>
+              <p>Mandor 1</p>
             </a>
           </li>
 
             <li class="nav-item">
             <a href="{{ route('foreman2.index') }}" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
-              <p>Daftar mandor 2</p>
+              <i class="nav-icon fas fa-users-cog"></i>
+              <p>Mandor 2</p>
             </a>
           </li>
 
           <li class="nav-item">
             <a href="{{ route('employee.index') }}" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
+              <i class="nav-icon fas fa-poo"></i>
               <p>Daftar karyawan</p>
             </a>
           </li>

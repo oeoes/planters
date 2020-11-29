@@ -24,9 +24,24 @@ class Foreman1Controller extends Controller
             'name' => $request->foreman1,
             'email' => $request->email,
             'role' => 1,
-            'password' => Hash::make($request->password), // password
+            'password' => Hash::make($request->password),
         ]);
 
         return back()->withSuccess('Foreman 1 created!');
+    }
+
+    public function update (Request $request, Foreman1 $foreman1) {
+        $foreman1->update([
+            'name' => $request->foreman1,
+            'email' => $request->email,
+            'role' => 1,
+            'password' => Hash::make($request->password),
+        ]);
+        return back();
+    }
+
+    public function delete (Foreman1 $foreman1) {
+        $foreman1->delete();
+        return back();
     }
 }

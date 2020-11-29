@@ -29,4 +29,19 @@ class Foreman2Controller extends Controller
 
         return back()->withSuccess('Foreman 2 created!');
     }
+
+    public function update (Request $request, Foreman2 $foreman2) {
+        $foreman2->update([
+            'name' => $request->foreman2,
+            'email' => $request->email,
+            'role' => 1,
+            'password' => Hash::make($request->password),
+        ]);
+        return back();
+    }
+
+    public function delete (Foreman2 $foreman2) {
+        $foreman2->delete();
+        return back();
+    }
 }
