@@ -692,4 +692,36 @@ class DwpmaintainController extends Controller
         return res(true, 200, 'Manual gawangan report filled successfully');
     }
 
+    public function years() {
+        $block_reference = BlockReference::where('foreman_id', fme()->id)
+                        ->where('completed', 1)->orderBy('created_at', 'DESC')->get();
+        $pyears = [];
+        foreach ($block_reference as $key => $value) {
+            $pyears [] = [
+                'planting_year' => $value['planting_year']
+            ];
+        }
+        return res(true, 200, 'Year listed!', $pyears);
+    }
+
+    public function block($year) {
+        $block_reference = BlockReference::where('foreman_id', fme()->id)->where('planting_year', $year)
+            ->where('completed', 1)->orderBy('created_at', 'DESC')->get();
+        $blocks = [];
+        foreach ($block_reference as $key => $value) {
+            $blocks [] = [
+                'block_id' => $value['block_id'],
+                'block_code' => block($value['block_id']),
+                'selected_year' => $year
+            ];
+        }
+        return res(true, 200, 'Blocks listed!', $blocks);
+    }
+
+    public function date($year, $block_id) {
+        $block_reference = BlockReference::where('foreman_id', fme()->id)->where('planting_year', $year)
+                            ->where('block_id', $block_id)->where('completed', 1)->orderBy('created_at', 'DESC')->get();
+        
+    }
+
 }

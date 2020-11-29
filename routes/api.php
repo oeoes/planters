@@ -28,8 +28,16 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::get('blocks', [BlockController::class, 'blocks']);
         Route::get('block-references', [BlockController::class, 'block_references']);
         Route::get('active-block-references', [BlockController::class, 'active_block_references']);
+
         // pas klik thn tanam dan kebun mau ke create
         Route::get('det-active-block-references/{block_ref_id}', [BlockController::class, 'det_active_block_references']);
+
+        // get year by complete blok re
+        Route::get('years', [DwpmaintainController::class, 'years']);
+        // get block by query year, [DwpmaintainController]
+        Route::get('year/{year}/blocks/', [DwpmaintainController::class, 'block']);
+        // get all tanggal by block
+        Route::get('year/{year}/blocks/{block_code}', [DwpmaintainController::class, 'date']);
     });
 
     Route::group(['prefix' => 'subforeman'], function () {

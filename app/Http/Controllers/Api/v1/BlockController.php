@@ -136,42 +136,46 @@ class BlockController extends Controller
                 // diarahin ke create rkh
                 $check = SprayingType::where('block_ref_id', $block_ref_id)->where('date', $now)
                         ->where('completed', 0)->first(); 
-                $filling = FillSpraying::find($check->id);
+                    if ($check) 
+                        $filling = FillSpraying::find($check->id);
             break;
 
             case 2:
                 $check = FertilizerType::where('block_ref_id', $block_ref_id)->where('date', $now)
                         ->where('completed', 0)->first(); 
-                $filling = FillFertilizer::find($check->id);
+                        if ($check) 
+                        $filling = FillSpraying::find($check->id);
             break;
 
             case 3:
                 $check = CircleType::where('block_ref_id', $block_ref_id)->where('date', $now)
                         ->where('completed', 0)->first(); 
-                $filling = FillCircle::find($check->id);
+                        if ($check) 
+                        $filling = FillSpraying::find($check->id);
             break;
 
             case 4:
                 $check = PruningType::where('block_ref_id', $block_ref_id)->where('date', $now)
                         ->where('completed', 0)->first(); 
-                $filling = FillPruning::find($check->id);
+                        if ($check) 
+                        $filling = FillSpraying::find($check->id);
             break;
 
             case 5:
                 $check = GawanganType::where('block_ref_id', $block_ref_id)->where('date', $now)
                         ->where('completed', 0)->first(); 
-                $filling = FillGawangan::find($check->id);
+                        if ($check) 
+                        $filling = FillSpraying::find($check->id);
             break;
 
             case 6:
                 $check = PestControl::where('block_ref_id', $block_ref_id)->where('date', $now)
                         ->where('completed', 0)->first(); 
-                $filling = PestControl::find($check->id);
+                        if ($check) 
+                        $filling = FillSpraying::find($check->id);
             break;
         }
         if (! $check) {
-            // Sebelum create rkh dibuat, baiknya create blok ref
-            // sebelum buat blok ref, baiknya definisikan afdelling refs
             $afdelling = Afdelling::where('id', fme()->afdelling_id)->first();
             if (! $afdelling_ref) {
                 AfdellingReference::create([
@@ -198,7 +202,6 @@ class BlockController extends Controller
                 $ingredients_amount = $check->ingredients_amount;
                 $ingredients_type = $check->ingredients_type;
             } else {
-                // kalau opsinya ke manual, dia gada jenis dan bahan
                 $ingredients_amount = null;
                 $ingredients_type = null;
             }
@@ -207,12 +210,12 @@ class BlockController extends Controller
                 'date' => date('Y-m-d', strtotime($check->date)),
                 'subforeman' => subforeman($check->subforeman_id)->name,
                 'block_code' => block($single_ref->block_id),
-                'job_type' => $single_ref->jobtype_id,
-                'target_coverage' => $check->target_coverage,
-                'ingredients_type' => $ingredients_type,
+                'job_type'   => $single_ref->jobtype_id,
+                'target_coverage'    => $check->target_coverage,
+                'ingredients_type'   => $ingredients_type,
                 'ingredients_amount' => $ingredients_amount,
                 'foreman_note' => $check->foreman_note,
-                'hk_used' => $check->hk_used,
+                'hk_used'   => $check->hk_used,
                 'completed' => 0,
             ];
 

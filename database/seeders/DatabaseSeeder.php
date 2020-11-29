@@ -25,10 +25,10 @@ class DatabaseSeeder extends Seeder
             AfdellingTableSeeder::class,
             BlockTableSeeder::class,
             ForemanTableSeeder::class,
-            AfdellingRefTableSeeder::class,
+            // AfdellingRefTableSeeder::class,
             JobTypeTableSeeder::class,
             SubforemanTableSeeder::class,
-            BlockRefTableSeeder::class,
+            // BlockRefTableSeeder::class,
         ]);
 
         Subforeman::factory(100)->create();
