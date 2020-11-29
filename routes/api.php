@@ -13,7 +13,7 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('jwt.auth')
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
-    Route::group(['prefix' => 'foreman', 'middleware' => ['foreman']], function () {
+    Route::group(['prefix' => 'foreman'], function () {
         Route::post('store-afdelling-ref', [AfdellingController::class, 'store_afdelling_ref']);
         Route::get('sub-foreman/{jobtype}/afdelling/{afdelling_id}', [DwpmaintainController::class, 'active_subforeman']);
         
@@ -28,6 +28,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::get('blocks', [BlockController::class, 'blocks']);
         Route::get('block-references', [BlockController::class, 'block_references']);
         Route::get('active-block-references', [BlockController::class, 'active_block_references']);
+        // pas klik thn tanam dan kebun mau ke create
         Route::get('det-active-block-references/{block_ref_id}', [BlockController::class, 'det_active_block_references']);
     });
 

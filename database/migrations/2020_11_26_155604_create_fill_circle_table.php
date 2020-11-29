@@ -16,7 +16,7 @@ class CreateFillCircleTable extends Migration
         Schema::create('fill_circles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('circle_id')->constrained();
-            $table->float('expec_ingredients_coverage', 9, 2);
+            $table->float('ftarget_coverage', 8, 2);
             $table->string('image')->nullable();
             $table->text('hk_name');
             $table->text('subforeman_note')->nullable();

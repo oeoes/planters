@@ -32,9 +32,9 @@ class DwpmaintainController extends Controller
             'foreman_id' => 'required',
             'subforeman_id' => 'required',
             'date' => 'required',
-            'type' => 'required',
-            'target_coverage' => 'required', 
+            'ingredients_type' => 'required',
             'ingredients_amount' => 'required',
+            'target_coverage' => 'required', 
             'hk_used' => 'required',
         ]);
 
@@ -60,9 +60,8 @@ class DwpmaintainController extends Controller
         }
 
         SprayingType::create($request->all());
-        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)
-                                ->where('available_date', date('Y-m-d'))
-                                ->first();
+
+        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
         $current_hk = $hk->available_hk;
         $used_hk    = $request->hk_used;
         $limit_hk   = $current_hk - $used_hk;
@@ -73,12 +72,12 @@ class DwpmaintainController extends Controller
 
         $data = [
             'block_ref_id' => (int) $request->block_ref_id,
-            'foreman_name' => (int) foreman($request->foreman_id)->name,
-            'subforeman_id'=> (int) subforeman($request->subforeman_id)->name,
+            'foreman' => foreman($request->foreman_id)->name,
+            'subforeman'=> subforeman($request->subforeman_id)->name,
             'date' => $request->date,
-            'type' => $request->type,
-            'target_coverage'  => (float) $request->target,
+            'ingredients_type' => $request->ingredients_type,
             'ingredients_amount' => (float) $request->ingredients_amount,
+            'target_coverage'  => (float) $request->target_coverage,
             'hk_used' => (float)$request->hk_used,
             'foreman_note' => $request->foreman_note
         ];
@@ -92,7 +91,7 @@ class DwpmaintainController extends Controller
             'foreman_id' => 'required',
             'subforeman_id' => 'required',
             'date' => 'required',
-            'type' => 'required',
+            'ingredients_type' => 'required',
             'target_coverage' => 'required', 
             'ingredients_amount' => 'required',
             'hk_used' => 'required',
@@ -121,17 +120,23 @@ class DwpmaintainController extends Controller
 
         FertilizerType::create($request->all());
 
+        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
+        $current_hk = $hk->available_hk;
+        $used_hk    = $request->hk_used;
+        $limit_hk   = $current_hk - $used_hk;
+        $hk->update(['available_hk' => $limit_hk]);
+
         $subforeman->increment('active');
         $subforeman->save();
 
         $data = [
             'block_ref_id' => (int) $request->block_ref_id,
-            'foreman_name' => (int) foreman($request->foreman_id)->name,
-            'subforeman_id'=> (int) subforeman($request->subforeman_id)->name,
+            'foreman' => foreman($request->foreman_id)->name,
+            'subforeman'=> subforeman($request->subforeman_id)->name,
             'date' => $request->date,
-            'type' => $request->type,
-            'target_coverage'  => (float) $request->target,
+            'ingredients_type' => $request->ingredients_type,
             'ingredients_amount' => (float) $request->ingredients_amount,
+            'target_coverage'  => (float) $request->target_coverage,
             'hk_used' => (float)$request->hk_used,
             'foreman_note' => $request->foreman_note
         ];
@@ -145,7 +150,7 @@ class DwpmaintainController extends Controller
             'foreman_id' => 'required',
             'subforeman_id' => 'required',
             'date' => 'required',
-            'type' => 'required',
+            'ingredients_type' => 'required',
             'target_coverage' => 'required', 
             'ingredients_amount' => 'required',
             'hk_used' => 'required',
@@ -174,17 +179,23 @@ class DwpmaintainController extends Controller
 
         PestControl::create($request->all());
 
+        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
+        $current_hk = $hk->available_hk;
+        $used_hk    = $request->hk_used;
+        $limit_hk   = $current_hk - $used_hk;
+        $hk->update(['available_hk' => $limit_hk]);
+
         $subforeman->increment('active');
         $subforeman->save();
 
         $data = [
             'block_ref_id' => (int) $request->block_ref_id,
-            'foreman_name' => (int) foreman($request->foreman_id)->name,
-            'subforeman_id'=> (int) subforeman($request->subforeman_id)->name,
+            'foreman' => foreman($request->foreman_id)->name,
+            'subforeman'=> subforeman($request->subforeman_id)->name,
             'date' => $request->date,
-            'type' => $request->type,
-            'target_coverage'  => (float) $request->target,
+            'ingredients_type' => $request->ingredients_type,
             'ingredients_amount' => (float) $request->ingredients_amount,
+            'target_coverage'  => (float) $request->target_coverage,
             'hk_used' => (float)$request->hk_used,
             'foreman_note' => $request->foreman_note
         ];
@@ -198,9 +209,7 @@ class DwpmaintainController extends Controller
             'foreman_id' => 'required',
             'subforeman_id' => 'required',
             'date' => 'required',
-            'type' => 'required',
             'target_coverage' => 'required', 
-            'ingredients_amount' => 'required',
             'hk_used' => 'required',
         ]);
 
@@ -227,13 +236,19 @@ class DwpmaintainController extends Controller
 
         CircleType::create($request->all());
 
+        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
+        $current_hk = $hk->available_hk;
+        $used_hk    = $request->hk_used;
+        $limit_hk   = $current_hk - $used_hk;
+        $hk->update(['available_hk' => $limit_hk]);
+
         $subforeman->increment('active');
         $subforeman->save();
 
         $data = [
             'block_ref_id' => (int) $request->block_ref_id,
-            'foreman_name' => (int) foreman($request->foreman_id)->name,
-            'subforeman_id'=> (int) subforeman($request->subforeman_id)->name,
+            'foreman' => foreman($request->foreman_id)->name,
+            'subforeman'=> subforeman($request->subforeman_id)->name,
             'date' => $request->date,
             'target_coverage'  => (float) $request->target,
             'hk_used' => (float)$request->hk_used,
@@ -250,7 +265,6 @@ class DwpmaintainController extends Controller
             'foreman_id' => 'required',
             'subforeman_id' => 'required',
             'date' => 'required',
-            'type' => 'required',
             'target_coverage' => 'required', 
             'hk_used' => 'required',
         ]);
@@ -283,8 +297,8 @@ class DwpmaintainController extends Controller
 
         $data = [
             'block_ref_id' => (int) $request->block_ref_id,
-            'foreman_name' => (int) foreman($request->foreman_id)->name,
-            'subforeman_id'=> (int) subforeman($request->subforeman_id)->name,
+            'foreman' => foreman($request->foreman_id)->name,
+            'subforeman'=> subforeman($request->subforeman_id)->name,
             'date' => $request->date,
             'target_coverage'  => (float) $request->target,
             'hk_used' => (float)$request->hk_used,
@@ -300,7 +314,6 @@ class DwpmaintainController extends Controller
             'foreman_id' => 'required',
             'subforeman_id' => 'required',
             'date' => 'required',
-            'type' => 'required',
             'target_coverage' => 'required', 
             'hk_used' => 'required',
         ]);
@@ -328,15 +341,21 @@ class DwpmaintainController extends Controller
 
         GawanganType::create($request->all());
 
+        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
+        $current_hk = $hk->available_hk;
+        $used_hk    = $request->hk_used;
+        $limit_hk   = $current_hk - $used_hk;
+        $hk->update(['available_hk' => $limit_hk]);
+
         $subforeman->increment('active');
         $subforeman->save();
 
         $data = [
             'block_ref_id' => (int) $request->block_ref_id,
-            'foreman_name' => (int) foreman($request->foreman_id)->name,
-            'subforeman_id'=> (int) subforeman($request->subforeman_id)->name,
+            'foreman' => foreman($request->foreman_id)->name,
+            'subforeman'=> subforeman($request->subforeman_id)->name,
             'date' => $request->date,
-            'target_coverage'  => (float) $request->target,
+            'target_coverage'  => (float) $request->target_coverage,
             'hk_used' => (float)$request->hk_used,
             'foreman_note' => $request->foreman_note
         ];
@@ -362,13 +381,14 @@ class DwpmaintainController extends Controller
 
         $validator = Validator::make($request->all(), [
             'spraying_id' => 'required',
-            'expectation' => 'required',
+            'ftarget_coverage' => 'required',
+            'fingredients_amount' => 'required',
             'begin' => 'required',
             'ended' => 'required',
         ]);
 
         if ($validator->fails())
-            return res(false, 404, $validator->errors());
+            return res(false, 404, $validator->errors()->first());
 
         $fillspraying = FillSpraying::where('spraying_id', $request->spraying_id)->first();
         if ($fillspraying) 
@@ -387,8 +407,8 @@ class DwpmaintainController extends Controller
 
         FillSpraying::create([
             'spraying_id' => $request->spraying_id,
-            'expec_ingredients_coverage' => $request->expec_ingredients_coverage,
-            'expec_ingredients_amount' => $request->expec_ingredients_amount,
+            'ftarget_coverage' => $request->ftarget_coverage,
+            'fingredients_amount' => $request->fingredients_amount,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
@@ -401,9 +421,12 @@ class DwpmaintainController extends Controller
 
         $tcov = BlockReference::find($block_ref_id);
         $current_coverage = $tcov->available_coverage;
-        $used_coverage = $request->expectation;
+        $used_coverage = $request->ftarget_coverage;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
+
+        if ($tcov->available_coverage == 0) 
+        $tcov->increment('completed'); 
         
         return res(true, 200, 'Spraying report filled successfully');
     }
@@ -411,13 +434,14 @@ class DwpmaintainController extends Controller
     public function fill_fertilizer(Request $request) {
         $validator = Validator::make($request->all(), [
             'fertilizer_id' => 'required',
-            'expectation' => 'required',
+            'ftarget_coverage' => 'required',
+            'fingredients_amount' => 'required',
             'begin' => 'required',
             'ended' => 'required',
         ]);
 
         if ($validator->fails())
-            return res(false, 404, $validator->errors());
+            return res(false, 404, $validator->errors()->first());
 
         $fillfertilizer = FillFertilizer::where('fertilizer_id', $request->fertilizer_id)->first();
         if ($fillfertilizer) 
@@ -436,8 +460,8 @@ class DwpmaintainController extends Controller
 
         FillFertilizer::create([
             'fertilizer_id' => $request->fertilizer_id,
-            'expec_ingredients_coverage' => $request->expec_ingredients_coverage,
-            'expec_ingredients_amount' => $request->expec_ingredients_amount,
+            'ftarget_coverage' => $request->ftarget_coverage,
+            'fingredients_amount' => $request->fingredients_amount,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
@@ -455,6 +479,8 @@ class DwpmaintainController extends Controller
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
 
+        if ($tcov->available_coverage == 0) 
+        $tcov->increment('completed'); 
         
         return res(true, 200, 'fertilizer report filled successfully');
     }
@@ -462,13 +488,14 @@ class DwpmaintainController extends Controller
     public function fill_pcontrol(Request $request) {
         $validator = Validator::make($request->all(), [
             'pcontrol_id' => 'required',
-            'expectation' => 'required',
+            'ftarget_coverage' => 'required',
+            'fingredients_amount' => 'required',
             'begin' => 'required',
             'ended' => 'required',
         ]);
 
         if ($validator->fails())
-            return res(false, 404, $validator->errors());
+            return res(false, 404, $validator->errors()->first());
 
         $fillpestcontrol = FillPcontrols::where('pcontrol_id', $request->pcontrol_id)->first();
         if ($fillpestcontrol) 
@@ -487,8 +514,8 @@ class DwpmaintainController extends Controller
 
         FillPcontrols::create([
             'pcontrol_id' => $request->pcontrol_id,
-            'expec_ingredients_coverage' => $request->expec_ingredients_coverage,
-            'expec_ingredients_amount' => $request->expec_ingredients_amount,
+            'ftarget_coverage' => $request->ftarget_coverage,
+            'fingredients_amount' => $request->fingredients_amount,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
@@ -496,7 +523,7 @@ class DwpmaintainController extends Controller
             'hk_name' => $request->hk_name
         ]);
 
-        $reference = PestControl::find($request->pestcontrol_id);
+        $reference = PestControl::find($request->pcontrol_id);
         $block_ref_id = $reference->block_ref_id;
 
         $tcov = BlockReference::find($block_ref_id);
@@ -505,6 +532,8 @@ class DwpmaintainController extends Controller
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
 
+        if ($tcov->available_coverage == 0) 
+        $tcov->increment('completed'); 
         
         return res(true, 200, 'fertilizer report filled successfully');
     }
@@ -512,13 +541,14 @@ class DwpmaintainController extends Controller
     public function fill_circle(Request $request) {
         $validator = Validator::make($request->all(), [
             'circle_id' => 'required',
-            'expectation' => 'required',
+            'ftarget_coverage' => 'required',
+            'fingredients_amount' => 'required',
             'begin' => 'required',
             'ended' => 'required',
         ]);
 
         if ($validator->fails())
-            return res(false, 404, $validator->errors());
+            return res(false, 404, $validator->errors()->first());
 
         $fillcircle = FillCircle::where('circle_id', $request->circle_id)->first();
         if ($fillcircle) 
@@ -537,7 +567,7 @@ class DwpmaintainController extends Controller
 
         FillCircle::create([
             'circle_id' => $request->circle_id,
-            'expec_ingredients_coverage' => $request->expec_ingredients_coverage,
+            'ftarget_coverage' => $request->ftarget_coverage,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
@@ -554,19 +584,22 @@ class DwpmaintainController extends Controller
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
         
+        if ($tcov->available_coverage == 0) 
+        $tcov->increment('completed'); 
+
         return res(true, 200, 'Manual circle report filled successfully');
     }
 
     public function fill_pruning(Request $request) {
         $validator = Validator::make($request->all(), [
             'pruning_id' => 'required',
-            'expectation' => 'required',
+            'ftarget_coverage' => 'required',
             'begin' => 'required',
             'ended' => 'required',
         ]);
 
         if ($validator->fails())
-            return res(false, 404, $validator->errors());
+            return res(false, 404, $validator->errors()->first());
 
         $fillpruning = FillPruning::where('pruning_id', $request->pruning_id)->first();
         if ($fillpruning) 
@@ -585,7 +618,7 @@ class DwpmaintainController extends Controller
 
         FillPruning::create([
             'pruning_id' => $request->pruning_id,
-            'expec_ingredients_coverage' => $request->expec_ingredients_coverage,
+            'ftarget_coverage' => $request->ftarget_coverage,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
@@ -602,6 +635,8 @@ class DwpmaintainController extends Controller
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
 
+        if ($tcov->available_coverage == 0) 
+        $tcov->increment('completed'); 
         
         return res(true, 200, 'Manual pruning report filled successfully');
     }
@@ -609,13 +644,13 @@ class DwpmaintainController extends Controller
     public function fill_gawangan(Request $request) {
         $validator = Validator::make($request->all(), [
             'gawangan_id' => 'required',
-            'expectation' => 'required',
+            'ftarget_coverage' => 'required',
             'begin' => 'required',
             'ended' => 'required',
         ]);
 
         if ($validator->fails())
-            return res(false, 404, $validator->errors());
+            return res(false, 404, $validator->errors()->first());
 
         $fillgawangan = FillGawangan::where('gawangan_id', $request->gawangan_id)->first();
         if ($fillgawangan) 
@@ -634,7 +669,7 @@ class DwpmaintainController extends Controller
 
         FillGawangan::create([
             'gawangan_id' => $request->gawangan_id,
-            'expec_ingredients_coverage' => $request->expec_ingredients_coverage,
+            'ftarget_coverage' => $request->ftarget_coverage,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
@@ -651,7 +686,9 @@ class DwpmaintainController extends Controller
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
 
-        
+        if ($tcov->available_coverage == 0) 
+        $tcov->increment('completed'); 
+
         return res(true, 200, 'Manual gawangan report filled successfully');
     }
 

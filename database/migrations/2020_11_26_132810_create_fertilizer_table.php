@@ -19,7 +19,7 @@ class CreateFertilizerTable extends Migration
             $table->foreignId('foreman_id')->constrained('foremans');
             $table->foreignId('subforeman_id')->constrained('subforemans');
             $table->date('date');
-            $table->string('type');
+            $table->string('ingredients_type');
             $table->float('target_coverage', 8, 2);
             $table->float('ingredients_amount', 8, 2);           
             $table->integer('hk_used');

@@ -16,8 +16,8 @@ class CreateFillPcontrolTable extends Migration
         Schema::create('fill_pcontrols', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pcontrol_id')->constrained('pest_controls');
-            $table->float('expec_ingredients_coverage', 9, 2);
-            $table->integer('expec_ingredients_amount');
+            $table->float('ftarget_coverage', 8, 2);
+            $table->float('fingredients_amount', 8, 2);
             $table->string('image')->nullable();
             $table->text('hk_name');
             $table->text('subforeman_note')->nullable();

@@ -9,6 +9,11 @@ use App\Models\Block;
 use App\Models\BlockReference;
 use App\Models\Maintain\CircleType;
 use App\Models\Maintain\FertilizerType;
+use App\Models\Maintain\FillCircle;
+use App\Models\Maintain\FillFertilizer;
+use App\Models\Maintain\FillGawangan;
+use App\Models\Maintain\FillPruning;
+use App\Models\Maintain\FillSpraying;
 use App\Models\Maintain\GawanganType;
 use App\Models\Maintain\PestControl;
 use App\Models\Maintain\PruningType;
@@ -78,7 +83,7 @@ class BlockController extends Controller
                 'name' => $value['code'],
             ];
         }
-        return res(true, 200, 'Blocks listed', $blocks);
+        return res(true, 200, 'Blocks listed', $data);
     }
 
     // all blocks
@@ -109,7 +114,7 @@ class BlockController extends Controller
                 $data [] = [
                     'block_reference_id' => $value['id'],
                     'planting_year' => $value['planting_year'],
-                    'block_name' => block($value['block_id']),
+                    'block_code' => block($value['block_id']),
                 ];
             }
             return res(true, 200, 'Blocks listed', $data);
@@ -130,22 +135,40 @@ class BlockController extends Controller
             case 1:
                 // jika job type yg dituju blm diisi mandor 1,
                 // diarahin ke create rkh
-                $check = SprayingType::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->where('completed', 0)->first(); break;
+                $check = SprayingType::where('block_ref_id', $block_ref_id)->where('date', $now)
+                        ->where('completed', 0)->first(); 
+                $filling = FillSpraying::find($check->id);
+            break;
 
             case 2:
-                $check = FertilizerType::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->where('completed', 0)->first(); break;
+                $check = FertilizerType::where('block_ref_id', $block_ref_id)->where('date', $now)
+                        ->where('completed', 0)->first(); 
+                $filling = FillFertilizer::find($check->id);
+            break;
 
             case 3:
-                $check = CircleType::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->where('completed', 0)->first(); break;
+                $check = CircleType::where('block_ref_id', $block_ref_id)->where('date', $now)
+                        ->where('completed', 0)->first(); 
+                $filling = FillCircle::find($check->id);
+            break;
 
             case 4:
-                $check = PruningType::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->where('completed', 0)->first(); break;
+                $check = PruningType::where('block_ref_id', $block_ref_id)->where('date', $now)
+                        ->where('completed', 0)->first(); 
+                $filling = FillPruning::find($check->id);
+            break;
 
             case 5:
-                $check = GawanganType::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->where('completed', 0)->first(); break;
+                $check = GawanganType::where('block_ref_id', $block_ref_id)->where('date', $now)
+                        ->where('completed', 0)->first(); 
+                $filling = FillGawangan::find($check->id);
+            break;
 
             case 6:
-                $check = PestControl::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->where('completed', 0)->first(); break;
+                $check = PestControl::where('block_ref_id', $block_ref_id)->where('date', $now)
+                        ->where('completed', 0)->first(); 
+                $filling = PestControl::find($check->id);
+            break;
         }
 
         if (! $check) {
@@ -165,7 +188,7 @@ class BlockController extends Controller
             }
             $data = [
                 'block_code' => block($single_ref->block_id),
-                'job_type' => $single_ref->__id,
+                'job_type' => $single_ref->jobtype_id,
                 'available_hk' => $available_hk,
                 'available_coverage' => $single_ref->available_coverage
             ];
@@ -175,16 +198,16 @@ class BlockController extends Controller
 
             if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
                 $ingredients_amount = $check->ingredients_amount;
-                $ingredients_type = $check->type;
+                $ingredients_type = $check->ingredients_type;
             } else {
                 // kalau opsinya ke manual, dia gada jenis dan bahan
                 $ingredients_amount = null;
                 $ingredients_type = null;
             }
 
-            $data = [
-                'date' => date('d-m-Y', strtotime($check->date)),
-                'foreman' => fme()->name,
+            $foreman = [
+                'date' => date('Y-m-d', strtotime($check->date)),
+                'subforeman' => subforeman($check->subforeman_id)->name,
                 'block_code' => block($single_ref->block_id),
                 'job_type' => $single_ref->jobtype_id,
                 'target_coverage' => $check->target_coverage,
@@ -193,6 +216,23 @@ class BlockController extends Controller
                 'foreman_note' => $check->foreman_note,
                 'hk_used' => $check->hk_used,
                 'completed' => 0,
+            ];
+
+            if (! $filling) {
+                $subforeman = null;
+            } else {
+                $subforeman = [
+                    "begin" => $filling->begin,
+                    "ended" => $filling->ended,
+                    "target_coverage" => $filling->ftarget_coverage,
+                    "ingredients_amount" => $filling->fingredients_amount,
+                    "image" => $filling->image
+                ];
+            }
+
+            $data = [
+                "foreman" => $foreman,
+                "subforeman" => $subforeman
             ];
             
             return res(true, 200, 'Detail RKH', $data);

@@ -11,7 +11,7 @@ class AuthController extends Controller
     public function login(Request $request) {
         if ($token = Auth::guard('foreman')->attempt($request->all())) {
             return $this->respondWithToken($token, 'foreman');
-        } else if ($token = Auth::guard('subforeman')->attempt($request->all())) {
+        } elseif ($token = Auth::guard('subforeman')->attempt($request->all())) {
             return $this->respondWithToken($token, 'subforeman');
         }
         return res(false, 401, 'Unauthorized, invalid email or password');
