@@ -19,15 +19,15 @@ return [
             'provider' => 'assistants',
         ],
 
-        'foreman1' => [
+        'foreman' => [
             'driver' => 'jwt',
-            'provider' => 'foremans1',
+            'provider' => 'foremans',
             'hash' => false,
         ],
 
-        'foreman2' => [
+        'subforeman' => [
             'driver' => 'jwt',
-            'provider' => 'foremans2',
+            'provider' => 'subforemans',
             'hash' => false,
         ],
 
@@ -40,14 +40,14 @@ return [
             'model' => App\Models\Assistant::class,
         ],
 
-        'foremans1' => [
+        'foremans' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Foreman1::class,
+            'model' => App\Models\Foreman::class,
         ],
 
-        'foremans2' => [
+        'subforemans' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Foreman2::class,
+            'model' => App\Models\Subforeman::class,
         ]
 
         // 'users' => [

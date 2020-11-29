@@ -15,7 +15,8 @@ class CreateBlockTable extends Migration
     {
         Schema::create('blocks', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('code');
+            $table->foreignId('afdelling_id')->constrained();
             $table->timestamps();
         });
     }

@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\HarvestMaintain;
-use App\Models\RkhMaintain;
-use App\Models\SprayingMaintain;
+use App\Models\Assistant;
+use App\Models\Foreman;;
+use App\Models\Subforeman;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,22 +17,22 @@ class DatabaseSeeder extends Seeder
     // https://stackoverflow.com/questions/42639976/laravel-seeding-results-in-null-timestamp
     public function run()
     {
-        \App\Models\Assistant::factory(10)->create();
-        \App\Models\Farm::factory(5)->create();
-        \App\Models\Afdelling::factory(10)->create();
-        \App\Models\Block::factory(15)->create();
-        \App\Models\Foreman1::factory(20)->create();
-        \App\Models\Foreman2::factory(20)->create();
-        \App\Models\Employee::factory(20)->create();
+        Assistant::factory(10)->create();
         
         $this->call([
-            AreaTableSeeder::class,
             AssistantTableSeeder::class,
-            Foreman1TableSeeder::class,
-            Foreman2TableSeeder::class,
-            FruitlistsTableSeeder::class,
-            RkhHarvestingTableSeeder::class,
-            FruitHarvestingTableSeeder::class,
+            FarmTableSeeder::class,
+            AfdellingTableSeeder::class,
+            BlockTableSeeder::class,
+            ForemanTableSeeder::class,
+            // AfdellingRefTableSeeder::class,
+            JobTypeTableSeeder::class,
+            SubforemanTableSeeder::class,
+            // BlockRefTableSeeder::class,
         ]);
+
+        Subforeman::factory(100)->create();
+        Foreman::factory(100)->create();
+
     }
 }

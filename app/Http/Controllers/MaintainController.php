@@ -7,22 +7,24 @@ use App\Models\Farm;
 use App\Models\Afdelling;
 use App\Models\Block;
 use App\Models\Area;
-use App\Models\Maintain\RkhMaintain;
-use App\Models\Maintain\RkhHarvestMaintain;
-use App\Models\Maintain\RkhSprayingMaintain;
-use App\Models\Maintain\RkhManualMaintain;
-use App\Models\Maintain\HarvestMaintain;
-use App\Models\Maintain\HarvestSpraying;
-use App\Models\Maintain\SprayingMaintain;
-use App\Models\Maintain\ManualMaintain;
+use App\Models\Maintain\CircleType;
+use App\Models\Maintain\FertilizerType;
+use App\Models\Maintain\GawanganType;
+use App\Models\Maintain\PestControl;
+use App\Models\Maintain\PruningType;
+use App\Models\Maintain\SprayingType;
 
 class MaintainController extends Controller
 {
     public function index() {
-        $maintaints = RkhMaintain::orderByDesc('created_at')->get();
-        return view('maintain.index', [
-            'maintains'      => $maintaints,
-        ]);
+        $sprayings = SprayingType::all();
+        $fertilizers = FertilizerType::all();
+        $pestcontrols = PestControl::all();
+        $circles = CircleType::all();
+        $prunings = PruningType::all();
+        $gawangans = GawanganType::all();
+        $arr = $sprayings->merge($sprayings);
+        dd($arr);
     }
 
     public function filter1(Request $request) {
