@@ -15,9 +15,9 @@ class CreateAfdellingReferenceTable extends Migration
     {
         Schema::create('afdelling_references', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('foreman_id')->constrained('foremans');
             $table->foreignId('afdelling_id')->constrained();
-            $table->integer('hk_total');
+            $table->integer('available_hk');
+            $table->date('available_date');
             $table->timestamps();
         });
     }

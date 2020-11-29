@@ -19,6 +19,7 @@ class CreateForemanTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->foreignId('afdelling_id')->constrained('afdellings');
+            $table->integer('role')->default(1);
             $table->timestamps();
         });
     }

@@ -20,7 +20,8 @@ class CreateSprayingTable extends Migration
             $table->foreignId('subforeman_id')->constrained('subforemans');
             $table->date('date');
             $table->string('type');
-            $table->float('target', 8, 2);
+            $table->float('target_coverage', 8, 2);
+            $table->float('ingredients_amount', 8, 2);
             $table->integer('hk_used');
             $table->text('foreman_note')->nullable();
             $table->char('completed')->default(0);

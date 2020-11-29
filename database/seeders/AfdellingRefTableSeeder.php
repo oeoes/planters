@@ -15,9 +15,9 @@ class AfdellingRefTableSeeder extends Seeder
     public function run()
     {
         $data = [
-            'foreman_id' => 1,
             'afdelling_id' => 1,
-            'hk_total' => 100
+            'available_hk' => 100,
+            'available_date' => '2015/08/18',
         ];
         DB::table('afdelling_references')->insert($data);
     }

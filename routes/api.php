@@ -23,11 +23,12 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::post('store-mcircle',   [DwpmaintainController::class, 'store_mcircle']);
         Route::post('store-mpruning',  [DwpmaintainController::class, 'store_mpruning']);
         Route::post('store-mgawangan', [DwpmaintainController::class, 'store_mgawangan']);
-        Route::post('store-block-references', [BlockController::class, 'store_block_references']);
-        // Route::get(())
 
+        Route::post('store-block-references', [BlockController::class, 'store_block_references']);
         Route::get('blocks', [BlockController::class, 'blocks']);
-        Route::get('active-block-reference', [BlockController::class, 'active-block-reference']);
+        Route::get('block-references', [BlockController::class, 'block_references']);
+        Route::get('active-block-references', [BlockController::class, 'active_block_references']);
+        Route::get('det-active-block-references/{block_ref_id}', [BlockController::class, 'det_active_block_references']);
     });
 
     Route::group(['prefix' => 'subforeman'], function () {

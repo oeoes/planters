@@ -17,6 +17,7 @@ class CreateAfdellingTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('farm_id')->constrained();
+            $table->integer('hk_total');
             $table->timestamps();
         });
     }

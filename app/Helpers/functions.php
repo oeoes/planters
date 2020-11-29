@@ -24,6 +24,16 @@ function res($status, $code, $message, $data = null) {
         return $fm;
     }
 
+    function fme() {
+      $fm = auth()->guard('foreman')->user();
+      return $fm;
+    }
+
+    function sfme() {
+      $sfme = auth()->guard('subforeman')->user();
+      return $sfme;
+    }
+
     function subforeman($id) {
       $sfm = Subforeman::find($id);
       return $sfm;

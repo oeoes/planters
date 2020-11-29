@@ -22,10 +22,19 @@ use Ramsey\Uuid\Uuid;
 class DwpmaintainController extends Controller
 {
     public function store_spraying(Request $request) {
-        foreach ($request->except('foreman_note') as $data => $value) {
-            $valids[$data] = "required";
-        }
-        $request->validate($valids);
+        $validator = Validator::make($request->all(), [
+            'block_ref_id' => 'required',
+            'foreman_id' => 'required',
+            'subforeman_id' => 'required',
+            'date' => 'required',
+            'type' => 'required',
+            'target_coverage' => 'required', 
+            'ingredients_amount' => 'required',
+            'hk_used' => 'required',
+        ]);
+
+        if ($validator->fails())
+            return res(false, 404, $validator->errors()->first());
 
         $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
         if (! $subforeman) 
@@ -45,16 +54,7 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        $s = SprayingType::create([
-            'block_ref_id' => $request->block_ref_id,
-            'foreman_id' => $request->foreman_id,
-            'subforeman_id'=> $request->subforeman_id,
-            'date' => $request->date,
-            'type' => $request->type,
-            'target'  => $request->target,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ]);
+        SprayingType::create($request->all());
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -74,10 +74,19 @@ class DwpmaintainController extends Controller
     }
 
     public function store_fertilizer(Request $request) {
-        foreach ($request->except('foreman_note') as $data => $value) {
-            $valids[$data] = "required";
-        }
-        $request->validate($valids);
+        $validator = Validator::make($request->all(), [
+            'block_ref_id' => 'required',
+            'foreman_id' => 'required',
+            'subforeman_id' => 'required',
+            'date' => 'required',
+            'type' => 'required',
+            'target_coverage' => 'required', 
+            'ingredients_amount' => 'required',
+            'hk_used' => 'required',
+        ]);
+
+        if ($validator->fails())
+            return res(false, 404, $validator->errors()->first());
 
         $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
         if (! $subforeman) 
@@ -88,7 +97,7 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Wrong foreman or block references');
 
         if ($blockrefs->jobtype_id != 2 || $subforeman->jobtype_id != 2) 
-                return res(false, 404, 'Wrong job type', [$blockrefs->jobtype_id, $subforeman->jobtype_id]);
+            return res(false, 404, 'Wrong job type', [$blockrefs->jobtype_id, $subforeman->jobtype_id]);
 
         $fertilizer = FertilizerType::where('block_ref_id', $request->block_ref_id)->where('foreman_id', $request->foreman_id)->latest()->first();
         if ($fertilizer) {
@@ -97,16 +106,7 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        FertilizerType::create([
-            'block_ref_id' => $request->block_ref_id,
-            'foreman_id' => $request->foreman_id,
-            'subforeman_id'=> $request->subforeman_id,
-            'date' => $request->date,
-            'type' => $request->type,
-            'target'  => $request->target,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ]);
+        FertilizerType::create($request->all());
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -118,7 +118,7 @@ class DwpmaintainController extends Controller
             'date' => $request->date,
             'type' => $request->type,
             'target'  => (float) $request->target,
-            'hk_used' => (float)$request->hk_used,
+            'hk_used' => (float) $request->hk_used,
             'foreman_note' => $request->foreman_note
         ];
 
@@ -126,10 +126,19 @@ class DwpmaintainController extends Controller
     }
 
     public function store_pcontrol(Request $request) {
-        foreach ($request->except('foreman_note') as $data => $value) {
-            $valids[$data] = "required";
-        }
-        $request->validate($valids);
+        $validator = Validator::make($request->all(), [
+            'block_ref_id' => 'required',
+            'foreman_id' => 'required',
+            'subforeman_id' => 'required',
+            'date' => 'required',
+            'type' => 'required',
+            'target_coverage' => 'required', 
+            'ingredients_amount' => 'required',
+            'hk_used' => 'required',
+        ]);
+
+        if ($validator->fails())
+            return res(false, 404, $validator->errors()->first());
 
         $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
         if (! $subforeman) 
@@ -149,16 +158,7 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        PestControl::create([
-            'block_ref_id' => $request->block_ref_id,
-            'foreman_id' => $request->foreman_id,
-            'subforeman_id'=> $request->subforeman_id,
-            'date' => $request->date,
-            'type' => $request->type,
-            'target'  => $request->target,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ]);
+        PestControl::create($request->all());
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -178,10 +178,19 @@ class DwpmaintainController extends Controller
     }
 
     public function store_mcircle(Request $request) {
-        foreach ($request->except('foreman_note') as $data => $value) {
-            $valids[$data] = "required";
-        }
-        $request->validate($valids);
+        $validator = Validator::make($request->all(), [
+            'block_ref_id' => 'required',
+            'foreman_id' => 'required',
+            'subforeman_id' => 'required',
+            'date' => 'required',
+            'type' => 'required',
+            'target_coverage' => 'required', 
+            'ingredients_amount' => 'required',
+            'hk_used' => 'required',
+        ]);
+
+        if ($validator->fails())
+            return res(false, 404, $validator->errors()->first());
 
         $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
         if (! $subforeman) 
@@ -201,15 +210,7 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        CircleType::create([
-            'block_ref_id' => $request->block_ref_id,
-            'foreman_id' => $request->foreman_id,
-            'subforeman_id'=> $request->subforeman_id,
-            'date' => $request->date,
-            'target'  => $request->target,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ]);
+        CircleType::create($request->all());
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -229,10 +230,19 @@ class DwpmaintainController extends Controller
     }
 
     public function store_mpruning(Request $request) {
-        foreach ($request->except('foreman_note') as $data => $value) {
-            $valids[$data] = "required";
-        }
-        $request->validate($valids);
+        $validator = Validator::make($request->all(), [
+            'block_ref_id' => 'required',
+            'foreman_id' => 'required',
+            'subforeman_id' => 'required',
+            'date' => 'required',
+            'type' => 'required',
+            'target_coverage' => 'required', 
+            'ingredients_amount' => 'required',
+            'hk_used' => 'required',
+        ]);
+
+        if ($validator->fails())
+            return res(false, 404, $validator->errors()->first());
 
         $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
         if (! $subforeman) 
@@ -252,15 +262,7 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        PruningType::create([
-            'block_ref_id' => $request->block_ref_id,
-            'foreman_id' => $request->foreman_id,
-            'subforeman_id'=> $request->subforeman_id,
-            'date' => $request->date,
-            'target'  => $request->target,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ]);
+        PruningType::create($request->all());
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -279,10 +281,19 @@ class DwpmaintainController extends Controller
     }
 
     public function store_mgawangan(Request $request) {
-        foreach ($request->except('foreman_note') as $data => $value) {
-            $valids[$data] = "required";
-        }
-        $request->validate($valids);
+        $validator = Validator::make($request->all(), [
+            'block_ref_id' => 'required',
+            'foreman_id' => 'required',
+            'subforeman_id' => 'required',
+            'date' => 'required',
+            'type' => 'required',
+            'target_coverage' => 'required', 
+            'ingredients_amount' => 'required',
+            'hk_used' => 'required',
+        ]);
+
+        if ($validator->fails())
+            return res(false, 404, $validator->errors()->first());
 
         $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
         if (! $subforeman) 
@@ -302,15 +313,7 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        GawanganType::create([
-            'block_ref_id' => $request->block_ref_id,
-            'foreman_id' => $request->foreman_id,
-            'subforeman_id'=> $request->subforeman_id,
-            'date' => $request->date,
-            'target'  => $request->target,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ]);
+        GawanganType::create($request->all());
 
         $subforeman->increment('active');
         $subforeman->save();

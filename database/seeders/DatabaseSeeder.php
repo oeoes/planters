@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Afdelling;
-use App\Models\HarvestMaintain;
-use App\Models\RkhMaintain;
-use App\Models\SprayingMaintain;
+use App\Models\Assistant;
+use App\Models\Foreman;;
+use App\Models\Subforeman;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,7 +17,7 @@ class DatabaseSeeder extends Seeder
     // https://stackoverflow.com/questions/42639976/laravel-seeding-results-in-null-timestamp
     public function run()
     {
-        \App\Models\Assistant::factory(10)->create();
+        Assistant::factory(10)->create();
         
         $this->call([
             AssistantTableSeeder::class,
@@ -32,7 +31,8 @@ class DatabaseSeeder extends Seeder
             BlockRefTableSeeder::class,
         ]);
 
-        \App\Models\Subforeman::factory(100)->create();
+        Subforeman::factory(100)->create();
+        Foreman::factory(100)->create();
 
     }
 }

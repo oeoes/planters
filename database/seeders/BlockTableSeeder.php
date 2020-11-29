@@ -21,15 +21,15 @@ class BlockTableSeeder extends Seeder
             ],
             [
                 'code' => 'Block BB',
-                'afdelling_id' => 2,
+                'afdelling_id' => 1,
             ],
             [
                 'code' => 'Block CC',
-                'afdelling_id' => 3,
+                'afdelling_id' => 1,
             ],
             [
                 'code' => 'Block DD',
-                'afdelling_id' => 4,
+                'afdelling_id' => 1,
             ]
             
         ];

@@ -18,18 +18,22 @@ class AfdellingTableSeeder extends Seeder
             [
                 'name' => 'Afdelling1',
                 'farm_id' => 1,
+                'hk_total' => 20,
             ],
             [
                 'name' => 'Afdelling2',
                 'farm_id' => 1,
+                'hk_total' => 20,
             ],
             [
                 'name' => 'Afdelling3',
                 'farm_id' => 2,
+                'hk_total' => 20,
             ],
             [
                 'name' => 'Afdelling4',
                 'farm_id' => 3,
+                'hk_total' => 20,
             ]
         ];
 
