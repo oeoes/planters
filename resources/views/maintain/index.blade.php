@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('root.app')
 
-@section('title', 'Dasbor')
+@section('web-title', 'Dasbor')
 
 @section('content-title')
   <b>Rawat</b> <small class="text-muted font-weight-lighter" style="font-size: 14pt">Rencana Kerja Harian</small>

@@ -81,6 +81,7 @@ class BlockController extends Controller
             $data [] = [
                 'id' => $value['id'],
                 'name' => $value['code'],
+                'afdelling_id' => $value['afdelling_id']
             ];
         }
         return res(true, 200, 'Blocks listed', $data);
@@ -127,9 +128,7 @@ class BlockController extends Controller
         $single_ref = BlockReference::find($block_ref_id);
         $afdelling_id = auth()->guard('foreman')->user()->afdelling_id;
         $now = date('Y-m-d');
-        $afdelling_ref = AfdellingReference::where('afdelling_id', $afdelling_id)
-                        ->where('available_date', $now)->first();
-        
+        $afdelling_ref = AfdellingReference::where('afdelling_id', $afdelling_id)->where('available_date', $now)->first();
         // Jika datanya blm tersedia diinput mandor
         switch($single_ref->jobtype_id) {
             case 1:
@@ -170,7 +169,6 @@ class BlockController extends Controller
                 $filling = PestControl::find($check->id);
             break;
         }
-
         if (! $check) {
             // Sebelum create rkh dibuat, baiknya create blok ref
             // sebelum buat blok ref, baiknya definisikan afdelling refs
@@ -226,7 +224,9 @@ class BlockController extends Controller
                     "ended" => $filling->ended,
                     "target_coverage" => $filling->ftarget_coverage,
                     "ingredients_amount" => $filling->fingredients_amount,
-                    "image" => $filling->image
+                    "image" => $filling->image,
+                    "subforeman_note" => $filling->subforeman_note,
+                    "hk_name" => $filling->hk_name,
                 ];
             }
 
