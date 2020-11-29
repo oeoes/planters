@@ -47,6 +47,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::post('fill-circle',     [DwpmaintainController::class, 'fill_circle']);
         Route::post('fill-pruning',    [DwpmaintainController::class, 'fill_pruning']);
         Route::post('fill-gawangan',   [DwpmaintainController::class, 'fill_gawangan']);
+
+        Route::get('today-job', [DwpmaintainController::class, 'check_job_today']);
     });
 
 });

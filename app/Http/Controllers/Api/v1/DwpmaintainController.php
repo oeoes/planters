@@ -719,9 +719,156 @@ class DwpmaintainController extends Controller
     }
 
     public function date($year, $block_id) {
-        $block_reference = BlockReference::where('foreman_id', fme()->id)->where('planting_year', $year)
-                            ->where('block_id', $block_id)->where('completed', 1)->orderBy('created_at', 'DESC')->get();
+        $block_reference = BlockReference::where('foreman_id', fme()->id)->where('planting_year', $year)->where('block_id', $block_id)->where('completed', 1)->orderBy('created_at', 'DESC')->get();
+        foreach ($block_reference as $key => $value) {
+            $id = $value['id'];
+            $jobtype_id = $value['id'];
+            switch ($jobtype_id) {
+                case 1:
+                    $data = SprayingType::where('block_ref_id', $id)->orderByDesc('created_at')->get();
+                    if(! $data) {
+                        return res(true, 200, 'There no history');
+                    } else {
+                        $ids = [];
+                        foreach ($data as $key => $value) {
+                            $id = $value['id'];
+                            $ids[] = [ $id ];
+                        }
+                        $fill = FillSpraying::whereIn('id', $ids)->get();
+                        return res(true, 200, 'Date listed', $fill);
+                    }
+                break;
+                
+                case 2:
+                    $data = FertilizerType::where('block_ref_id', $id)->orderByDesc('created_at')->get();
+                    if(! $data) {
+                        return res(true, 200, 'There no history');
+                    } else {
+                        $ids = [];
+                        foreach ($data as $key => $value) {
+                            $id = $value['id'];
+                            $ids[] = [ $id ];
+                        }
+                        $fill = FillFertilizer::whereIn('id', $ids)->get();
+                        return res(true, 200, 'Date listed', $fill);
+                    }
+                break;
+
+                case 3:
+                    $data = CircleType::where('block_ref_id', $id)->orderByDesc('created_at')->get();
+                    if(! $data) {
+                        return res(true, 200, 'There no history');
+                    } else {
+                        $ids = [];
+                        foreach ($data as $key => $value) {
+                            $id = $value['id'];
+                            $ids[] = [ $id ];
+                        }
+                        $fill = FillCircle::whereIn('id', $ids)->get();
+                        return res(true, 200, 'Date listed', $fill);
+                    }
+                break;
+
+                case 4:
+                    $data = PruningType::where('block_ref_id', $id)->orderByDesc('created_at')->get();
+                    if(! $data) {
+                        return res(true, 200, 'There no history');
+                    } else {
+                        $ids = [];
+                        foreach ($data as $key => $value) {
+                            $id = $value['id'];
+                            $ids[] = [ $id ];
+                        }
+                        $fill = FillPruning::whereIn('id', $ids)->get();
+                        return res(true, 200, 'Date listed', $fill);
+                    }
+                break;
+
+                case 5:
+                    $data = GawanganType::where('block_ref_id', $id)->orderByDesc('created_at')->get();
+                    if(! $data) {
+                        return res(true, 200, 'There no history');
+                    } else {
+                        $ids = [];
+                        foreach ($data as $key => $value) {
+                            $id = $value['id'];
+                            $ids[] = [ $id ];
+                        }
+                        $fill = FillGawangan::whereIn('id', $ids)->get();
+                        return res(true, 200, 'Date listed', $fill);
+                    }
+                break;
+
+                case 6:
+                    $data = PestControl::where('block_ref_id', $id)->orderByDesc('created_at')->get();
+                    if(! $data) {
+                        return res(true, 200, 'There no history');
+                    } else {
+                        $ids = [];
+                        foreach ($data as $key => $value) {
+                            $id = $value['id'];
+                            $ids[] = [ $id ];
+                        }
+                        $fill = FillPcontrols::whereIn('id', $ids)->get();
+                        return res(true, 200, 'Date listed', $fill);
+                    }
+                break;
+            }
+        }    
+    }
+
+    public function check_job_today() {
+        // date
+        // mandor 1
+        // blok
+        // hk used
+        // target luas
+        // jenis pupuk
+        // target berat
+        // catata
+        $now = date('Y-m-d');
+        $sfmid = sfme()->id;
+        $joblists = [
+            SprayingType::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
+            FertilizerType::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
+            CircleType::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
+            PruningType::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
+            GawanganType::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
+            PestControl::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
+        ];
+
+        $data = '';
+        for ($i = 0; $i < count($joblists) ; $i++) { 
+            if ($joblists[$i]) {
+                $data = $joblists[$i];
+                break;
+            }
+        }
+        if ($data == '') {
+            return res(false, 404, 'There is no job today');
+        }
         
+        $blockref = BlockReference::where('id', $data->block_ref_id)->first();
+        $block = block($blockref->block_id);
+        if (! $data->ingredients_type) {
+            $ingredients_type = null;
+            $ingredientes_amount = null;
+        } else {
+            $ingredients_type = $data->ingredients_type;
+            $ingredientes_amount = $data->ingredients_amount;
+        }
+        $dataArr = [
+            'date' => $data->date,
+            'foreman' => foreman($data->foreman_id),
+            'block' => $block,
+            'hk_used' => $data->hk_used,
+            'target_coverage' => $data->target_coverage,
+            'ingredients_type' => $ingredients_type,
+            'ingredients_amount' => $ingredientes_amount,
+            'foreman_note' => $data->foreman_note
+        ];
+
+        return res(true, 200, 'Job today', $dataArr);
     }
 
 }
