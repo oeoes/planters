@@ -838,9 +838,11 @@ class DwpmaintainController extends Controller
         ];
 
         $data = '';
+        $job_type = '';
         for ($i = 0; $i < count($joblists) ; $i++) { 
             if ($joblists[$i]) {
                 $data = $joblists[$i];
+                $job_type = self::get_job_type($i);
                 break;
             }
         }
@@ -859,7 +861,10 @@ class DwpmaintainController extends Controller
         }
         $dataArr = [
             'date' => $data->date,
-            'foreman' => foreman($data->foreman_id),
+            'job_type' => $job_type,
+            'job_type_id' => $data->id,
+            // 'foreman' => foreman($data->foreman_id),
+            'foreman' => Foreman::find($data->foreman_id)->select('name'),
             'block' => $block,
             'hk_used' => $data->hk_used,
             'target_coverage' => $data->target_coverage,
@@ -869,6 +874,34 @@ class DwpmaintainController extends Controller
         ];
 
         return res(true, 200, 'Job today', $dataArr);
+    }
+
+    public static function get_job_type($index) {
+        switch($index) {
+            case 0:
+                return 'spraying';
+            break;
+
+            case 1:
+                return 'fertilizer';
+            break;
+
+            case 2:
+                return 'circle';
+            break;
+
+            case 3:
+                return 'prunning';
+            break;
+
+            case 4:
+                return 'gawangan';
+            break;
+
+            case 5:
+                return 'pest_control';
+            break;
+        }
     }
 
 }
