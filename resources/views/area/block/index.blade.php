@@ -32,7 +32,7 @@ Daftar Block
                         <td>{{ $block->afdelling }}</td>
                         <td>{{ $block->farm }}</td>
                         <td>
-                            <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
+                            <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3 mb-2" data-toggle="modal"
                                 data-target="#edit-block{{$key}}"><i class="nav-icon fas fa-pen"></i>
                             </button>
                             <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"

@@ -34,7 +34,7 @@ Daftar Mandor 2
                         <td>{{ $subforeman->afdelling }}</td>
                         <td>{{ $subforeman->job_type }}</td>
                         <td>
-                            <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
+                            <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3 mb-2" data-toggle="modal"
                                 data-target="#edit-subforeman{{$key}}"><i class="nav-icon fas fa-pen"></i>
                             </button>
                             <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"
