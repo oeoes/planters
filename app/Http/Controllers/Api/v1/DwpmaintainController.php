@@ -861,7 +861,6 @@ class DwpmaintainController extends Controller
         }
         $dataArr = [
             'date' => $data->date,
-            'job_type' => $job_type,
             'job_type_id' => $data->id,
             // 'foreman' => foreman($data->foreman_id),
             'foreman' => Foreman::where('id', $data->foreman_id)->select('name', 'email')->first(),
