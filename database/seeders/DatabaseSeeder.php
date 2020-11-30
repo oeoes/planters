@@ -31,8 +31,8 @@ class DatabaseSeeder extends Seeder
             // BlockRefTableSeeder::class,
         ]);
 
-        Subforeman::factory(100)->create();
-        Foreman::factory(100)->create();
+        Subforeman::factory(50)->create();
+        Foreman::factory(50)->create();
 
     }
 }

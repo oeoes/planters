@@ -174,9 +174,18 @@ class BlockController extends Controller
             if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
                 $ingredients_amount = $data->ingredients_amount;
                 $ingredients_type = $data->ingredients_type;
-            } elseif (in_array($single_ref->jobtype_id, [3, 4, 5, 7])) {
+                $target_akp = null;
+                $target_bjr = null;
+            } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
                 $ingredients_amount = null;
                 $ingredients_type = null;
+                $target_akp = null;
+                $target_bjr = null;
+            } else if (in_array($single_ref->jobtype_id, [7])) {
+                $ingredients_amount = null;
+                $ingredients_type = null;
+                $target_akp = $data->target_akp;
+                $target_bjr = $data->target_bjr;
             }
 
             $foreman = [
@@ -185,6 +194,8 @@ class BlockController extends Controller
                 'block_code' => block($single_ref->block_id),
                 'job_type'   => $single_ref->jobtype_id,
                 'target_coverage'    => $data->target_coverage,
+                'target_akp' => $target_akp,
+                'target_bjr' => $target_bjr,
                 'ingredients_type'   => $ingredients_type,
                 'ingredients_amount' => $ingredients_amount,
                 'foreman_note' => $data->foreman_note,

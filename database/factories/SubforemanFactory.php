@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Subforeman;
 use Illuminate\Database\Eloquent\Factories\Factory;
-
+use Illuminate\Support\Facades\Hash;
 class SubforemanFactory extends Factory
 {
     /**
@@ -24,9 +24,9 @@ class SubforemanFactory extends Factory
         return [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => Hash::make('password'), // password
             'afdelling_id' => 1,
-            'jobtype_id' => $this->faker->numberBetween(1, 3) //sprayig
+            'jobtype_id' => $this->faker->numberBetween(1, 7) //sprayig
         ];
     }
 }
