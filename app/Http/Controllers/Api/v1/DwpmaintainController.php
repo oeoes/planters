@@ -84,7 +84,7 @@ class DwpmaintainController extends Controller
             'foreman_note' => $request->foreman_note
         ];
 
-        return res(true, 200, 'Daily work plan spraying added', $data);
+        return res(true, 200, 'Daily work plan spraying added');
     }
 
     public function store_fertilizer(Request $request) {
@@ -143,7 +143,7 @@ class DwpmaintainController extends Controller
             'foreman_note' => $request->foreman_note
         ];
 
-        return res(true, 200, 'Daily work plan fertilizer added', $data);
+        return res(true, 200, 'Daily work plan fertilizer added');
     }
 
     public function store_pcontrol(Request $request) {
@@ -202,7 +202,7 @@ class DwpmaintainController extends Controller
             'foreman_note' => $request->foreman_note
         ];
 
-        return res(true, 200, 'Daily work plan pest control added', $data);
+        return res(true, 200, 'Daily work plan pest control added');
     }
 
     public function store_mcircle(Request $request) {
@@ -257,7 +257,7 @@ class DwpmaintainController extends Controller
             'foreman_note' => $request->foreman_note
         ];
 
-        return res(true, 200, 'Daily work plan manual circle added', $data);
+        return res(true, 200, 'Daily work plan manual circle added');
 
     }
 
@@ -307,7 +307,7 @@ class DwpmaintainController extends Controller
             'foreman_note' => $request->foreman_note
         ];
 
-        return res(true, 200, 'Daily work plan pruning added', $data);
+        return res(true, 200, 'Daily work plan pruning added');
     }
 
     public function store_mgawangan(Request $request) {
@@ -362,7 +362,7 @@ class DwpmaintainController extends Controller
             'foreman_note' => $request->foreman_note
         ];
 
-        return res(true, 200, 'Daily work plan pruning added', $data);
+        return res(true, 200, 'Daily work plan pruning added');
     }
 
     public function active_subforeman($jobtype_id, $afdelling_id) { 
@@ -727,7 +727,11 @@ class DwpmaintainController extends Controller
     public function dates($year, $block_id) {
         // pasti gada yg sama [first] bukan get
         $reference = BlockReference::where('planting_year', $year)->where('block_id', $block_id)->first();
+        if (! $reference) {
+            return res(false, 404, 'Cannot find the completed daily work plan');
+        }
         $data = $reference->model::where('block_ref_id', $reference->id)->get();
+        return $data;
     }
 
     public function check_job_today($subforeman_id) {

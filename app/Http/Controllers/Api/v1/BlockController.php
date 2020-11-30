@@ -83,7 +83,7 @@ class BlockController extends Controller
             'completed' => 0,
         ];
 
-        return res(true, 200, 'Reference of block created', $data);
+        return res(true, 200, 'Reference of block created');
     }
 
     public function blocks() {
@@ -205,16 +205,59 @@ class BlockController extends Controller
                 'completed' => 0,
             ];
 
-            $fillout = $single_ref->fill::where('harvest_id', $data->id)->first();
+            switch ($single_ref->jobtype_id) {
+                case 1:
+                    $fillout = $single_ref->fill::where('spraying_id', $data->id)->first();
+                    break;
+                case 2:
+                    $fillout = $single_ref->fill::where('fertilizer_id', $data->id)->first();
+                    break;
+                case 3:
+                    $fillout = $single_ref->fill::where('circle_id', $data->id)->first();
+                    break;
+                case 4:
+                    $fillout = $single_ref->fill::where('pruning_id', $data->id)->first();
+                    break;
+                case 5:
+                    $fillout = $single_ref->fill::where('gawangan_id', $data->id)->first();
+                    break;
+                case 6:
+                    $fillout = $single_ref->fill::where('pcontrol_id', $data->id)->first();
+                    break;
+                case 7:
+                    $fillout = $single_ref->fill::where('harvest_id', $data->id)->first();
+                    break;
+            }
 
             if (! $fillout) {
                 $subforeman = null;
             } else {
+
+                if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
+                    $ingredients_amount = $fillout->ingredients_amount;
+                    $ingredients_type = $fillout->ingredients_type;
+                    $target_akp = null;
+                    $target_bjr = null;
+                } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
+                    $ingredients_amount = null;
+                    $ingredients_type = null;
+                    $target_akp = null;
+                    $target_bjr = null;
+                } else if (in_array($single_ref->jobtype_id, [7])) {
+                    $ingredients_amount = null;
+                    $ingredients_type = null;
+                    $target_akp = $fillout->target_akp;
+                    $target_bjr = $fillout->target_bjr;
+                }
+
                 $subforeman = [
                     "begin" => $fillout->begin,
                     "ended" => $fillout->ended,
                     "target_coverage" => $fillout->ftarget_coverage,
-                    "ingredients_amount" => $fillout->fingredients_amount,
+                    'target_akp' => $target_akp,
+                    'target_bjr' => $target_bjr,
+                    'ingredients_type'   => $ingredients_type,
+                    'ingredients_amount' => $ingredients_amount,
                     "image" => $fillout->image,
                     "subforeman_note" => $fillout->subforeman_note,
                     "hk_name" => $fillout->hk_name,

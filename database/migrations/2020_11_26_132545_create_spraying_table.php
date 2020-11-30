@@ -19,7 +19,7 @@ class CreateSprayingTable extends Migration
             $table->foreignId('foreman_id')->constrained('foremans');
             $table->foreignId('subforeman_id')->constrained('subforemans');
             $table->date('date');
-            $table->string('ingredients_type');
+            $table->string('ingredients_type'); // di subforeman 2 engga perlu type
             $table->float('ingredients_amount', 8, 2);
             $table->float('target_coverage', 8, 2);
             $table->integer('hk_used');
