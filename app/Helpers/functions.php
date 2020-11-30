@@ -64,7 +64,7 @@ function res($status, $code, $message, $data = null) {
     function model($jobtypeid) {
       switch ($jobtypeid) {
         case 1:
-            return 'App\Models\Maintain\AppSprayingType'; break;
+            return 'App\Models\Maintain\SprayingType'; break;
         case 2: 
             return 'App\Models\Maintain\FertilizerType'; break;
         case 3:

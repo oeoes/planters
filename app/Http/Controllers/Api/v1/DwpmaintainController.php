@@ -365,65 +365,6 @@ class DwpmaintainController extends Controller
         return res(true, 200, 'Daily work plan pruning added', $data);
     }
 
-    public function store_harvest(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'block_ref_id' => 'required',
-            'foreman_id' => 'required',
-            'subforeman_id' => 'required',
-            'date' => 'required',
-            'target_coverage' => 'required', 
-            'target_akp' => 'required', 
-            'target_bjr' => 'required', 
-            'hk_used' => 'required',
-        ]);
-
-        if ($validator->fails())
-            return res(false, 404, $validator->errors()->first());
-
-        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
-        if (! $subforeman) 
-            return res(false, 404, 'Invalid subforeman');
-
-        $blockrefs = BlockReference::where('id', $request->block_ref_id)->where('foreman_id', $request->foreman_id)->first();
-        if (! $blockrefs)
-            return res(false, 404, 'Wrong foreman or block references');
-
-        if ($blockrefs->jobtype_id != 7 || $subforeman->jobtype_id != 7) 
-                return res(false, 404, 'Wrong job type for block', [$blockrefs->jobtype_id, $subforeman->jobtype_id]);
-
-        $harvesting = HarvestingType::where('block_ref_id', $request->block_ref_id)->where('foreman_id', $request->foreman_id)->latest()->first();
-        if ($harvesting) {
-            // if harvesting created less 1
-            if ($harvesting->date == $request->date || $harvesting->completed == 0)
-            return res(false, 404, 'Cannot do next, please fill this form first!');
-        }
-
-        HarvestingType::create($request->all());
-
-        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
-        $current_hk = $hk->available_hk;
-        $used_hk    = $request->hk_used;
-        $limit_hk   = $current_hk - $used_hk;
-        $hk->update(['available_hk' => $limit_hk]);
-
-        $subforeman->increment('active');
-        $subforeman->save();
-
-        $data = [
-            'block_ref_id' => (int) $request->block_ref_id,
-            'foreman' => foreman($request->foreman_id)->name,
-            'subforeman'=> subforeman($request->subforeman_id)->name,
-            'date' => $request->date,
-            'target_coverage'  => (float) $request->target_coverage,
-            'target_akp'   => (float) $request->target_akp,
-            'target_bjr'   => (float) $request->target_bjr,
-            'hk_used'      => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ];
-
-        return res(true, 200, 'Daily work plan harvesting added', $data);
-    }
-
     public function active_subforeman($jobtype_id, $afdelling_id) { 
         // located on foreman route / area
         // active = 0, where standby
@@ -753,65 +694,13 @@ class DwpmaintainController extends Controller
         return res(true, 200, 'Manual gawangan report filled successfully');
     }
 
-    public function fill_harvesting(Request $request) {
-
-        $validator = Validator::make($request->all(), [
-            'harvest_id' => 'required',
-            'ftarget_coverage' => 'required',
-            'ftarget_akp' => 'required',
-            'ftarget_bjr' => 'required',
-            'begin' => 'required',
-            'ended' => 'required',
-        ]);
-
-        if ($validator->fails())
-            return res(false, 404, $validator->errors()->first());
-
-        $fillspraying = FillHarvesting::where('harvest_id', $request->harvest_id)->first();
-        if ($fillspraying) 
-            return res(false, 404, 'Data for today existed');
-
-        if ($request->hasFile('image')) {
-            $request->validate([ 'image' => 'image:jpeg,png,jpg|max:2048'   ]);
-            $image = $request->file('image');
-            $image_folder = 'harvesting';
-            $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
-            $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
-            $image_url = asset('/storage/' . $image_url);
-        } else {
-            $image_url = null;
-        }
-
-        FillHarvesting::create([
-            'harvest_id' => $request->harvest_id,
-            'ftarget_coverage' => $request->ftarget_coverage,
-            'ftarget_akp' => $request->ftarget_akp,
-            'ftarget_bjr' => $request->ftarget_bjr,
-            'image' => $image_url,
-            'subforeman_note' => $request->subforeman_note,
-            'begin' => $request->begin,
-            'ended' => $request->ended,
-            'hk_name' => $request->hk_name
-        ]);
-
-        $reference = HarvestingType::find($request->harvest_id);
-        $block_ref_id = $reference->block_ref_id;
-
-        $tcov = BlockReference::find($block_ref_id);
-        $current_coverage = $tcov->available_coverage;
-        $used_coverage = $request->ftarget_coverage;
-        $new_coverage = $current_coverage - $used_coverage;
-        $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
-        
-        return res(true, 200, 'Harvesting report filled successfully');
-    }
-
     public function years() {
         $block_reference = BlockReference::where('foreman_id', fme()->id)
-                        ->where('completed', 1)->orderBy('created_at', 'DESC')->get();
+                        ->where('completed', 1)
+                        ->distinct('planting_year')
+                        ->select('planting_year')
+                        ->get();
+        $block_reference = collect($block_reference)->sortBy('planting_year')->reverse()->toArray();
         $pyears = [];
         foreach ($block_reference as $key => $value) {
             $pyears [] = [
@@ -835,106 +724,13 @@ class DwpmaintainController extends Controller
         return res(true, 200, 'Blocks listed!', $blocks);
     }
 
-    public function date($year, $block_id) {
-        $block_reference = BlockReference::where('foreman_id', fme()->id)->where('planting_year', $year)->where('block_id', $block_id)->where('completed', 1)->orderBy('created_at', 'DESC')->get();
-        foreach ($block_reference as $key => $value) {
-            $id = $value['id'];
-            $jobtype_id = $value['id'];
-            switch ($jobtype_id) {
-                case 1:
-                    $data = SprayingType::where('block_ref_id', $id)->orderByDesc('created_at')->get();
-                    if(! $data) {
-                        return res(true, 200, 'There no history');
-                    } else {
-                        $ids = [];
-                        foreach ($data as $key => $value) {
-                            $id = $value['id'];
-                            $ids[] = [ $id ];
-                        }
-                        $fill = FillSpraying::whereIn('id', $ids)->get();
-                        return res(true, 200, 'Date listed', $fill);
-                    }
-                break;
-                
-                case 2:
-                    $data = FertilizerType::where('block_ref_id', $id)->orderByDesc('created_at')->get();
-                    if(! $data) {
-                        return res(true, 200, 'There no history');
-                    } else {
-                        $ids = [];
-                        foreach ($data as $key => $value) {
-                            $id = $value['id'];
-                            $ids[] = [ $id ];
-                        }
-                        $fill = FillFertilizer::whereIn('id', $ids)->get();
-                        return res(true, 200, 'Date listed', $fill);
-                    }
-                break;
-
-                case 3:
-                    $data = CircleType::where('block_ref_id', $id)->orderByDesc('created_at')->get();
-                    if(! $data) {
-                        return res(true, 200, 'There no history');
-                    } else {
-                        $ids = [];
-                        foreach ($data as $key => $value) {
-                            $id = $value['id'];
-                            $ids[] = [ $id ];
-                        }
-                        $fill = FillCircle::whereIn('id', $ids)->get();
-                        return res(true, 200, 'Date listed', $fill);
-                    }
-                break;
-
-                case 4:
-                    $data = PruningType::where('block_ref_id', $id)->orderByDesc('created_at')->get();
-                    if(! $data) {
-                        return res(true, 200, 'There no history');
-                    } else {
-                        $ids = [];
-                        foreach ($data as $key => $value) {
-                            $id = $value['id'];
-                            $ids[] = [ $id ];
-                        }
-                        $fill = FillPruning::whereIn('id', $ids)->get();
-                        return res(true, 200, 'Date listed', $fill);
-                    }
-                break;
-
-                case 5:
-                    $data = GawanganType::where('block_ref_id', $id)->orderByDesc('created_at')->get();
-                    if(! $data) {
-                        return res(true, 200, 'There no history');
-                    } else {
-                        $ids = [];
-                        foreach ($data as $key => $value) {
-                            $id = $value['id'];
-                            $ids[] = [ $id ];
-                        }
-                        $fill = FillGawangan::whereIn('id', $ids)->get();
-                        return res(true, 200, 'Date listed', $fill);
-                    }
-                break;
-
-                case 6:
-                    $data = PestControl::where('block_ref_id', $id)->orderByDesc('created_at')->get();
-                    if(! $data) {
-                        return res(true, 200, 'There no history');
-                    } else {
-                        $ids = [];
-                        foreach ($data as $key => $value) {
-                            $id = $value['id'];
-                            $ids[] = [ $id ];
-                        }
-                        $fill = FillPcontrols::whereIn('id', $ids)->get();
-                        return res(true, 200, 'Date listed', $fill);
-                    }
-                break;
-            }
-        }    
+    public function dates($year, $block_id) {
+        // pasti gada yg sama [first] bukan get
+        $reference = BlockReference::where('planting_year', $year)->where('block_id', $block_id)->first();
+        $data = $reference->model::where('block_ref_id', $reference->id)->get();
     }
 
-    public function check_job_today() {
+    public function check_job_today($subforeman_id) {
         // date
         // mandor 1
         // blok
@@ -943,17 +739,30 @@ class DwpmaintainController extends Controller
         // jenis pupuk
         // target berat
         // catata
-        $now = date('Y-m-d');
-        $sfmid = sfme()->id;
         $joblists = [
-            SprayingType::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
-            FertilizerType::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
-            CircleType::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
-            PruningType::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
-            GawanganType::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
-            PestControl::where('date', $now)->where('subforeman_id', $sfmid)->where('completed', 0)->first(),
+            SprayingType::where('subforeman_id', $subforeman_id)
+                        ->where('date', date('Y-m-d'))
+                        ->where('completed', 0)->first(),
+            FertilizerType::where('subforeman_id', $subforeman_id)
+                        ->where('date', date('Y-m-d'))
+                        ->where('completed', 0)->first(),
+            CircleType::where('subforeman_id', $subforeman_id)
+                        ->where('date', date('Y-m-d'))
+                        ->where('completed', 0)->first(),
+            PruningType::where('subforeman_id', $subforeman_id)
+                        ->where('date', date('Y-m-d'))
+                        ->where('completed', 0)->first(),
+            GawanganType::where('subforeman_id', $subforeman_id)
+                        ->where('date', date('Y-m-d'))
+                        ->where('completed', 0)->first(),
+            PestControl::where('subforeman_id', $subforeman_id)
+                        ->where('date', date('Y-m-d'))
+                        ->where('completed', 0)->first(),
+            HarvestingType::where('subforeman_id', $subforeman_id)
+                        ->where('date', date('Y-m-d'))
+                        ->where('completed', 0)->first(),
         ];
-
+        
         $data = '';
         $job_type = '';
         for ($i = 0; $i < count($joblists) ; $i++) { 

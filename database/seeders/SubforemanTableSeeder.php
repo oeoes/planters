@@ -36,7 +36,7 @@ class SubforemanTableSeeder extends Seeder
             'email' => 'subforeman@planters.com',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'afdelling_id' => 1,
-            'jobtype_id' => 1 //sprayig
+            'jobtype_id' => 7 //sprayig
         ]);
     }
 }

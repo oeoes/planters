@@ -46,14 +46,15 @@ class BlockController extends Controller
 
         $block_references = BlockReference::where('block_id', $request->block_id)->where('planting_year', $request->planting_year)->first();
         if ($block_references) 
-            return res(false, 400, 'Reference of block already created');
+            return res(false, 400, 'Reference of block already created', [ 'block_reference_id' => $block_references->id]);
             $population_perblock = ($request->population_coverage /  $request->total_coverage);
         
-        $afdelling_ref = AfdellingReference::find(fme()->afdelling_id);
-        if ($afdelling_ref->available_hk == 0) {
-            return res(false, 404, 'Cannot create block reference for today, there is no employees available');
+        $afdelling_ref = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->first();
+        if ($afdelling_ref != null) {
+            if ($afdelling_ref->available_hk == 0 && $afdelling_ref->available_date == date('Y-m-d')) {
+                return res(false, 404, 'Cannot create block reference for today, there is no employees available');
+            }   
         }
-
 
         BlockReference::create([
             'block_id'   => $request->block_id,
@@ -99,8 +100,11 @@ class BlockController extends Controller
     }
 
     // all blocks
-    public function block_references() {
-        $refs = BlockReference::where('foreman_id', auth()->guard('foreman')->user()->id)->where('completed', 1)->orderByDesc('created_at')->get();
+    public function completed_block_references() {
+        $refs = BlockReference::where('foreman_id', fme()->id)
+                                ->where('completed', 1)
+                                ->orderByDesc('created_at')
+                                ->get();
         $data = [];
         if (! $refs->isEmpty()) {
             foreach ($refs as $value) {
@@ -118,8 +122,8 @@ class BlockController extends Controller
 
     // active block references
     public function active_block_references() {
-        $refs = BlockReference::where('foreman_id', auth()->guard('foreman')->user()->id)
-                            //   ->where('completed', 0)
+        $refs = BlockReference::where('foreman_id', fme()->id)
+                              ->where('completed', 0)
                               ->orderByDesc('created_at')
                               ->get();
         $data = [];
@@ -134,7 +138,7 @@ class BlockController extends Controller
             }
             return res(true, 200, 'Blocks listed', $data);
         } else {
-            return res(true, 200, 'There is no active block');
+            return res(true, 200, 'There is no active blocks reference');
         }
     }
 
@@ -142,7 +146,7 @@ class BlockController extends Controller
         $single_ref = BlockReference::find($block_ref_id);
         $afdelling_id = auth()->guard('foreman')->user()->afdelling_id;
         $now = date('Y-m-d');
-        $data = $single_ref->model::where('block_ref_id', $block_ref_id)->first();
+        $data = $single_ref->model::where('block_ref_id', $block_ref_id)->where('completed', 0)->first();
 
         if(! $data) {
             $afdelling_ref = AfdellingReference::whereDate('available_date', date('Y-m-d'))->where('afdelling_id', $afdelling_id)->first();
@@ -172,9 +176,18 @@ class BlockController extends Controller
             if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
                 $ingredients_amount = $data->ingredients_amount;
                 $ingredients_type = $data->ingredients_type;
-            } elseif (in_array($single_ref->jobtype_id, [3, 4, 5, 7])) {
+                $target_akp = null;
+                $target_bjr = null;
+            } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
                 $ingredients_amount = null;
                 $ingredients_type = null;
+                $target_akp = null;
+                $target_bjr = null;
+            } else if (in_array($single_ref->jobtype_id, [7])) {
+                $ingredients_amount = null;
+                $ingredients_type = null;
+                $target_akp = $data->target_akp;
+                $target_bjr = $data->target_bjr;
             }
 
             $foreman = [
@@ -183,6 +196,8 @@ class BlockController extends Controller
                 'block_code' => block($single_ref->block_id),
                 'job_type'   => $single_ref->jobtype_id,
                 'target_coverage'    => $data->target_coverage,
+                'target_akp' => $target_akp,
+                'target_bjr' => $target_bjr,
                 'ingredients_type'   => $ingredients_type,
                 'ingredients_amount' => $ingredients_amount,
                 'foreman_note' => $data->foreman_note,
