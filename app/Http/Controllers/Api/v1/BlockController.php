@@ -51,11 +51,10 @@ class BlockController extends Controller
         
         $afdelling_ref = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->first();
         if ($afdelling_ref != null) {
-            if ($afdelling_ref->available_hk == 0) {
+            if ($afdelling_ref->available_hk == 0 && $afdelling_ref->available_date == date('Y-m-d')) {
                 return res(false, 404, 'Cannot create block reference for today, there is no employees available');
             }   
         }
-
 
         BlockReference::create([
             'block_id'   => $request->block_id,
@@ -101,8 +100,11 @@ class BlockController extends Controller
     }
 
     // all blocks
-    public function block_references() {
-        $refs = BlockReference::where('foreman_id', auth()->guard('foreman')->user()->id)->where('completed', 1)->orderByDesc('created_at')->get();
+    public function completed_block_references() {
+        $refs = BlockReference::where('foreman_id', fme()->id)
+                                ->where('completed', 1)
+                                ->orderByDesc('created_at')
+                                ->get();
         $data = [];
         if (! $refs->isEmpty()) {
             foreach ($refs as $value) {
@@ -120,8 +122,8 @@ class BlockController extends Controller
 
     // active block references
     public function active_block_references() {
-        $refs = BlockReference::where('foreman_id', auth()->guard('foreman')->user()->id)
-                            //   ->where('completed', 0)
+        $refs = BlockReference::where('foreman_id', fme()->id)
+                              ->where('completed', 0)
                               ->orderByDesc('created_at')
                               ->get();
         $data = [];
@@ -136,7 +138,7 @@ class BlockController extends Controller
             }
             return res(true, 200, 'Blocks listed', $data);
         } else {
-            return res(true, 200, 'There is no active block');
+            return res(true, 200, 'There is no active blocks reference');
         }
     }
 

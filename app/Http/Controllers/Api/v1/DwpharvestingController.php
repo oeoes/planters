@@ -72,19 +72,7 @@ class DwpharvestingController extends Controller
         $subforeman->increment('active');
         $subforeman->save();
 
-        $data = [
-            'block_ref_id' => (int) $request->block_ref_id,
-            'foreman' => foreman($request->foreman_id)->name,
-            'subforeman'=> subforeman($request->subforeman_id)->name,
-            'date' => $request->date,
-            'target_coverage'  => (float) $request->target_coverage,
-            'target_akp'   => (float) $request->target_akp,
-            'target_bjr'   => (float) $request->target_bjr,
-            'hk_used'      => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ];
-
-        return res(true, 200, 'Daily work plan harvesting added', $data);
+        return res(true, 200, 'Daily work plan harvesting added');
     }
 
     public function fill_harvesting(Request $request) {

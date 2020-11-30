@@ -27,21 +27,17 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
         Route::post('store-harvest', [DwpharvestingController::class, 'store_harvest']);
 
-        Route::post('store-block-references', [BlockController::class, 'store_block_references']);
         Route::get('blocks', [BlockController::class, 'blocks']);
-        Route::get('block-references', [BlockController::class, 'block_references']);
+        Route::post('store-block-references', [BlockController::class, 'store_block_references']);
+        Route::get('completed-block-references', [BlockController::class, 'completed_block_references']);
         Route::get('active-block-references', [BlockController::class, 'active_block_references']);
 
         // pas klik thn tanam dan kebun mau ke create
         Route::get('det-active-block-references/{block_ref_id}', [BlockController::class, 'det_active_block_references']);
 
-        // get year by complete blok re
         Route::get('years', [DwpmaintainController::class, 'years']);
-        // get block by query year, [DwpmaintainController]
         Route::get('year/{year}/blocks', [DwpmaintainController::class, 'block']);
-        // get all tanggal by block and year
         Route::get('year/{year}/blocks/{block_id}', [DwpmaintainController::class, 'dates']);
-        // set complete rkh
         Route::get('set-complete-rkh/{block_ref_id}', [DwpmaintainController::class, 'set_complete_rkh']);
     
     });
