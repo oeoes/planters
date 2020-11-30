@@ -14,7 +14,7 @@ Daftar Mandor 1
 <div class="row">
     <div class="col-md-8">
         <div class="card">
-            <table class="table table-hover table-borderless">
+            <table class="table table-hover table-borderless table-responsive">
                 <thead class="text-muted">
                     <tr>
                         <th>#</th>
@@ -30,7 +30,7 @@ Daftar Mandor 1
                         <td>{{ $foreman->name }}</td>
                         <td>{{ $foreman->email }}</td>
                         <td>
-                            <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
+                            <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3 mb-2" data-toggle="modal"
                                 data-target="#edit-foreman{{$key}}"><i class="nav-icon fas fa-pen"></i>
                             </button>
                             <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"

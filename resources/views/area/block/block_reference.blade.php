@@ -46,7 +46,7 @@ Daftar Referensi Block
                         <td>{{ $block_reference->population_coverage }}</td>
                         <td>{{ $block_reference->population_perblock }}</td>
                         <td>
-                            <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3 mb-1" data-toggle="modal"
+                            <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3 mb-2" data-toggle="modal"
                                 data-target="#edit-block_reference{{$key}}"><i class="nav-icon fas fa-pen"></i>
                             </button>
                             <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"

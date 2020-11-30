@@ -19,7 +19,8 @@
         "league/flysystem-cached-adapter": "~1.0",
         "realrashid/sweet-alert": "^3.1",
         "sentry/sentry-laravel": "^2.2",
-        "tymon/jwt-auth": "^1.0"
+        "tymon/jwt-auth": "^1.0",
+        "yajra/laravel-datatables": "^1.5"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
