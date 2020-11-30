@@ -7,6 +7,7 @@ use App\Models\Afdelling;
 use App\Models\AfdellingReference;
 use App\Models\Block;
 use App\Models\BlockReference;
+use App\Models\Harvesting\FillHarvesting;
 use App\Models\Maintain\CircleType;
 use App\Models\Maintain\FertilizerType;
 use App\Models\Maintain\FillCircle;
@@ -19,6 +20,8 @@ use App\Models\Maintain\PestControl;
 use App\Models\Maintain\PruningType;
 use App\Models\Maintain\SprayingType;
 use Illuminate\Http\Request;
+// use App\Models\Harvesting\HarvestingType;
+// use App\Models\Harvesting\FillHarvesting;
 use Validator;
 
 class BlockController extends Controller
@@ -45,6 +48,12 @@ class BlockController extends Controller
         if ($block_references) 
             return res(false, 400, 'Reference of block already created');
             $population_perblock = ($request->population_coverage /  $request->total_coverage);
+        
+        $afdelling_ref = AfdellingReference::find(fme()->afdelling_id);
+        if ($afdelling_ref->available_hk == 0) {
+            return res(false, 404, 'Cannot create block reference for today, there is no employees available');
+        }
+
 
         BlockReference::create([
             'block_id'   => $request->block_id,
@@ -55,6 +64,8 @@ class BlockController extends Controller
             'population_perblock' => $population_perblock,
             'total_coverage'      => $request->total_coverage,
             'available_coverage'  => $request->total_coverage,
+            'model' => model($request->jobtype_id),
+            'fill'  => fill($request->jobtype_id),
             'completed' => 0,
         ]);
         $last_block_reference = BlockReference::where('foreman_id', fme()->id)->latest()->first();
@@ -107,7 +118,10 @@ class BlockController extends Controller
 
     // active block references
     public function active_block_references() {
-        $refs = BlockReference::where('foreman_id', auth()->guard('foreman')->user()->id)->where('completed', 0)->orderByDesc('created_at')->get();
+        $refs = BlockReference::where('foreman_id', auth()->guard('foreman')->user()->id)
+                            //   ->where('completed', 0)
+                              ->orderByDesc('created_at')
+                              ->get();
         $data = [];
 
         if (! $refs->isEmpty()) {
@@ -128,54 +142,10 @@ class BlockController extends Controller
         $single_ref = BlockReference::find($block_ref_id);
         $afdelling_id = auth()->guard('foreman')->user()->afdelling_id;
         $now = date('Y-m-d');
-        $afdelling_ref = AfdellingReference::where('afdelling_id', $afdelling_id)->where('available_date', $now)->first();
-        // Jika datanya blm tersedia diinput mandor
-        switch($single_ref->jobtype_id) {
-            case 1:
-                // jika job type yg dituju blm diisi mandor 1,
-                // diarahin ke create rkh
-                $check = SprayingType::where('block_ref_id', $block_ref_id)->where('date', $now)
-                        ->where('completed', 0)->first(); 
-                    if ($check) 
-                        $filling = FillSpraying::find($check->id);
-            break;
+        $data = $single_ref->model::where('block_ref_id', $block_ref_id)->first();
 
-            case 2:
-                $check = FertilizerType::where('block_ref_id', $block_ref_id)->where('date', $now)
-                        ->where('completed', 0)->first(); 
-                        if ($check) 
-                        $filling = FillSpraying::find($check->id);
-            break;
-
-            case 3:
-                $check = CircleType::where('block_ref_id', $block_ref_id)->where('date', $now)
-                        ->where('completed', 0)->first(); 
-                        if ($check) 
-                        $filling = FillSpraying::find($check->id);
-            break;
-
-            case 4:
-                $check = PruningType::where('block_ref_id', $block_ref_id)->where('date', $now)
-                        ->where('completed', 0)->first(); 
-                        if ($check) 
-                        $filling = FillSpraying::find($check->id);
-            break;
-
-            case 5:
-                $check = GawanganType::where('block_ref_id', $block_ref_id)->where('date', $now)
-                        ->where('completed', 0)->first(); 
-                        if ($check) 
-                        $filling = FillSpraying::find($check->id);
-            break;
-
-            case 6:
-                $check = PestControl::where('block_ref_id', $block_ref_id)->where('date', $now)
-                        ->where('completed', 0)->first(); 
-                        if ($check) 
-                        $filling = FillSpraying::find($check->id);
-            break;
-        }
-        if (! $check) {
+        if(! $data) {
+            $afdelling_ref = AfdellingReference::whereDate('available_date', date('Y-m-d'))->where('afdelling_id', $afdelling_id)->first();
             $afdelling = Afdelling::where('id', fme()->afdelling_id)->first();
             if (! $afdelling_ref) {
                 AfdellingReference::create([
@@ -188,6 +158,7 @@ class BlockController extends Controller
             } else {
                 $available_hk = $afdelling_ref->available_hk;
             }
+
             $data = [
                 'block_code' => block($single_ref->block_id),
                 'job_type' => $single_ref->jobtype_id,
@@ -199,37 +170,39 @@ class BlockController extends Controller
         } else {
 
             if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-                $ingredients_amount = $check->ingredients_amount;
-                $ingredients_type = $check->ingredients_type;
-            } else {
+                $ingredients_amount = $data->ingredients_amount;
+                $ingredients_type = $data->ingredients_type;
+            } elseif (in_array($single_ref->jobtype_id, [3, 4, 5, 7])) {
                 $ingredients_amount = null;
                 $ingredients_type = null;
             }
 
             $foreman = [
-                'date' => date('Y-m-d', strtotime($check->date)),
-                'subforeman' => subforeman($check->subforeman_id)->name,
+                'date' => date('Y-m-d', strtotime($data->date)),
+                'subforeman' => subforeman($data->subforeman_id)->name,
                 'block_code' => block($single_ref->block_id),
                 'job_type'   => $single_ref->jobtype_id,
-                'target_coverage'    => $check->target_coverage,
+                'target_coverage'    => $data->target_coverage,
                 'ingredients_type'   => $ingredients_type,
                 'ingredients_amount' => $ingredients_amount,
-                'foreman_note' => $check->foreman_note,
-                'hk_used'   => $check->hk_used,
+                'foreman_note' => $data->foreman_note,
+                'hk_used'   => $data->hk_used,
                 'completed' => 0,
             ];
 
-            if (! $filling) {
+            $fillout = $single_ref->fill::where('harvest_id', $data->id)->first();
+
+            if (! $fillout) {
                 $subforeman = null;
             } else {
                 $subforeman = [
-                    "begin" => $filling->begin,
-                    "ended" => $filling->ended,
-                    "target_coverage" => $filling->ftarget_coverage,
-                    "ingredients_amount" => $filling->fingredients_amount,
-                    "image" => $filling->image,
-                    "subforeman_note" => $filling->subforeman_note,
-                    "hk_name" => $filling->hk_name,
+                    "begin" => $fillout->begin,
+                    "ended" => $fillout->ended,
+                    "target_coverage" => $fillout->ftarget_coverage,
+                    "ingredients_amount" => $fillout->fingredients_amount,
+                    "image" => $fillout->image,
+                    "subforeman_note" => $fillout->subforeman_note,
+                    "hk_name" => $fillout->hk_name,
                 ];
             }
 
@@ -238,9 +211,8 @@ class BlockController extends Controller
                 "subforeman" => $subforeman
             ];
             
-            return res(true, 200, 'Detail RKH', $data);
-        }
-            
+            return res(true, 200, 'Detail RKH', $data); 
+        }   
 
     }
 }

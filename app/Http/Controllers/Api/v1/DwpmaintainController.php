@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\AfdellingReference;
 use App\Models\BlockReference;
 use App\Models\Foreman;
+use App\Models\Harvesting\FillHarvesting;
+use App\Models\Harvesting\HarvestingType;
 use App\Models\Maintain\CircleType;
 use App\Models\Maintain\FertilizerType;
 use App\Models\Maintain\FillCircle;
@@ -78,7 +80,7 @@ class DwpmaintainController extends Controller
             'ingredients_type' => $request->ingredients_type,
             'ingredients_amount' => (float) $request->ingredients_amount,
             'target_coverage'  => (float) $request->target_coverage,
-            'hk_used' => (float)$request->hk_used,
+            'hk_used' => $request->hk_used,
             'foreman_note' => $request->foreman_note
         ];
 
@@ -137,7 +139,7 @@ class DwpmaintainController extends Controller
             'ingredients_type' => $request->ingredients_type,
             'ingredients_amount' => (float) $request->ingredients_amount,
             'target_coverage'  => (float) $request->target_coverage,
-            'hk_used' => (float)$request->hk_used,
+            'hk_used' => $request->hk_used,
             'foreman_note' => $request->foreman_note
         ];
 
@@ -196,7 +198,7 @@ class DwpmaintainController extends Controller
             'ingredients_type' => $request->ingredients_type,
             'ingredients_amount' => (float) $request->ingredients_amount,
             'target_coverage'  => (float) $request->target_coverage,
-            'hk_used' => (float)$request->hk_used,
+            'hk_used' => $request->hk_used,
             'foreman_note' => $request->foreman_note
         ];
 
@@ -251,7 +253,7 @@ class DwpmaintainController extends Controller
             'subforeman'=> subforeman($request->subforeman_id)->name,
             'date' => $request->date,
             'target_coverage'  => (float) $request->target,
-            'hk_used' => (float)$request->hk_used,
+            'hk_used' => $request->hk_used,
             'foreman_note' => $request->foreman_note
         ];
 
@@ -301,7 +303,7 @@ class DwpmaintainController extends Controller
             'subforeman'=> subforeman($request->subforeman_id)->name,
             'date' => $request->date,
             'target_coverage'  => (float) $request->target,
-            'hk_used' => (float)$request->hk_used,
+            'hk_used' => $request->hk_used,
             'foreman_note' => $request->foreman_note
         ];
 
@@ -356,11 +358,70 @@ class DwpmaintainController extends Controller
             'subforeman'=> subforeman($request->subforeman_id)->name,
             'date' => $request->date,
             'target_coverage'  => (float) $request->target_coverage,
-            'hk_used' => (float)$request->hk_used,
+            'hk_used' => $request->hk_used,
             'foreman_note' => $request->foreman_note
         ];
 
         return res(true, 200, 'Daily work plan pruning added', $data);
+    }
+
+    public function store_harvest(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'block_ref_id' => 'required',
+            'foreman_id' => 'required',
+            'subforeman_id' => 'required',
+            'date' => 'required',
+            'target_coverage' => 'required', 
+            'target_akp' => 'required', 
+            'target_bjr' => 'required', 
+            'hk_used' => 'required',
+        ]);
+
+        if ($validator->fails())
+            return res(false, 404, $validator->errors()->first());
+
+        $subforeman = Subforeman::where('id', $request->subforeman_id)->where('active', 0)->where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->first();
+        if (! $subforeman) 
+            return res(false, 404, 'Invalid subforeman');
+
+        $blockrefs = BlockReference::where('id', $request->block_ref_id)->where('foreman_id', $request->foreman_id)->first();
+        if (! $blockrefs)
+            return res(false, 404, 'Wrong foreman or block references');
+
+        if ($blockrefs->jobtype_id != 7 || $subforeman->jobtype_id != 7) 
+                return res(false, 404, 'Wrong job type for block', [$blockrefs->jobtype_id, $subforeman->jobtype_id]);
+
+        $harvesting = HarvestingType::where('block_ref_id', $request->block_ref_id)->where('foreman_id', $request->foreman_id)->latest()->first();
+        if ($harvesting) {
+            // if harvesting created less 1
+            if ($harvesting->date == $request->date || $harvesting->completed == 0)
+            return res(false, 404, 'Cannot do next, please fill this form first!');
+        }
+
+        HarvestingType::create($request->all());
+
+        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
+        $current_hk = $hk->available_hk;
+        $used_hk    = $request->hk_used;
+        $limit_hk   = $current_hk - $used_hk;
+        $hk->update(['available_hk' => $limit_hk]);
+
+        $subforeman->increment('active');
+        $subforeman->save();
+
+        $data = [
+            'block_ref_id' => (int) $request->block_ref_id,
+            'foreman' => foreman($request->foreman_id)->name,
+            'subforeman'=> subforeman($request->subforeman_id)->name,
+            'date' => $request->date,
+            'target_coverage'  => (float) $request->target_coverage,
+            'target_akp'   => (float) $request->target_akp,
+            'target_bjr'   => (float) $request->target_bjr,
+            'hk_used'      => $request->hk_used,
+            'foreman_note' => $request->foreman_note
+        ];
+
+        return res(true, 200, 'Daily work plan harvesting added', $data);
     }
 
     public function active_subforeman($jobtype_id, $afdelling_id) { 
@@ -692,6 +753,62 @@ class DwpmaintainController extends Controller
         return res(true, 200, 'Manual gawangan report filled successfully');
     }
 
+    public function fill_harvesting(Request $request) {
+
+        $validator = Validator::make($request->all(), [
+            'harvest_id' => 'required',
+            'ftarget_coverage' => 'required',
+            'ftarget_akp' => 'required',
+            'ftarget_bjr' => 'required',
+            'begin' => 'required',
+            'ended' => 'required',
+        ]);
+
+        if ($validator->fails())
+            return res(false, 404, $validator->errors()->first());
+
+        $fillspraying = FillHarvesting::where('harvest_id', $request->harvest_id)->first();
+        if ($fillspraying) 
+            return res(false, 404, 'Data for today existed');
+
+        if ($request->hasFile('image')) {
+            $request->validate([ 'image' => 'image:jpeg,png,jpg|max:2048'   ]);
+            $image = $request->file('image');
+            $image_folder = 'harvesting';
+            $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
+            $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
+            $image_url = asset('/storage/' . $image_url);
+        } else {
+            $image_url = null;
+        }
+
+        FillHarvesting::create([
+            'harvest_id' => $request->harvest_id,
+            'ftarget_coverage' => $request->ftarget_coverage,
+            'ftarget_akp' => $request->ftarget_akp,
+            'ftarget_bjr' => $request->ftarget_bjr,
+            'image' => $image_url,
+            'subforeman_note' => $request->subforeman_note,
+            'begin' => $request->begin,
+            'ended' => $request->ended,
+            'hk_name' => $request->hk_name
+        ]);
+
+        $reference = HarvestingType::find($request->harvest_id);
+        $block_ref_id = $reference->block_ref_id;
+
+        $tcov = BlockReference::find($block_ref_id);
+        $current_coverage = $tcov->available_coverage;
+        $used_coverage = $request->ftarget_coverage;
+        $new_coverage = $current_coverage - $used_coverage;
+        $tcov->update([ 'available_coverage' => $new_coverage ]);
+
+        if ($tcov->available_coverage == 0) 
+        $tcov->increment('completed'); 
+        
+        return res(true, 200, 'Harvesting report filled successfully');
+    }
+
     public function years() {
         $block_reference = BlockReference::where('foreman_id', fme()->id)
                         ->where('completed', 1)->orderBy('created_at', 'DESC')->get();
@@ -864,7 +981,7 @@ class DwpmaintainController extends Controller
             'job_type_id' => $data->id,
             // 'foreman' => foreman($data->foreman_id),
             'foreman' => Foreman::where('id', $data->foreman_id)->select('name', 'email')->first(),
-            'block' => $block,
+            'block_code' => $block,
             'hk_used' => $data->hk_used,
             'target_coverage' => $data->target_coverage,
             'ingredients_type' => $ingredients_type,
@@ -873,6 +990,17 @@ class DwpmaintainController extends Controller
         ];
 
         return res(true, 200, 'Job today', $dataArr);
+    }
+
+    public function set_complete_rkh($block_ref_id) {
+        $ref = BlockReference::find($block_ref_id);
+        $data = $ref->model::where('block_ref_id', $block_ref_id)->where('foreman_id', fme()->id)->where('completed', 0)->latest()->first();
+        if ($data) {
+            $ref->model::increment('completed');
+            return res(true, 200, 'Daily work plan completed');
+        } else {
+            return res(false, 404, 'Daily work plan not found');
+        }
     }
 
     public static function get_job_type($index) {

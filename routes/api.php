@@ -24,6 +24,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::post('store-mpruning',  [DwpmaintainController::class, 'store_mpruning']);
         Route::post('store-mgawangan', [DwpmaintainController::class, 'store_mgawangan']);
 
+        Route::post('store-harvest', [DwpmaintainController::class, 'store_harvest']);
+
         Route::post('store-block-references', [BlockController::class, 'store_block_references']);
         Route::get('blocks', [BlockController::class, 'blocks']);
         Route::get('block-references', [BlockController::class, 'block_references']);
@@ -38,6 +40,9 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::get('year/{year}/blocks/', [DwpmaintainController::class, 'block']);
         // get all tanggal by block
         Route::get('year/{year}/blocks/{block_code}', [DwpmaintainController::class, 'date']);
+        // set complete rkh
+        Route::get('set-complete-rkh/{block_ref_id}', [DwpmaintainController::class, 'set_complete_rkh']);
+    
     });
 
     Route::group(['prefix' => 'subforeman'], function () {
@@ -47,6 +52,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::post('fill-circle',     [DwpmaintainController::class, 'fill_circle']);
         Route::post('fill-pruning',    [DwpmaintainController::class, 'fill_pruning']);
         Route::post('fill-gawangan',   [DwpmaintainController::class, 'fill_gawangan']);
+        Route::post('fill-harvesting', [DwpmaintainController::class, 'fill_harvesting']);
 
         Route::get('today-job', [DwpmaintainController::class, 'check_job_today']);
     });

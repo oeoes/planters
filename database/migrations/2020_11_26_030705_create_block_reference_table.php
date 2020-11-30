@@ -18,11 +18,13 @@ class CreateBlockReferenceTable extends Migration
             $table->foreignId('block_id')->constrained('blocks');
             $table->foreignId('foreman_id')->constrained('foremans');
             $table->foreignId('jobtype_id')->constrained('job_types');
-            $table->char('planting_year');
+            $table->char('planting_year')->nullable();
             $table->double('total_coverage', 8, 2);
             $table->double('available_coverage', 8, 2);
             $table->double('population_coverage', 8, 2);
             $table->double('population_perblock', 8, 2);
+            $table->string('model')->nullable();
+            $table->string('fill')->nullable();
             $table->char('completed')->default(0);
             $table->timestamps();
         });
