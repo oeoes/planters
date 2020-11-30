@@ -46,12 +46,7 @@
           </li>
 
           <li class="nav-header ml-1">Area</li>
-          {{-- <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
-              <p>Tambah kebun</p>
-            </a>
-          </li> --}}
+          
           <li class="nav-item">
             <a href="{{ route('farm') }}" class="nav-link">
               <i class="nav-icon fas fa-tree"></i>
@@ -81,14 +76,14 @@
           <li class="nav-item">
             <a href="{{ route('foreman.index') }}" class="nav-link">
               <i class="nav-icon fas fa-user-tie"></i>
-              <p>Mandor 1</p>
+              <p>Mandor</p>
             </a>
           </li>
 
             <li class="nav-item">
             <a href="{{ route('subforeman.index') }}" class="nav-link">
               <i class="nav-icon fas fa-users-cog"></i>
-              <p>Mandor 2</p>
+              <p>Mandor Bidang</p>
             </a>
           </li>
 

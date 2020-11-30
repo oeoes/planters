@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Block References')
+@section('title', 'PLANTERS - Block References')
 
 @section('content-title')
 Daftar Referensi Block
@@ -14,7 +14,7 @@ Daftar Referensi Block
 <div class="row">
     <div class="col-md-8">
         <div class="card">
-            <table class="table table-hover table-borderless table-responsive">
+            <table id="myTable" class="table table-hover table-borderless table-responsive">
                 <thead class="text-muted">
                     <tr>
                         <th>#</th>

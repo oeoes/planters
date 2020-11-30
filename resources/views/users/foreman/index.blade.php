@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Mandor 1')
+@section('title', 'PLANTERS - Mandor')
 
 @section('content-title')
-Daftar Mandor 1
+Daftar Mandor
 @endsection
 
 @section('modal')
@@ -14,7 +14,7 @@ Daftar Mandor 1
 <div class="row">
     <div class="col-md-8">
         <div class="card">
-            <table class="table table-hover table-borderless table-responsive">
+            <table id="myTable" class="table table-hover table-borderless table-responsive">
                 <thead class="text-muted">
                     <tr>
                         <th>#</th>
