@@ -37,6 +37,9 @@ class JobTypeTableSeeder extends Seeder
             ],[
                 'id'   => 6,
                 'name' => 'Pest Control'
+            ],[
+                'id'   => 7,
+                'name' => 'Harvesting'
             ],
         ];
 
