@@ -46,12 +46,14 @@ class BlockController extends Controller
 
         $block_references = BlockReference::where('block_id', $request->block_id)->where('planting_year', $request->planting_year)->first();
         if ($block_references) 
-            return res(false, 400, 'Reference of block already created');
+            return res(false, 400, 'Reference of block already created', [ 'block_reference_id' => $block_references->id]);
             $population_perblock = ($request->population_coverage /  $request->total_coverage);
         
-        $afdelling_ref = AfdellingReference::find(fme()->afdelling_id);
-        if ($afdelling_ref->available_hk == 0) {
-            return res(false, 404, 'Cannot create block reference for today, there is no employees available');
+        $afdelling_ref = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->first();
+        if ($afdelling_ref != null) {
+            if ($afdelling_ref->available_hk == 0) {
+                return res(false, 404, 'Cannot create block reference for today, there is no employees available');
+            }   
         }
 
 
@@ -142,7 +144,7 @@ class BlockController extends Controller
         $single_ref = BlockReference::find($block_ref_id);
         $afdelling_id = auth()->guard('foreman')->user()->afdelling_id;
         $now = date('Y-m-d');
-        $data = $single_ref->model::where('block_ref_id', $block_ref_id)->first();
+        $data = $single_ref->model::where('block_ref_id', $block_ref_id)->where('completed', 0)->first();
 
         if(! $data) {
             $afdelling_ref = AfdellingReference::whereDate('available_date', date('Y-m-d'))->where('afdelling_id', $afdelling_id)->first();
