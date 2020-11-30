@@ -16,7 +16,7 @@
   Add job_type
 </button> -->
 <div class="row">
-  <div class="col-8">
+  <div class="col-md-8">
       <div class="card">
           <table class="table table-hover table-borderless">
               <thead class="text-muted">
@@ -109,7 +109,7 @@
           </table>
       </div>
   </div>
-  <div class="col-4">
+  <div class="col-md-4">
       <div class="card">
         <div class="card-header">
             Add Job Type
