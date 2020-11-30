@@ -864,7 +864,7 @@ class DwpmaintainController extends Controller
             'job_type' => $job_type,
             'job_type_id' => $data->id,
             // 'foreman' => foreman($data->foreman_id),
-            'foreman' => Foreman::find($data->foreman_id)->select('name'),
+            'foreman' => Foreman::find($data->foreman_id)->name,
             'block' => $block,
             'hk_used' => $data->hk_used,
             'target_coverage' => $data->target_coverage,
