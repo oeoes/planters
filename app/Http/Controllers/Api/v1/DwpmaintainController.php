@@ -426,9 +426,6 @@ class DwpmaintainController extends Controller
         $used_coverage = $request->ftarget_coverage;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
         
         return res(true, 200, 'Spraying report filled successfully');
     }
@@ -480,9 +477,6 @@ class DwpmaintainController extends Controller
         $used_coverage = $request->expectation;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
         
         return res(true, 200, 'fertilizer report filled successfully');
     }
@@ -533,9 +527,6 @@ class DwpmaintainController extends Controller
         $used_coverage = $request->expectation;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
         
         return res(true, 200, 'fertilizer report filled successfully');
     }
@@ -585,9 +576,7 @@ class DwpmaintainController extends Controller
         $used_coverage = $request->expectation;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-        
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
+    
 
         return res(true, 200, 'Manual circle report filled successfully');
     }
@@ -636,9 +625,6 @@ class DwpmaintainController extends Controller
         $used_coverage = $request->expectation;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
         
         return res(true, 200, 'Manual pruning report filled successfully');
     }
@@ -687,9 +673,6 @@ class DwpmaintainController extends Controller
         $used_coverage = $request->expectation;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
 
         return res(true, 200, 'Manual gawangan report filled successfully');
     }
@@ -837,6 +820,7 @@ class DwpmaintainController extends Controller
                     "image" => $fillout->image,
                     "subforeman_note" => $fillout->subforeman_note,
                     "hk_name" => $fillout->hk_name,
+                    "completed" => $fillout->completed
                 ];
             }
 
@@ -922,12 +906,17 @@ class DwpmaintainController extends Controller
     public function set_complete_rkh($block_ref_id) {
         $ref = BlockReference::find($block_ref_id);
         $data = $ref->model::where('block_ref_id', $block_ref_id)
-                            ->where('foreman_id', auth()->guard('foreman')->user()->id)
+                            ->where('foreman_id', fme()->id)
                             ->where('completed', 0)
                             ->first();
         if ($data) {
-            $ref->model::increment('completed');
+            $data->increment('completed');
             Subforeman::where('id', $data->subforeman_id)->decrement('active');
+
+            if ($ref->available_coverage == 0) {
+                $ref->increment('completed');
+                return res(true, 200, 'Block spreading completed, view this block on history menu');
+            }
             return res(true, 200, 'Daily work plan completed');
         } else {
             return res(false, 404, 'Daily work plan not found');

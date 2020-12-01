@@ -22,6 +22,7 @@ class CreateFillCircleTable extends Migration
             $table->text('subforeman_note')->nullable();
             $table->time('begin');
             $table->time('ended');
+            $table->integer('completed')->default(1);
             $table->timestamps();
         });
     }

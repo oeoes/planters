@@ -111,7 +111,9 @@ class BlockController extends Controller
                                 ->orderByDesc('created_at')
                                 ->get();
         $data = [];
-        if (! $refs->isEmpty()) {
+        if ($refs->isEmpty()) {
+            return res(true, 200, 'Empty blocks');
+        } else {
             foreach ($refs as $value) {
                 $data [] = [
                     'block_reference_id' => $value['id'],
@@ -120,8 +122,6 @@ class BlockController extends Controller
                 ];
             }
             return res(true, 200, 'Blocks listed', $data);
-        } else {
-            return res(true, 200, 'Empty blocks');
         }
     }
 
@@ -132,8 +132,9 @@ class BlockController extends Controller
                               ->orderByDesc('created_at')
                               ->get();
         $data = [];
-
-        if (! $refs->isEmpty()) {
+        if ($refs->isEmpty()) {
+            return res(true, 200, 'There is no active blocks reference');
+        } else {
             foreach ($refs as $value) {
                 $data [] = [
                     'block_reference_id' => $value['id'],
@@ -142,19 +143,19 @@ class BlockController extends Controller
                 ];
             }
             return res(true, 200, 'Blocks listed', $data);
-        } else {
-            return res(true, 200, 'There is no active blocks reference');
         }
     }
 
     public function det_active_block_references($block_ref_id) {
         $single_ref = BlockReference::find($block_ref_id);
-        $afdelling_id = auth()->guard('foreman')->user()->afdelling_id;
+        $afdelling_id = fme()->afdelling_id;
         $now = date('Y-m-d');
-        $data = $single_ref->model::where('block_ref_id', $block_ref_id)->where('completed', 0)->first();
+        $data = $single_ref->model::where('block_ref_id', $block_ref_id)->where('date', $now)->first();
 
         if(! $data) {
-            $afdelling_ref = AfdellingReference::whereDate('available_date', date('Y-m-d'))->where('afdelling_id', $afdelling_id)->first();
+            $afdelling_ref = AfdellingReference::whereDate('available_date', $now)
+                                ->where('afdelling_id', $afdelling_id)
+                                ->first();
             $afdelling = Afdelling::where('id', fme()->afdelling_id)->first();
             if (! $afdelling_ref) {
                 AfdellingReference::create([
@@ -266,6 +267,7 @@ class BlockController extends Controller
                     "image" => $fillout->image,
                     "subforeman_note" => $fillout->subforeman_note,
                     "hk_name" => $fillout->hk_name,
+                    "completed" => $fillout->completed
                 ];
             }
 

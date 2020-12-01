@@ -24,7 +24,7 @@ class CreateFertilizerTable extends Migration
             $table->float('ingredients_amount', 8, 2);           
             $table->integer('hk_used');
             $table->text('foreman_note')->nullable();
-            $table->char('completed')->default(0);
+            $table->integer('completed')->default(0);
             $table->timestamps();
         });
     }

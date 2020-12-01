@@ -24,7 +24,7 @@ class CreateHarvestingTable extends Migration
             $table->float('target_bjr', 8, 2);
             $table->integer('hk_used');
             $table->text('foreman_note')->nullable();
-            $table->char('completed')->default(0);
+            $table->integer('completed')->default(0);
             $table->timestamps();
         });
     }
