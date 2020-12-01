@@ -879,13 +879,32 @@ class DwpmaintainController extends Controller
         
         $blockref = BlockReference::where('id', $data->block_ref_id)->first();
         $block = block($blockref->block_id);
-        if (! $data->ingredients_type) {
+        // if (! $data->ingredients_type) {
+        //     $ingredients_type = null;
+        //     $ingredientes_amount = null;
+        // } else {
+        //     $ingredients_type = $data->ingredients_type;
+        //     $ingredientes_amount = $data->ingredients_amount;
+        // }
+
+        if (in_array($blockref->jobtype_id, [1, 2, 6])) {
+            $ingredients_amount = $data->ingredients_amount;
+            $ingredients_type   = $data->ingredients_type;
+            $target_akp = null;
+            $target_bjr = null;
+        } else if (in_array($blockref->jobtype_id, [3, 4, 5])) {
+            $ingredients_amount = null;
             $ingredients_type = null;
-            $ingredientes_amount = null;
-        } else {
-            $ingredients_type = $data->ingredients_type;
-            $ingredientes_amount = $data->ingredients_amount;
+            $target_akp = null;
+            $target_bjr = null;
+        } else if (in_array($blockref->jobtype_id, [7])) {
+            $ingredients_amount = null;
+            $ingredients_type = null;
+            $target_akp = $data->target_akp;
+            $target_bjr = $data->target_bjr;
         }
+
+        
         $dataArr = [
             'date' => $data->date,
             'job_type_id' => $data->id,
@@ -894,8 +913,10 @@ class DwpmaintainController extends Controller
             'block_code' => $block,
             'hk_used' => $data->hk_used,
             'target_coverage' => $data->target_coverage,
+            'target_akp' => $target_akp,
+            'target_bjr' => $target_bjr,
             'ingredients_type' => $ingredients_type,
-            'ingredients_amount' => $ingredientes_amount,
+            'ingredients_amount' => $ingredients_amount,
             'foreman_note' => $data->foreman_note
         ];
 
@@ -921,6 +942,7 @@ class DwpmaintainController extends Controller
             }
             return res(true, 200, 'Daily work plan completed');
         } else {
+            return $data;
             return res(false, 404, 'Daily work plan not found');
         }
     }
