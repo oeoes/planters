@@ -26,11 +26,45 @@
             </a>
           </li>
           <li class="nav-header ml-1">Rencana Kerja Harian</li>
-          <li class="nav-item">
+          <li class="nav-item has-threeview">
             <a href="{{ route('maintain.index') }}" class="nav-link">
               <i class="nav-icon fas fa-tasks"></i>
-              <p>RKH Rawat</p>
+              <p>RKH Rawat <i class="right fas fa-angle-left"></i></p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Spraying</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Fertilizer</p>
+                </a>
+              </li><li class="nav-item">
+                <a href="" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Manual Circle</p>
+                </a>
+              </li><li class="nav-item">
+                <a href="" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Manual Pruning</p>
+                </a>
+              </li><li class="nav-item">
+                <a href="" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Manual Gawangan</p>
+                </a>
+              </li><li class="nav-item">
+                <a href="" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Pest Control</p>
+                </a>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
             <a href="" class="nav-link">
