@@ -535,7 +535,6 @@ class DwpmaintainController extends Controller
         $validator = Validator::make($request->all(), [
             'circle_id' => 'required',
             'ftarget_coverage' => 'required',
-            'fingredients_amount' => 'required',
             'begin' => 'required',
             'ended' => 'required',
         ]);
