@@ -726,12 +726,126 @@ class DwpmaintainController extends Controller
 
     public function dates($year, $block_id) {
         // pasti gada yg sama [first] bukan get
-        $reference = BlockReference::where('planting_year', $year)->where('block_id', $block_id)->first();
+        $reference = BlockReference::where('planting_year', $year)
+                                    ->where('block_id', $block_id)
+                                    ->where('completed', 1)->first();
         if (! $reference) {
             return res(false, 404, 'Cannot find the completed daily work plan');
         }
-        $data = $reference->model::where('block_ref_id', $reference->id)->get();
-        return $data;
+        $dates = $reference->model::where('block_ref_id', $reference->id)->orderBy('date', 'DESC')->get();
+        $arrDates = [];
+        foreach ($dates as $key => $value) {
+            $arrDates [] =[
+                'block_reference_id' => $reference->id,
+                'date' => $value['date'],
+                'foreman_id' => fme()->id,
+            ];
+        }
+        return res(true, 200, 'Date listed', $arrDates);
+    }
+
+    public function detail_rkh_completed($block_ref_id, $date) {
+        $single_ref = BlockReference::find($block_ref_id);
+        $data = $single_ref->model::where('block_ref_id', $block_ref_id)->where('date', $date)->first();
+
+            if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
+                $ingredients_amount = $data->ingredients_amount;
+                $ingredients_type = $data->ingredients_type;
+                $target_akp = null;
+                $target_bjr = null;
+            } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
+                $ingredients_amount = null;
+                $ingredients_type = null;
+                $target_akp = null;
+                $target_bjr = null;
+            } else if (in_array($single_ref->jobtype_id, [7])) {
+                $ingredients_amount = null;
+                $ingredients_type = null;
+                $target_akp = $data->target_akp;
+                $target_bjr = $data->target_bjr;
+            }
+
+            $foreman = [
+                'date' => date('Y-m-d', strtotime($data->date)),
+                'subforeman' => subforeman($data->subforeman_id)->name,
+                'block_code' => block($single_ref->block_id),
+                'job_type'   => $single_ref->jobtype_id,
+                'target_coverage'    => $data->target_coverage,
+                'target_akp' => $target_akp,
+                'target_bjr' => $target_bjr,
+                'ingredients_type'   => $ingredients_type,
+                'ingredients_amount' => $ingredients_amount,
+                'foreman_note' => $data->foreman_note,
+                'hk_used'   => $data->hk_used,
+                'completed' => 0,
+            ];
+
+            switch ($single_ref->jobtype_id) {
+                case 1:
+                    $fillout = $single_ref->fill::where('spraying_id', $data->id)->first();
+                    break;
+                case 2:
+                    $fillout = $single_ref->fill::where('fertilizer_id', $data->id)->first();
+                    break;
+                case 3:
+                    $fillout = $single_ref->fill::where('circle_id', $data->id)->first();
+                    break;
+                case 4:
+                    $fillout = $single_ref->fill::where('pruning_id', $data->id)->first();
+                    break;
+                case 5:
+                    $fillout = $single_ref->fill::where('gawangan_id', $data->id)->first();
+                    break;
+                case 6:
+                    $fillout = $single_ref->fill::where('pcontrol_id', $data->id)->first();
+                    break;
+                case 7:
+                    $fillout = $single_ref->fill::where('harvest_id', $data->id)->first();
+                    break;
+            }
+
+            if (! $fillout) {
+                $subforeman = null;
+            } else {
+
+                if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
+                    $ingredients_amount = $fillout->fingredients_amount;
+                    $ingredients_type = $fillout->fingredients_type;
+                    $target_akp = null;
+                    $target_bjr = null;
+                } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
+                    // circle, pruning, gawangan
+                    $ingredients_amount = null;
+                    $ingredients_type = null;
+                    $target_akp = null;
+                    $target_bjr = null;
+                } else if (in_array($single_ref->jobtype_id, [7])) {
+                    $ingredients_amount = null;
+                    $ingredients_type = null;
+                    $target_akp = $fillout->target_akp;
+                    $target_bjr = $fillout->target_bjr;
+                }
+
+                $subforeman = [
+                    "begin" => $fillout->begin,
+                    "ended" => $fillout->ended,
+                    "target_coverage" => $fillout->ftarget_coverage,
+                    'target_akp' => $target_akp,
+                    'target_bjr' => $target_bjr,
+                    'ingredients_type'   => $ingredients_type,
+                    'ingredients_amount' => $ingredients_amount,
+                    "image" => $fillout->image,
+                    "subforeman_note" => $fillout->subforeman_note,
+                    "hk_name" => $fillout->hk_name,
+                ];
+            }
+
+            $data = [
+                "foreman" => $foreman,
+                "subforeman" => $subforeman
+            ];
+            
+            return res(true, 200, 'Detail RKH', $data); 
     }
 
     public function check_job_today($subforeman_id) {

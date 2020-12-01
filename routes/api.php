@@ -32,12 +32,13 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::get('completed-block-references', [BlockController::class, 'completed_block_references']);
         Route::get('active-block-references', [BlockController::class, 'active_block_references']);
 
-        // pas klik thn tanam dan kebun mau ke create
         Route::get('det-active-block-references/{block_ref_id}', [BlockController::class, 'det_active_block_references']);
 
         Route::get('years', [DwpmaintainController::class, 'years']);
         Route::get('year/{year}/blocks', [DwpmaintainController::class, 'block']);
         Route::get('year/{year}/blocks/{block_id}', [DwpmaintainController::class, 'dates']);
+        Route::get('detail-rkh-completed/{block_ref_id}/{date}', [DwpmaintainController::class, 'detail_rkh_completed']);
+
         Route::get('set-complete-rkh/{block_ref_id}', [DwpmaintainController::class, 'set_complete_rkh']);
     
     });
