@@ -3,7 +3,7 @@
 return [
 
     'defaults' => [
-        'guard' => 'foreman',
+        'guard' => 'subforeman',
         'passwords' => 'users',
     ],
 
