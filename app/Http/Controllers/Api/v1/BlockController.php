@@ -240,8 +240,8 @@ class BlockController extends Controller
             } else {
 
                 if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-                    $ingredients_amount = $fillout->ingredients_amount;
-                    $ingredients_type = $fillout->ingredients_type;
+                    $ingredients_amount = $fillout->fingredients_amount;
+                    $ingredients_type   = $fillout->ftarget_coverage;
                     $target_akp = null;
                     $target_bjr = null;
                 } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
