@@ -20,16 +20,16 @@ class DatabaseSeeder extends Seeder
         Assistant::factory(10)->create();
         $this->call([
             AssistantTableSeeder::class,
-            FarmTableSeeder::class,
-            AfdellingTableSeeder::class,
-            BlockTableSeeder::class,
-            ForemanTableSeeder::class,
+            // FarmTableSeeder::class,
+            // AfdellingTableSeeder::class,
+            // BlockTableSeeder::class,
+            // ForemanTableSeeder::class,
             JobTypeTableSeeder::class,
-            SubforemanTableSeeder::class,
+            // SubforemanTableSeeder::class,
         ]);
 
-        Subforeman::factory()->create();
-        Foreman::factory()->create();
+        // Subforeman::factory()->create();
+        // Foreman::factory()->create();
 
     }
 }
