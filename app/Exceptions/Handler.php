@@ -33,8 +33,8 @@ class Handler extends ExceptionHandler
     {
         if ($request->wantsJson()) {   //add Accept: application/json in request
             try {
-                $headers = apache_request_headers(); //get header
-                $request->headers->set('Authorization', $headers['authorization']);// set header in request
+                // $headers = apache_request_headers(); //get header
+                // $request->headers->set('Authorization', $headers['authorization']);// set header in request
                 
                 JWTAuth::parseToken()->authenticate();
             } catch (Throwable $e) {
@@ -45,7 +45,7 @@ class Handler extends ExceptionHandler
                 }else if($e instanceof \Tymon\JWTAuth\Exceptions\TokenBlacklistedException) {
                     return res(false, 400, 'Token blacklisted');
                 } else {
-                    return res(false, 400, 'Token not found', $headers);
+                    return res(false, 400, 'Token not found');
                 }
             }
 

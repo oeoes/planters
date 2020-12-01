@@ -921,9 +921,13 @@ class DwpmaintainController extends Controller
 
     public function set_complete_rkh($block_ref_id) {
         $ref = BlockReference::find($block_ref_id);
-        $data = $ref->model::where('block_ref_id', $block_ref_id)->where('foreman_id', fme()->id)->where('completed', 0)->latest()->first();
+        $data = $ref->model::where('block_ref_id', $block_ref_id)
+                            ->where('foreman_id', auth()->guard('foreman')->user()->id)
+                            ->where('completed', 0)
+                            ->first();
         if ($data) {
             $ref->model::increment('completed');
+            Subforeman::where('id', $data->subforeman_id)->decrement('active');
             return res(true, 200, 'Daily work plan completed');
         } else {
             return res(false, 404, 'Daily work plan not found');
