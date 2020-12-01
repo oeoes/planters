@@ -14,7 +14,7 @@ Daftar Mandor Bidang
 <div class="row">
     <div class="col-md-8">
         <div class="card">
-            <table id="myTable" class="table table-hover table-borderless">
+            <table id="myTable" class="table table-hover table-borderless table-responsive">
                 <thead class="text-muted">
                     <tr>
                         <th>#</th>

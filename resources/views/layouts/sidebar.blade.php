@@ -99,12 +99,6 @@
               <p>Block</p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="{{ route('block_reference') }}" class="nav-link">
-              <i class="nav-icon fas fa-th-large"></i>
-              <p>Block Reference</p>
-            </a>
-          </li>
 
           <li class="nav-header ml-1">User</li>
           <li class="nav-item">
