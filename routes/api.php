@@ -12,7 +12,7 @@ use App\Models\Block;
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
 
-Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
+Route::group(['prefix' => 'v1', 'middleware' => ['jwt.refresh']], function () {
 
     Route::group(['prefix' => 'foreman', 'middleware' => 'foreman' ], function () {
         Route::post('store-afdelling-ref', [AfdellingController::class, 'store_afdelling_ref']);
