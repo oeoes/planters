@@ -726,12 +726,22 @@ class DwpmaintainController extends Controller
 
     public function dates($year, $block_id) {
         // pasti gada yg sama [first] bukan get
-        $reference = BlockReference::where('planting_year', $year)->where('block_id', $block_id)->first();
+        $reference = BlockReference::where('planting_year', $year)
+                                    ->where('block_id', $block_id)
+                                    ->where('completed', 1)->first();
         if (! $reference) {
             return res(false, 404, 'Cannot find the completed daily work plan');
         }
-        $data = $reference->model::where('block_ref_id', $reference->id)->get();
-        return $data;
+        $dates = $reference->model::where('block_ref_id', $reference->id)->orderBy('date', 'DESC')->get();
+        $arrDates = [];
+        foreach ($dates as $key => $value) {
+            $arrDates [] =[
+                'block_reference_id' => $reference->id,
+                'date' => $value['date'],
+                'foreman_id' => fme()->id,
+            ];
+        }
+        return res(true, 200, 'Date listed', $arrDates);
     }
 
     public function check_job_today($subforeman_id) {
