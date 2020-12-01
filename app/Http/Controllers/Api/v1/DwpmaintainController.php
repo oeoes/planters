@@ -910,11 +910,8 @@ class DwpmaintainController extends Controller
                             ->where('completed', 0)
                             ->first();
         if ($data) {
-            // $data->increment('completed');
-            $data->update(['completed' => 1]);
-            // Subforeman::where('id', $data->subforeman_id)->decrement('active');
-            $subforeman = Subforeman::where('id', $data->subforeman_id)->first();
-            $subforeman->update(['active' => 0]);
+            $data->increment('completed');
+            Subforeman::where('id', $data->subforeman_id)->decrement('active');
 
             if ($ref->available_coverage == 0) {
                 $ref->increment('completed');
