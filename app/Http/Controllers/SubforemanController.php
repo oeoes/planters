@@ -37,7 +37,6 @@ class SubforemanController extends Controller
             'email' => $request->email,
             'afdelling_id' => $request->afdelling_id,
             'jobtype_id' => $request->jobtype_id,
-            'role' => 2,
             'password' => Hash::make($request->password),
         ]);
 
@@ -50,7 +49,6 @@ class SubforemanController extends Controller
             'email' => $request->email,
             'afdelling_id' => $request->afdelling_id,
             'jobtype_id' => $request->jobtype_id,
-            'role' => 1,
             'password' => Hash::make($request->password),
         ]);
         return back();
