@@ -43,6 +43,22 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
     
     });
 
+    // Route::group(['prefix' => 'subforeman', 'middleware' => 'subforeman' ], function () {
+    //     Route::post('fill-spraying',   [DwpmaintainController::class, 'fill_spraying']);
+    //     Route::post('fill-fertilizer', [DwpmaintainController::class, 'fill_fertilizer']);
+    //     Route::post('fill-pcontrol',   [DwpmaintainController::class, 'fill_pcontrol']);
+    //     Route::post('fill-circle',     [DwpmaintainController::class, 'fill_circle']);
+    //     Route::post('fill-pruning',    [DwpmaintainController::class, 'fill_pruning']);
+    //     Route::post('fill-gawangan',   [DwpmaintainController::class, 'fill_gawangan']);
+
+    //     Route::post('fill-harvesting', [DwpharvestingController::class, 'fill_harvesting']);
+
+    //     Route::get('today-job/{subforeman_id}', [DwpmaintainController::class, 'check_job_today']);
+    // });
+
+});
+
+Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'subforeman', 'middleware' => 'subforeman' ], function () {
         Route::post('fill-spraying',   [DwpmaintainController::class, 'fill_spraying']);
         Route::post('fill-fertilizer', [DwpmaintainController::class, 'fill_fertilizer']);
@@ -55,7 +71,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
         Route::get('today-job/{subforeman_id}', [DwpmaintainController::class, 'check_job_today']);
     });
-
 });
 
 route::get('allsfm', [TestController::class, 'allsfm']);
