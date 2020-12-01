@@ -48,7 +48,7 @@ Daftar Mandor Bidang
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="edit-subforemanLabel">Edit subforeman</h5>
+                                        <h5 class="modal-title" id="edit-subforemanLabel">Edit Mandor Bidang</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -143,7 +143,7 @@ Daftar Mandor Bidang
     <div class="col-md-4">
         <div class="card">
             <div class="card-header">
-                Tambah Mandor 2
+                Tambah Mandor Bidang
             </div>
             <div class="card-body">
                 <form action="{{ route('subforeman.store') }}" method="post">

@@ -44,7 +44,7 @@ Daftar Mandor
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="edit-foremanLabel">Edit foreman</h5>
+                                        <h5 class="modal-title" id="edit-foremanLabel">Edit Mandor</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -55,7 +55,7 @@ Daftar Mandor
                                             @csrf
                                             @method('PUT')
                                             <div class="form-group">
-                                                <label for="foreman">Foreman-1</label>
+                                                <label for="foreman">Nama</label>
                                                 <input type="text" name="foreman" id="foreman" class="form-control"
                                                     required value="{{ $foreman->name }}">
                                             </div>
@@ -99,7 +99,7 @@ Daftar Mandor
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="delete-foremanLabel">Delete foreman</h5>
+                                        <h5 class="modal-title" id="delete-foremanLabel">Delete Mandor</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -131,7 +131,7 @@ Daftar Mandor
     <div class="col-md-4">
         <div class="card">
             <div class="card-header">
-                Tambah Mandor 1
+                Tambah Mandor
             </div>
             <div class="card-body">
                 <form action="{{ route('foreman.store') }}" method="post">
