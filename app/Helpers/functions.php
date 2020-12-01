@@ -60,3 +60,41 @@ function res($status, $code, $message, $data = null) {
       $block = Block::find($blockid);
       return $block->code;
     }
+
+    function model($jobtypeid) {
+      switch ($jobtypeid) {
+        case 1:
+            return 'App\Models\Maintain\SprayingType'; break;
+        case 2: 
+            return 'App\Models\Maintain\FertilizerType'; break;
+        case 3:
+            return 'App\Models\Maintain\CircleType'; break;
+        case 4:
+            return 'App\Models\Maintain\PruningType'; break;
+        case 5:
+            return 'App\Models\Maintain\GawanganType'; break;
+        case 6: 
+            return 'App\Models\Maintain\PestControl'; break;
+        case 7: 
+            return 'App\Models\Harvesting\HarvestingType'; break;
+      }
+    }
+
+    function fill($jobtypeid) {
+      switch ($jobtypeid) {
+        case 1:
+            return 'App\Models\Maintain\FillSpraying'; break;
+        case 2: 
+            return 'App\Models\Maintain\FillFertilizer'; break;
+        case 3:
+            return 'App\Models\Maintain\FillCircle'; break;
+        case 4:
+            return 'App\Models\Maintain\FillPruning'; break;
+        case 5:
+            return 'App\Models\Maintain\FillGawangan'; break;
+        case 6: 
+            return 'App\Models\Maintain\FillPcontrols'; break;
+        case 7: 
+            return 'App\Models\Harvesting\FillHarvesting'; break;
+      }
+    }

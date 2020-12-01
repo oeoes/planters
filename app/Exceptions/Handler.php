@@ -33,6 +33,9 @@ class Handler extends ExceptionHandler
     {
         if ($request->wantsJson()) {   //add Accept: application/json in request
             try {
+                // $headers = apache_request_headers(); //get header
+                // $request->headers->set('Authorization', $headers['authorization']);// set header in request
+                
                 JWTAuth::parseToken()->authenticate();
             } catch (Throwable $e) {
                 if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
@@ -47,6 +50,7 @@ class Handler extends ExceptionHandler
             }
 
             return res(false, 404, $exception->getMessage());
+            
         } else {
             if(auth()->guard('assistant')->check()) {
                 return parent::render($request, $exception);
