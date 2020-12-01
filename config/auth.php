@@ -3,7 +3,7 @@
 return [
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'foreman',
         'passwords' => 'users',
     ],
 
@@ -21,13 +21,13 @@ return [
 
         'foreman' => [
             'driver' => 'jwt',
-            'provider' => 'foremans',
+            'provider' => 'foreman',
             'hash' => false,
         ],
 
         'subforeman' => [
             'driver' => 'jwt',
-            'provider' => 'subforemans',
+            'provider' => 'subforeman',
             'hash' => false,
         ],
 
@@ -40,12 +40,12 @@ return [
             'model' => App\Models\Assistant::class,
         ],
 
-        'foremans' => [
+        'foreman' => [
             'driver' => 'eloquent',
             'model' => App\Models\Foreman::class,
         ],
 
-        'subforemans' => [
+        'subforeman' => [
             'driver' => 'eloquent',
             'model' => App\Models\Subforeman::class,
         ]

@@ -20,6 +20,7 @@ use App\Models\Maintain\PestControl;
 use App\Models\Maintain\PruningType;
 use App\Models\Maintain\SprayingType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 // use App\Models\Harvesting\HarvestingType;
 // use App\Models\Harvesting\FillHarvesting;
 use Validator;
@@ -36,6 +37,10 @@ class BlockController extends Controller
             // 'population_perblock' => 'required', = pop.coverage / total.coverage
             'total_coverage' => 'required',
         ]);
+
+        if ($request->foreman_id != fme()->id)
+                return res(false, 404, 'Foreman not authenticated');
+            
 
         if ($validator->fails())
             return res(false, 404, $validator->errors());
