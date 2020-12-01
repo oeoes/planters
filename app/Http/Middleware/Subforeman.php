@@ -17,6 +17,7 @@ class Subforeman
      */
     public function handle(Request $request, Closure $next)
     {
+        config()->set( 'auth.defaults.guard', 'subforeman' );
         if (! Auth::guard('subforeman')->check()) {
             return res(false, 400, 'Wrong foreman');
         }

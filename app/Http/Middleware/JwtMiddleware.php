@@ -24,7 +24,7 @@ class JwtMiddleware
     {
 
         try {
-            $user = auth()->guard('foreman1')->check();
+            $user = auth()->guard('foreman')->check();
         } catch (Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
                 return response()->json(['status' => 'Token is Invalid']);

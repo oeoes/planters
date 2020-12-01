@@ -17,6 +17,7 @@ class Foreman
      */
     public function handle(Request $request, Closure $next)
     {
+        config()->set( 'auth.defaults.guard', 'foreman' );
         if (! Auth::guard('foreman')->check()) {
             return res(false, 400, 'Wrong foreman');
         }
