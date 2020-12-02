@@ -939,7 +939,6 @@ class DwpmaintainController extends Controller
             }
             return res(true, 200, 'Daily work plan completed');
         } else {
-            return $data;
             return res(false, 404, 'Daily work plan not found');
         }
     }
