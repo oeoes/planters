@@ -252,8 +252,8 @@ class BlockController extends Controller
                 } else if (in_array($single_ref->jobtype_id, [7])) {
                     $ingredients_amount = null;
                     $ingredients_type = null;
-                    $target_akp = $fillout->target_akp;
-                    $target_bjr = $fillout->target_bjr;
+                    $target_akp = $fillout->ftarget_akp;
+                    $target_bjr = $fillout->ftarget_bjr;
                 }
 
                 $subforeman = [
