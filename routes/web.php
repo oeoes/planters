@@ -11,6 +11,12 @@ use App\Http\Controllers\MaintainController;
 use App\Http\Controllers\HarvestingController;
 use App\Http\Controllers\EmployeeController;
 
+// SUPERADMIN
+use App\Http\Controllers\superadmin\DashboardController as SA_DashboardController;
+
+// FARMMANAGER
+use App\Http\Controllers\manager\DashboardController as FM_DashboardController;
+
 Route::get('/test', function() {return view('root.app'); });
 
 Route::get('/', function() {
@@ -20,7 +26,19 @@ Route::get('/login', [AuthController::class, 'loginform'])->middleware('guest');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.process');
 Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:assistant')->name('logout');
 
-Route::group(['middleware' => ['auth:assistant']], function () {
+Route::group(['prefix' => 'superadmin'], function () {
+    Route::group(['prefix' => 'dashboard'], function () {
+        Route::get('/', [SA_DashboardController::class, 'index'])->name('superadmin.dashboard');    
+    });
+});
+
+Route::group(['prefix' => 'manager'], function () {
+    Route::group(['prefix' => 'dashboard'], function () {
+        Route::get('/', [FM_DashboardController::class, 'index'])->name('manager.dashboard');    
+    });
+});
+
+Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], function () {
 
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');    
@@ -85,7 +103,6 @@ Route::group(['middleware' => ['auth:assistant']], function () {
         Route::get('/', [MaintainController::class, 'index'])->name('maintain.index');
         Route::post('/filter', [MaintainController::class, 'filter'])->name('maintain.filter');
     });
-
 
 });
 

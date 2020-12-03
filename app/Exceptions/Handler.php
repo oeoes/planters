@@ -52,9 +52,15 @@ class Handler extends ExceptionHandler
             return res(false, 404, $exception->getMessage());
             
         } else {
-            if(auth()->guard('assistant')->check()) {
+            if(auth()->guard('assistant')->check())
                 return parent::render($request, $exception);
-            } 
+
+            if(auth()->guard('farmmanager')->check())
+                return parent::render($request, $exception);
+
+            if(auth()->guard('superadmin')->check())
+                return parent::render($request, $exception);
+            
             return redirect('/login');
         }
             

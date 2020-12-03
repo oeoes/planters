@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SuperAdmin extends Model
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class SuperAdmin extends Authenticatable
 {
     use HasFactory;
 
-    protected $table = 'supir_admins';
+    protected $table = 'super_admins';
     protected $guarded = [];
     
 }

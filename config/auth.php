@@ -3,7 +3,7 @@
 return [
 
     'defaults' => [
-        'guard' => 'subforeman',
+        'guard' => '',
         'passwords' => 'users',
     ],
 
@@ -23,7 +23,6 @@ return [
             'driver' => 'session',
             'provider' => 'farmmanager',
         ],
-
 
         'assistant' => [
             'driver' => 'session',
