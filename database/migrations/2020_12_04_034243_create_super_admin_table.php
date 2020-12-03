@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEmployeeHarvestingTable extends Migration
+class CreateSuperAdminTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateEmployeeHarvestingTable extends Migration
      */
     public function up()
     {
-        Schema::create('employee_harvestings', function (Blueprint $table) {
+        Schema::create('super_admins', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('harvest_id')->constrained('harvestings');
             $table->string('name');
-            $table->integer('total_harvesting');
+            $table->string('email')->unique();
+            $table->string('password');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateEmployeeHarvestingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employee_harvestings');
+        Schema::dropIfExists('super_admins');
     }
 }
