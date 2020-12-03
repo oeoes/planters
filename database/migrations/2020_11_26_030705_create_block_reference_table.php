@@ -21,8 +21,8 @@ class CreateBlockReferenceTable extends Migration
             $table->char('planting_year')->nullable();
             $table->double('total_coverage', 8, 2);
             $table->double('available_coverage', 8, 2);
-            $table->double('population_coverage', 8, 2);
-            $table->double('population_perblock', 8, 2);
+            $table->double('population_coverage', 8, 2); // SPH
+            $table->double('population_perblock', 8, 2); // Total coverage *
             $table->string('model')->nullable();
             $table->string('fill')->nullable();
             $table->char('completed')->default(0);

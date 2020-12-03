@@ -16,11 +16,11 @@ class CreateFillHarvestingTable extends Migration
         Schema::create('fill_harvestings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('harvest_id')->constrained('harvestings');
-            $table->float('ftarget_coverage', 8, 2);
-            $table->float('ftarget_akp', 8, 2);
-            $table->float('ftarget_bjr', 8, 2);
+            $table->float('ftarget_coverage', 8, 2); // hasil panen aktual , total panen
+            $table->float('bjr', 8, 2);
+            $table->float('total_harvesting', 8, 2); // list dari nama karyawan dan total_harvesting
+            $table->float('final_harvesting', 8, 2); // total
             $table->string('image')->nullable();
-            $table->text('hk_name');
             $table->text('subforeman_note')->nullable();
             $table->time('begin');
             $table->time('ended');
