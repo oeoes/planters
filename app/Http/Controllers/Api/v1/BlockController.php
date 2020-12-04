@@ -222,14 +222,14 @@ class BlockController extends Controller
                             $ingredients_type   = $fillout->ingredients_type;
                             $akp = null;
                             $bjr = null;
-                            $hk_listed_arr = [];
+                            $hk_listed_arr = $fillout->hk_name;
                             $final_harvesting = null;
                         } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
                             $ingredients_amount = null;
                             $ingredients_type = null;
                             $akp = null;
                             $bjr = null;
-                            $hk_listed_arr = [];
+                            $hk_listed_arr = $fillout->hk_name;
                             $final_harvesting = null;
                         } else if (in_array($single_ref->jobtype_id, [7])) {
                             $ingredients_amount = null;
