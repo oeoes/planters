@@ -136,7 +136,7 @@ class BlockController extends Controller
             $data = $single_ref->model::where('block_ref_id', $block_ref_id)->latest()->first();
             if ($data) {
                 // kalo data terakhir completed, berarti dia diarahin untuk buat rkh baru
-                if ($data->completed == 0) {
+                if ($data->completed == 1) {
                     
                     if ($single_ref->jobtype_id == 7) {
                         $data = [
