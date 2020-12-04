@@ -324,6 +324,7 @@ class DwpmaintainController extends Controller
 
         FillSpraying::create([
             'spraying_id' => $request->spraying_id,
+            'afdelling_id' => fme()->afdelling_id,
             'ftarget_coverage' => $request->ftarget_coverage,
             'fingredients_amount' => $request->fingredients_amount,
             'image' => $image_url,
