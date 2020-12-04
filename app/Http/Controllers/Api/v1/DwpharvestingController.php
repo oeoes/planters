@@ -61,7 +61,8 @@ class DwpharvestingController extends Controller
             if ($harvesting->date == $request->date || $harvesting->completed == 0)
                 return res(false, 404, 'Cannot do next, please fill this form first!');
         }
-
+        
+        $request['afdelling_id'] = fme()->afdelling_id;
         HarvestingType::create($request->all());
 
         $subforeman->increment('active');
