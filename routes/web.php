@@ -108,7 +108,7 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
         Route::get('/circle', [MaintainController::class, 'circle'])->name('maintain.circle');
         Route::get('/pruning', [MaintainController::class, 'pruning'])->name('maintain.pruning');
         Route::get('/gawangan', [MaintainController::class, 'gawangan'])->name('maintain.gawangan');
-        Route::get('/pestcontrol', [MaintainController::class, 'pestcontrol'])->name('maintain.pestcnontrol');
+        Route::get('/pestcontrol', [MaintainController::class, 'pestcontrol'])->name('maintain.pestcontrol');
 
     });
 
