@@ -16,6 +16,7 @@ class CreateFillSprayingTable extends Migration
         Schema::create('fill_sprayings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('spraying_id')->constrained();
+            $table->foreignId('afdelling_id')->constrained();
             $table->float('ftarget_coverage', 8, 2);
             $table->float('fingredients_amount', 8, 2);
             $table->string('image')->nullable();

@@ -50,7 +50,7 @@ Daftar Mandor
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('foreman.update', ['foreman' => $foreman->id]) }}"
+                                        <form action="{{ route('assistant.foreman.update', ['foreman' => $foreman->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('PUT')
@@ -105,7 +105,7 @@ Daftar Mandor
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('foreman.delete', ['foreman' => $foreman->id]) }}"
+                                        <form action="{{ route('assistant.foreman.delete', ['foreman' => $foreman->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('DELETE')
@@ -134,7 +134,7 @@ Daftar Mandor
                 Tambah Mandor
             </div>
             <div class="card-body">
-                <form action="{{ route('foreman.store') }}" method="post">
+                <form action="{{ route('assistant.foreman.store') }}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="foreman">Nama</label>

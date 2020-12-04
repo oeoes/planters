@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'PLANTERS - Daftar Afdelling')
+@section('title', 'Daftar Afdelling')
 
 @section('content-title')
   Daftar Afdelling
@@ -101,7 +101,7 @@
                                           </button>
                                       </div>
                                       <div class="modal-body">
-                                          <form action="{{ route('afdelling.delete', ['afdelling' => $afdelling->id]) }}"
+                                          <form action="{{ route('assistant.afdelling.delete', ['afdelling' => $afdelling->id]) }}"
                                               method="post">
                                               @csrf
                                               @method('DELETE')
@@ -130,7 +130,7 @@
                   Add afdelling
               </div>
               <div class="card-body">
-                  <form action="{{ route('afdelling.store') }}" method="post">
+                  <form action="{{ route('assistant.afdelling.store') }}" method="post">
                       @csrf
                       <div class="form-group">
                           <label for="farm">Farm</label>

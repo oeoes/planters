@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'PLANTERS - Dashboard')
+@section('title', 'Dashboard')
 
 @section('content-title')
   <b>Rawat</b> <small class="text-muted font-weight-lighter" style="font-size: 14pt">Rencana Kerja Harian</small>
