@@ -134,6 +134,7 @@ class BlockController extends Controller
         // jika blok referensi udah dibuat
         if ($single_ref) {
             $data = $single_ref->model::where('block_ref_id', $block_ref_id)->latest()->first();
+            return $data;
             if ($data) {
                 // kalo data terakhir completed, berarti dia diarahin untuk buat rkh baru
                 if ($data->completed == 1) {
