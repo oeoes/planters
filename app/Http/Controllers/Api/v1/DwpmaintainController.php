@@ -810,6 +810,8 @@ class DwpmaintainController extends Controller
                 $ref->increment('completed');
                     return res(true, 200, 'Block spreading completed, view this block on history menu');
             }
+            // ini langsung habis ajabang
+            $ref->increment('completed');
             return res(true, 200, 'Daily work plan completed');
         } else {
             return res(false, 404, 'Daily work plan not found');
