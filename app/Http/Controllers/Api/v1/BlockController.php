@@ -131,7 +131,6 @@ class BlockController extends Controller
     public function det_active_block_references($block_ref_id) {
         $single_ref = BlockReference::find($block_ref_id);
 
-
         // jika blok referensi udah dibuat
         if ($single_ref) {
             $data = $single_ref->model::where('block_ref_id', $block_ref_id)->latest()->first();
@@ -223,12 +222,14 @@ class BlockController extends Controller
                             $ingredients_type   = $fillout->ingredients_type;
                             $akp = null;
                             $bjr = null;
+                            $hk_listed_arr = [];
                             $final_harvesting = null;
                         } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
                             $ingredients_amount = null;
                             $ingredients_type = null;
                             $akp = null;
                             $bjr = null;
+                            $hk_listed_arr = [];
                             $final_harvesting = null;
                         } else if (in_array($single_ref->jobtype_id, [7])) {
                             $ingredients_amount = null;
