@@ -24,9 +24,9 @@
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
         {{-- @include('sweetalert::alert') --}}
-        @include('layouts.navbar')
+        @include('assistant.layouts.navbar')
 
-        @include('layouts.sidebar')
+        @include('assistant.layouts.sidebar')
 
         @yield('modal')
 
@@ -44,13 +44,13 @@
             <div class="content">
                 <div class="container-fluid" style="min-height: 1000px">
 
-                    @include('layouts.messages')
+                    @include('assistant.layouts.messages')
 
                     @yield('content')
                 </div>
             </div>
         </div>
-        @include('layouts.footer')
+        @include('assistant.layouts.footer')
 
     </div>
     @yield('modal')

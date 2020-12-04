@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('assistant.layouts.app')
 
 @section('title', 'Daftar Afdelling')
 
@@ -48,7 +48,7 @@
                                           </button>
                                       </div>
                                       <div class="modal-body">
-                                          <form action="{{ route('afdelling.update', ['afdelling' => $afdelling->id]) }}"
+                                          <form action="{{ route('assistant.afdelling.update', ['afdelling' => $afdelling->id]) }}"
                                               method="post">
                                               @csrf
                                               @method('PUT')

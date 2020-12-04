@@ -250,26 +250,26 @@ class MaintainController extends Controller
     }
 
     public function spraying() {
-        return view('maintain.spraying');
+        return view('assistant.maintain.spraying');
     }
 
     public function fertilizer() {
-        return view('maintain.fertilizer');
+        return view('assistant.maintain.fertilizer');
     }
 
     public function circle() {
-        return view('maintain.circle');
+        return view('assistant.maintain.circle');
     }
 
     public function pruning() {
-        return view('maintain.pruning');
+        return view('assistant.maintain.pruning');
     }
 
     public function gawangan() {
-        return view('maintain.gawangan');
+        return view('assistant.maintain.gawangan');
     }
 
     public function pestcontrol() {
-        return view('maintain.pestcontrol');
+        return view('assistant.maintain.pestcontrol');
     }
 }
