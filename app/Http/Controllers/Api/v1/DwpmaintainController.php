@@ -61,7 +61,9 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        SprayingType::create($request->all());
+        $st = SprayingType::create($request->all());
+        // set block references completed to 0
+        $st->update(['completed' => 1]);
 
         $subforeman->increment('active');
         $subforeman->save();
