@@ -277,10 +277,26 @@ class BlockController extends Controller
                     return res(true, 200, 'You must completed this RKH to start next RKH', $data); 
 
                 }
+            } else {
+                if ($single_ref->jobtype_id == 7) {
+                    $data = [
+                        'block_code' => block($single_ref->block_id),
+                        'job_type' => $single_ref->jobtype_id,
+                        'available_coverage' => $single_ref->available_coverage,
+                        'population_coverage' => $single_ref->population_coverage,
+                    ];
+                } else {
+                    $data = [
+                        'block_code' => block($single_ref->block_id),
+                        'job_type' => $single_ref->jobtype_id,
+                        'available_coverage' => $single_ref->available_coverage
+                    ];
+                }
+                return res(true, 200, 'Please create RKH First', $data);
             }
         }
 
-            return res(false, 404, 'Block reference not found');
+    return res(false, 404, 'Block reference not found');
 
     }   
 
