@@ -1,21 +1,25 @@
 <?php
 
-use App\Http\Controllers\ForemanController;
-use App\Http\Controllers\SubforemanController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AreaController;
+
+use App\Http\Controllers\DashboardController as AS_DashboardController;
+use App\Http\Controllers\manager\DashboardController as FM_DashboardController;
+
+use App\Http\Controllers\superadmin\DashboardController  as SU_DashboardController;
+use App\Http\Controllers\superadmin\AreaController  as SU_AreaController;
+use App\Http\Controllers\superadmin\TestController as SU_TestController;
+use App\Http\Controllers\superadmin\MaintainController as SU_MaintainController;
+use App\Http\Controllers\superadmin\HarvestingController as SU_HarvestingController;
+use App\Http\Controllers\superadmin\EmployeeController as SU_EmployeeController;
+use App\Http\Controllers\superadmin\ForemanController as SU_ForemanController;
+use App\Http\Controllers\superadmin\SubforemanController as SU_SubforemanController;
+
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TestController;
-use App\Http\Controllers\MaintainController;
-use App\Http\Controllers\HarvestingController;
-use App\Http\Controllers\EmployeeController;
 
 // SUPERADMIN
-use App\Http\Controllers\superadmin\DashboardController as SA_DashboardController;
+
 
 // FARMMANAGER
-use App\Http\Controllers\manager\DashboardController as FM_DashboardController;
 
 Route::get('/test', function() {return view('root.app'); });
 
@@ -26,13 +30,91 @@ Route::get('/login',  [AuthController::class, 'loginform'])->middleware('guest')
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.process');
 Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:assistant,farmmanager,superadmin')->name('logout');
 
-Route::group(['prefix' => 'superadmin'], function () {
+/** Super Admin
+ * Start
+ */
+Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], function () {
     Route::group(['prefix' => 'dashboard'], function () {
-        Route::get('/', [SA_DashboardController::class, 'index'])->name('superadmin.dashboard');    
+        Route::get('/', [SU_DashboardController::class, 'index'])->name('superadmin.dashboard');    
     });
+
+    Route::group(['prefix' => 'area'], function () {
+        Route::group(['prefix' => 'job_type'], function () {
+            Route::get('/', [SU_AreaController::class, 'job_type'])->name('superadmin.job_type');
+            Route::post('/', [SU_AreaController::class, 'job_type_store'])->name('superadmin.job_type.store');
+            Route::put('/{job_type}', [SU_AreaController::class, 'job_type_update'])->name('superadmin.job_type.update');
+            Route::delete('/{job_type}', [SU_AreaController::class, 'job_type_delete'])->name('superadmin.job_type.delete');
+        });
+
+        Route::group(['prefix' => 'farm'], function () {
+            Route::get('/', [SU_AreaController::class, 'farm'])->name('superadmin.farm');
+            Route::post('/', [SU_AreaController::class, 'farm_store'])->name('superadmin.farm.store');
+            Route::put('/{farm}', [SU_AreaController::class, 'farm_update'])->name('superadmin.farm.update');
+            Route::delete('/{farm}', [SU_AreaController::class, 'farm_delete'])->name('superadmin.farm.delete');
+        });
+
+        Route::group(['prefix' => 'afdelling'], function () {
+            Route::get('/', [SU_AreaController::class, 'afdelling'])->name('superadmin.afdelling');
+            Route::post('/', [SU_AreaController::class, 'afdelling_store'])->name('superadmin.afdelling.store');
+            Route::post('/getafdelling', [SU_AreaController::class, 'getAfdelling']);
+            Route::put('/{afdelling}', [SU_AreaController::class, 'afdelling_update'])->name('superadmin.afdelling.update');
+            Route::delete('/{afdelling}', [SU_AreaController::class, 'afdelling_delete'])->name('superadmin.afdelling.delete');
+        });
+
+        Route::group(['prefix' => 'block'], function () {
+            Route::get('/', [SU_AreaController::class, 'block'])->name('superadmin.block');
+            Route::post('/', [SU_AreaController::class, 'block_store'])->name('superadmin.block.store');
+            Route::post('/getblock', [SU_AreaController::class, 'getBlock']);
+            Route::put('/{block}', [SU_AreaController::class, 'block_update'])->name('superadmin.block.update');
+            Route::delete('/{block}', [SU_AreaController::class, 'block_delete'])->name('superadmin.block.delete');
+        });
+
+        Route::group(['prefix' => 'block_reference'], function () {
+            Route::get('/', [SU_AreaController::class, 'block_reference'])->name('superadmin.block_reference');
+            Route::post('/', [SU_AreaController::class, 'block_reference_store'])->name('superadmin.block_reference.store');
+            Route::put('/{block_reference}', [SU_AreaController::class, 'block_reference_update'])->name('superadmin.block_reference.update');
+            Route::delete('/{block_reference}', [SU_AreaController::class, 'block_reference_delete'])->name('superadmin.block_reference.delete');
+        });
+    });
+
+    Route::group(['prefix' => 'subforeman'], function () {
+        Route::get('/', [SU_SubforemanController::class, 'index'])->name('superadmin.subforeman.index');
+        Route::post('/store', [SU_SubforemanController::class, 'store'])->name('superadmin.subforeman.store');
+        Route::put('/update/{subforeman}', [SU_SubforemanController::class, 'update'])->name('superadmin.subforeman.update'); 
+        Route::delete('/delete/{subforeman}', [SU_SubforemanController::class, 'delete'])->name('superadmin.subforeman.delete'); 
+    });
+
+    Route::group(['prefix' => 'foreman'], function () {
+        route::get('/', [SU_ForemanController::class, 'index'])->name('superadmin.foreman.index');
+        Route::post('/store', [SU_ForemanController::class, 'store'])->name('superadmin.foreman.store'); 
+        Route::put('/update/{foreman}', [SU_ForemanController::class, 'update'])->name('superadmin.foreman.update'); 
+        Route::delete('/delete/{foreman}', [SU_ForemanController::class, 'delete'])->name('superadmin.foreman.delete'); 
+    });
+
+    Route::group(['prefix' => 'employee'], function () {
+        
+    });
+
+    Route::group(['prefix' => 'maintain'], function () {
+        Route::get('/spraying', [SU_MaintainController::class, 'spraying'])->name('superadmin.maintain.spraying');
+        Route::get('/fertilizer', [SU_MaintainController::class, 'fertilizer'])->name('superadmin.maintain.fertilizer');
+        Route::get('/circle', [SU_MaintainController::class, 'circle'])->name('superadmin.maintain.circle');
+        Route::get('/pruning', [SU_MaintainController::class, 'pruning'])->name('superadmin.maintain.pruning');
+        Route::get('/gawangan', [SU_MaintainController::class, 'gawangan'])->name('superadmin.maintain.gawangan');
+        Route::get('/pestcontrol', [SU_MaintainController::class, 'pestcontrol'])->name('superadmin.maintain.pestcontrol'); 
+    });
+
+    Route::group(['prefix' => 'harvesting'], function () {
+        Route::get('/', [SU_HarvestingController::class, 'index'])->name('superadmin.harvesting.index');
+    });
+
 });
 
-Route::group(['prefix' => 'manager'], function () {
+/** Super Admin
+ * End
+ */
+
+Route::group(['prefix' => 'manager', 'middleware' => ['auth:farmmanager']], function () {
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', [FM_DashboardController::class, 'index'])->name('manager.dashboard');    
     });
@@ -41,7 +123,7 @@ Route::group(['prefix' => 'manager'], function () {
 Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], function () {
 
     Route::group(['prefix' => 'dashboard'], function () {
-        Route::get('/', [DashboardController::class, 'index'])->name('assistant.dashboard');    
+        Route::get('/', [AS_DashboardController::class, 'index'])->name('assistant.dashboard');    
     });
 
     Route::group(['prefix' => 'area'], function () {
@@ -58,6 +140,7 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
             Route::put('/{farm}', [AreaController::class, 'farm_update'])->name('assistant.farm.update');
             Route::delete('/{farm}', [AreaController::class, 'farm_delete'])->name('assistant.farm.delete');
         });
+
         Route::group(['prefix' => 'afdelling'], function () {
             Route::get('/', [AreaController::class, 'afdelling'])->name('assistant.afdelling');
             Route::post('/', [AreaController::class, 'afdelling_store'])->name('assistant.afdelling.store');
@@ -65,6 +148,7 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
             Route::put('/{afdelling}', [AreaController::class, 'afdelling_update'])->name('assistant.afdelling.update');
             Route::delete('/{afdelling}', [AreaController::class, 'afdelling_delete'])->name('assistant.afdelling.delete');
         });
+
         Route::group(['prefix' => 'block'], function () {
             Route::get('/', [AreaController::class, 'block'])->name('assistant.block');
             Route::post('/', [AreaController::class, 'block_store'])->name('assistant.block.store');
@@ -96,19 +180,19 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
     });
 
     Route::group(['prefix' => 'employee'], function () {
-        Route::get('/', [EmployeeController::class, 'index'])->name('assistant.employee.index');
+        Route::get('/', [SU_EmployeeController::class, 'index'])->name('assistant.employee.index');
     });
 
     Route::group(['prefix' => 'maintain'], function () {
-        Route::get('/', [MaintainController::class, 'index'])->name('assistant.maintain.index');
-        Route::post('/filter', [MaintainController::class, 'filter'])->name('assistant.maintain.filter');
+        // Route::get('/', [MaintainController::class, 'index'])->name('assistant.maintain.index');
+        // Route::post('/filter', [MaintainController::class, 'filter'])->name('assistant.maintain.filter');
 
-        Route::get('/spraying', [MaintainController::class, 'spraying'])->name('assistant.maintain.spraying');
-        Route::get('/fertilizer', [MaintainController::class, 'fertilizer'])->name('assistant.maintain.fertilizer');
-        Route::get('/circle', [MaintainController::class, 'circle'])->name('assistant.maintain.circle');
-        Route::get('/pruning', [MaintainController::class, 'pruning'])->name('assistant.maintain.pruning');
-        Route::get('/gawangan', [MaintainController::class, 'gawangan'])->name('assistant.maintain.gawangan');
-        Route::get('/pestcontrol', [MaintainController::class, 'pestcontrol'])->name('assistant.maintain.pestcontrol');
+        Route::get('/spraying', [SU_MaintainController::class, 'spraying'])->name('assistant.maintain.spraying');
+        Route::get('/fertilizer', [SU_MaintainController::class, 'fertilizer'])->name('assistant.maintain.fertilizer');
+        Route::get('/circle', [SU_MaintainController::class, 'circle'])->name('assistant.maintain.circle');
+        Route::get('/pruning', [SU_MaintainController::class, 'pruning'])->name('assistant.maintain.pruning');
+        Route::get('/gawangan', [SU_MaintainController::class, 'gawangan'])->name('assistant.maintain.gawangan');
+        Route::get('/pestcontrol', [SU_MaintainController::class, 'pestcontrol'])->name('assistant.maintain.pestcontrol');
 
     });
 

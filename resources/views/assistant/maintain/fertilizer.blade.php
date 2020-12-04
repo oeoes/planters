@@ -1,5 +1,4 @@
-@extends('layouts.app')
-
+@extends('assistant.layouts.app')
 @section('title', 'PLANTERS - FErtilizer')
 
 @section('content-title')

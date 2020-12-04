@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\superadmin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
 use App\Models\Farm;
 use App\Models\Afdelling;
 use App\Models\Block;
@@ -220,4 +220,5 @@ class AreaController extends Controller
         $block = Block::whereIn('id', $block)->get();
         return response()->json($block);
     }
+
 }

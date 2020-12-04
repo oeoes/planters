@@ -1,4 +1,4 @@
-@extends('assistant.layouts.app')
+@extends('superadmin.layouts.app')
 
 @section('title', 'Jenis Pekerjaan')
 
@@ -32,10 +32,11 @@
                       <td scope="row">{{ $key+1 }}</td>
                       <td>{{ $job_type->name }}</td>
                       <td>
-                        <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3 mb-2" data-toggle="modal"
+                        <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
                             data-target="#edit-job_type{{$key}}"><i
                                 class="nav-icon fas fa-pen"></i>
                         </button>
+                        <div class="mb-1"></div>
                         <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"
                             data-target="#delete-job_type{{$key}}"><i
                                 class="nav-icon fas fa-trash"></i>
@@ -54,7 +55,7 @@
                                       </button>
                                   </div>
                                   <div class="modal-body">
-                                      <form action="{{ route('assistant.assistantjob_type.update', ['job_type' => $job_type->id]) }}" method="post">
+                                      <form action="{{ route('superadmin.job_type.update', ['job_type' => $job_type->id]) }}" method="post">
                                           @csrf
                                           @method('PUT')
                                           <div class="form-group">
@@ -87,7 +88,7 @@
                                       </button>
                                   </div>
                                   <div class="modal-body">
-                                      <form action="{{ route('assistant.job_type.delete', ['job_type' => $job_type->id]) }}" method="post">
+                                      <form action="{{ route('superadmin.job_type.delete', ['job_type' => $job_type->id]) }}" method="post">
                                           @csrf
                                           @method('DELETE')
                                           Are you sure to delete selected job_type <b>"{{ $job_type->name }}"</b> ?
@@ -115,7 +116,7 @@
             Add Job Type
         </div>
         <div class="card-body">
-            <form action="{{ route('assistant.job_type.store') }}" method="post">
+            <form action="{{ route('superadmin.job_type.store') }}" method="post">
                 @csrf
                 <div class="form-group">
                     <label for="job_type">Job Type</label>

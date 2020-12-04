@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('assistant.layouts.app')
 
 @section('title', 'Daftar Kebun')
 
@@ -6,13 +6,7 @@
   Daftar Kebun
 @endsection
 
-@section('modal')
-
-@endsection
-
 @section('content')
-
-</button> -->
 <div class="row">
   <div class="col-md-8">
       <div class="card">

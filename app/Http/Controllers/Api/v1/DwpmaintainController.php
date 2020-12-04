@@ -115,7 +115,20 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        FertilizerType::create($request->all());
+        $data = [
+            'block_ref_id' => $request->block_ref_id,
+            'foreman_id' => $request->foreman_id,
+            'subforeman_id' => $request->subforeman_id,
+            'afdelling_id' => fme()->afdelling_id,
+            'date' => $request->date,
+            'ingredients_type' => $request->ingredients_type,
+            'ingredients_amount' => $request->ingredients_amount,
+            'target_coverage' => $request->target_coverage,
+            'hk_used' => $request->hk_used,
+            'foreman_note' => $request->foreman_note
+        ];
+
+        FertilizerType::create($data);
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -156,7 +169,20 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        PestControl::create($request->all());
+        $data = [
+            'block_ref_id' => $request->block_ref_id,
+            'foreman_id' => $request->foreman_id,
+            'subforeman_id' => $request->subforeman_id,
+            'afdelling_id' => fme()->afdelling_id,
+            'date' => $request->date,
+            'ingredients_type' => $request->ingredients_type,
+            'ingredients_amount' => $request->ingredients_amount,
+            'target_coverage' => $request->target_coverage,
+            'hk_used' => $request->hk_used,
+            'foreman_note' => $request->foreman_note
+        ];
+
+        PestControl::create($data);
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -195,7 +221,19 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        CircleType::create($request->all());
+       
+        $data = [
+            'block_ref_id' => $request->block_ref_id,
+            'foreman_id' => $request->foreman_id,
+            'subforeman_id' => $request->subforeman_id,
+            'afdelling_id' => fme()->afdelling_id,
+            'date' => $request->date,
+            'target_coverage' => $request->target_coverage,
+            'hk_used' => $request->hk_used,
+            'foreman_note' => $request->foreman_note
+        ]; 
+
+        CircleType::create($data);
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -235,7 +273,19 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        PruningType::create($request->all());
+
+    $data = [
+        'block_ref_id' => $request->block_ref_id,
+        'foreman_id' => $request->foreman_id,
+        'subforeman_id' => $request->subforeman_id,
+        'afdelling_id' => fme()->afdelling_id,
+        'date' => $request->date,
+        'target_coverage' => $request->target_coverage,
+        'hk_used' => $request->hk_used,
+        'foreman_note' => $request->foreman_note
+    ];
+
+        PruningType::create($data);
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -274,7 +324,18 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        GawanganType::create($request->all());
+        $data = [
+            'block_ref_id' => $request->block_ref_id,
+            'foreman_id' => $request->foreman_id,
+            'subforeman_id' => $request->subforeman_id,
+            'afdelling_id' => fme()->afdelling_id,
+            'date' => $request->date,
+            'target_coverage' => $request->target_coverage,
+            'hk_used' => $request->hk_used,
+            'foreman_note' => $request->foreman_note
+        ];
+
+        GawanganType::create($data);
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -327,6 +388,7 @@ class DwpmaintainController extends Controller
             'afdelling_id' => fme()->afdelling_id,
             'ftarget_coverage' => $request->ftarget_coverage,
             'fingredients_amount' => $request->fingredients_amount,
+            'afdelling_id' => fme()->afdelling_id,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
@@ -377,6 +439,7 @@ class DwpmaintainController extends Controller
             'fertilizer_id' => $request->fertilizer_id,
             'ftarget_coverage' => $request->ftarget_coverage,
             'fingredients_amount' => $request->fingredients_amount,
+            'afdelling_id' => fme()->afdelling_id,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
@@ -429,6 +492,7 @@ class DwpmaintainController extends Controller
             'ftarget_coverage' => $request->ftarget_coverage,
             'fingredients_amount' => $request->fingredients_amount,
             'image' => $image_url,
+            'afdelling_id' => fme()->afdelling_id,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
             'ended' => $request->ended,
@@ -477,6 +541,7 @@ class DwpmaintainController extends Controller
             'circle_id' => $request->circle_id,
             'ftarget_coverage' => $request->ftarget_coverage,
             'image' => $image_url,
+            'afdelling_id' => fme()->afdelling_id,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
             'ended' => $request->ended,
@@ -525,6 +590,7 @@ class DwpmaintainController extends Controller
         FillPruning::create([
             'pruning_id' => $request->pruning_id,
             'ftarget_coverage' => $request->ftarget_coverage,
+            'afdelling_id' => fme()->afdelling_id,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
@@ -573,6 +639,7 @@ class DwpmaintainController extends Controller
         FillGawangan::create([
             'gawangan_id' => $request->gawangan_id,
             'ftarget_coverage' => $request->ftarget_coverage,
+            'afdelling_id' => fme()->afdelling_id,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,

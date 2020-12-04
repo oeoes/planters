@@ -1,4 +1,4 @@
-@extends('assistant.layouts.app')
+@extends('superadmin.layouts.app')
 
 @section('title', 'Block list')
 
@@ -32,9 +32,10 @@ Daftar Block
                         <td>{{ $block->afdelling }}</td>
                         <td>{{ $block->farm }}</td>
                         <td>
-                            <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3 mb-2" data-toggle="modal"
+                            <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
                                 data-target="#edit-block{{$key}}"><i class="nav-icon fas fa-pen"></i>
                             </button>
+                            <div class="mb-1"></div>
                             <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"
                                 data-target="#delete-block{{$key}}"><i class="nav-icon fas fa-trash"></i>
                             </button>
@@ -52,7 +53,7 @@ Daftar Block
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('assistant.block.update', ['block' => $block->id]) }}"
+                                        <form action="{{ route('superadmin.block.update', ['block' => $block->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('PUT')
@@ -95,7 +96,7 @@ Daftar Block
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('assistant.block.delete', ['block' => $block->id]) }}"
+                                        <form action="{{ route('superadmin.block.delete', ['block' => $block->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('DELETE')
@@ -124,7 +125,7 @@ Daftar Block
                 Add block
             </div>
             <div class="card-body">
-                <form action="{{ route('assistant.block.store') }}" method="post">
+                <form action="{{ route('superadmin.block.store') }}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="block">Block</label>

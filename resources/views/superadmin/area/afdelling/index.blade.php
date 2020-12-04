@@ -1,4 +1,4 @@
-@extends('assistant.layouts.app')
+@extends('superadmin.layouts.app')
 
 @section('title', 'Daftar Afdelling')
 
@@ -10,7 +10,7 @@
   <div class="row">
       <div class="col-md-8">
           <div class="card">
-              <table id="myTable" class="table table-hover table-borderless">
+              <table id="myTable" class="table table-hover table-borderless table-responsive">
                   <thead class="text-muted">
                       <tr>
                           <th>#</th>
@@ -28,9 +28,10 @@
                           <td>{{ $afdelling->farm }}</td>
                           <td>{{ $afdelling->hk_total }}</td>
                           <td>
-                              <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3 mb-2" data-toggle="modal"
+                              <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
                                   data-target="#edit-afdelling{{$key}}"><i class="nav-icon fas fa-pen"></i>
                               </button>
+                              <div class="mb-1"></div>
                               <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"
                                   data-target="#delete-afdelling{{$key}}"><i class="nav-icon fas fa-trash"></i>
                               </button>
@@ -48,7 +49,7 @@
                                           </button>
                                       </div>
                                       <div class="modal-body">
-                                          <form action="{{ route('assistant.afdelling.update', ['afdelling' => $afdelling->id]) }}"
+                                          <form action="{{ route('superadmin.afdelling.update', ['afdelling' => $afdelling->id]) }}"
                                               method="post">
                                               @csrf
                                               @method('PUT')
@@ -101,7 +102,7 @@
                                           </button>
                                       </div>
                                       <div class="modal-body">
-                                          <form action="{{ route('assistant.afdelling.delete', ['afdelling' => $afdelling->id]) }}"
+                                          <form action="{{ route('superadmin.afdelling.delete', ['afdelling' => $afdelling->id]) }}"
                                               method="post">
                                               @csrf
                                               @method('DELETE')
@@ -130,7 +131,7 @@
                   Add afdelling
               </div>
               <div class="card-body">
-                  <form action="{{ route('assistant.afdelling.store') }}" method="post">
+                  <form action="{{ route('superadmin.afdelling.store') }}" method="post">
                       @csrf
                       <div class="form-group">
                           <label for="farm">Farm</label>

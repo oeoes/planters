@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Assistant - @yield('title')</title>
+    <title>Super Admin - @yield('title')</title>
     <link rel="stylesheet" href="{{ asset('template/plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('template/dist/css/adminlte.min.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -24,9 +24,9 @@
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
         {{-- @include('sweetalert::alert') --}}
-        @include('assistant.layouts.navbar')
+        @include('superadmin.layouts.navbar')
 
-        @include('assistant.layouts.sidebar')
+        @include('superadmin.layouts.sidebar')
 
         @yield('modal')
 
@@ -44,13 +44,13 @@
             <div class="content">
                 <div class="container-fluid" style="min-height: 1000px">
 
-                    @include('assistant.layouts.messages')
+                    @include('superadmin.layouts.messages')
 
                     @yield('content')
                 </div>
             </div>
         </div>
-        @include('assistant.layouts.footer')
+        @include('superadmin.layouts.footer')
 
     </div>
     @yield('modal')

@@ -1,20 +1,12 @@
-@extends('assistant.layouts.app')
+@extends('superadmin.layouts.app')
 
-@section('title', 'Jenis Pekerjaan')
+@section('title', 'Daftar Kebun')
 
 @section('content-title')
-  Jenis Pekerjaan
-@endsection
-
-@section('modal')
-
+  Daftar Kebun
 @endsection
 
 @section('content')
-<!-- Button trigger modal -->
-<!-- <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#job_type_modal">
-  Add job_type
-</button> -->
 <div class="row">
   <div class="col-md-8">
       <div class="card">
@@ -22,44 +14,45 @@
               <thead class="text-muted">
                   <tr>
                       <th>#</th>
-                      <th>Job type</th>
+                      <th>Farm</th>
                       <th>Action</th>
                   </tr>
               </thead>
               <tbody>
-                  @foreach ($job_types as $key => $job_type)
+                  @foreach ($farms as $key => $farm)
                   <tr>
-                      <td scope="row">{{ $key+1 }}</td>
-                      <td>{{ $job_type->name }}</td>
+                      <td scope="row">{{ $loop->iteration }}</td>
+                      <td>{{ $farm->name }}</td>
                       <td>
-                        <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3 mb-2" data-toggle="modal"
-                            data-target="#edit-job_type{{$key}}"><i
+                        <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
+                            data-target="#edit-farm{{$key}}"><i
                                 class="nav-icon fas fa-pen"></i>
                         </button>
+                        <div class="mb-1"></div>
                         <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"
-                            data-target="#delete-job_type{{$key}}"><i
+                            data-target="#delete-farm{{$key}}"><i
                                 class="nav-icon fas fa-trash"></i>
                         </button>
                       </td>
 
-                      <!-- Modal edit job_type -->
-                      <div class="modal fade" id="edit-job_type{{$key}}" tabindex="-1" aria-labelledby="edit-job_typeLabel"
+                      <!-- Modal edit farm -->
+                      <div class="modal fade" id="edit-farm{{$key}}" tabindex="-1" aria-labelledby="edit-farmLabel"
                           aria-hidden="true">
                           <div class="modal-dialog">
                               <div class="modal-content">
                                   <div class="modal-header">
-                                      <h5 class="modal-title" id="edit-job_typeLabel">Edit job_type</h5>
+                                      <h5 class="modal-title" id="edit-farmLabel">Edit Farm</h5>
                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                           <span aria-hidden="true">&times;</span>
                                       </button>
                                   </div>
                                   <div class="modal-body">
-                                      <form action="{{ route('assistant.assistantjob_type.update', ['job_type' => $job_type->id]) }}" method="post">
+                                      <form action="{{ route('superadmin.farm.update', ['farm' => $farm->id]) }}" method="post">
                                           @csrf
                                           @method('PUT')
                                           <div class="form-group">
-                                              <label for="job_type">Job Type</label>
-                                              <input type="text" name="job_type" id="job_type" class="form-control" value="{{ $job_type->name }}">
+                                              <label for="farm">Farm</label>
+                                              <input type="text" name="farm" id="farm" class="form-control" value="{{ $farm->name }}">
                                           </div>
                                   </div>
                                   <div class="modal-footer">
@@ -75,22 +68,22 @@
                           </div>
                       </div>
 
-                      <!-- Modal delete job_type -->
-                      <div class="modal fade" id="delete-job_type{{$key}}" tabindex="-1" aria-labelledby="delete-job_typeLabel"
+                      <!-- Modal delete farm -->
+                      <div class="modal fade" id="delete-farm{{$key}}" tabindex="-1" aria-labelledby="delete-farmLabel"
                           aria-hidden="true">
                           <div class="modal-dialog">
                               <div class="modal-content">
                                   <div class="modal-header">
-                                      <h5 class="modal-title" id="delete-job_typeLabel">Delete job_type</h5>
+                                      <h5 class="modal-title" id="delete-farmLabel">Delete Farm</h5>
                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                           <span aria-hidden="true">&times;</span>
                                       </button>
                                   </div>
                                   <div class="modal-body">
-                                      <form action="{{ route('assistant.job_type.delete', ['job_type' => $job_type->id]) }}" method="post">
+                                      <form action="{{ route('superadmin.farm.delete', ['farm' => $farm->id]) }}" method="post">
                                           @csrf
                                           @method('DELETE')
-                                          Are you sure to delete selected job_type <b>"{{ $job_type->name }}"</b> ?
+                                          Are you sure to delete selected farm <b>"{{ $farm->name }}"</b> ?
                                   </div>
                                   <div class="modal-footer">
                                       <button type="button"
@@ -112,14 +105,14 @@
   <div class="col-md-4">
       <div class="card">
         <div class="card-header">
-            Add Job Type
+            Add Farm
         </div>
         <div class="card-body">
-            <form action="{{ route('assistant.job_type.store') }}" method="post">
+            <form action="{{ route('superadmin.farm.store') }}" method="post">
                 @csrf
                 <div class="form-group">
-                    <label for="job_type">Job Type</label>
-                    <input type="text" name="job_type" id="job_type" class="form-control">
+                    <label for="farm">Farm</label>
+                    <input type="text" name="farm" id="farm" class="form-control">
                 </div>
                 <button type="submit" class="btn btn-sm rounded-pill btn-outline-primary pl-3 pr-3">Add</button>
             </form>

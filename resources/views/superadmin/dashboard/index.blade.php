@@ -1,8 +1,9 @@
-@extends('assistant.layouts.app')
-@section('title', 'PLANTERS - Dashboard')
+@extends('superadmin.layouts.app')
+
+@section('title', 'Super Admin - Dashboard')
 
 @section('content-title')
-  <b>Pest Control</b> <small class="text-muted font-weight-lighter" style="font-size: 14pt">Rencana Kerja Harian</small>
+  <b>Rawat</b> <small class="text-muted font-weight-lighter" style="font-size: 14pt">Rencana Kerja Harian</small>
 @endsection
 
 @section('css')

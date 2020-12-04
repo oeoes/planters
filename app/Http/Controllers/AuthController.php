@@ -14,7 +14,6 @@ class AuthController extends Controller
 
     public function authenticate(Request $request ) {
         $credentials = ['email' => $request->email, 'password' => $request->password];
-        $a = Auth::guard('farmmanager')->attempt($credentials);
 
         if (Auth::guard('assistant')->attempt($credentials)) {
 
