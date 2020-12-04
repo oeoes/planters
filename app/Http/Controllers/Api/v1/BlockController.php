@@ -236,8 +236,8 @@ class BlockController extends Controller
                     "image" => $fillout->image,
                     "subforeman_note" => $fillout->subforeman_note,
                     "completed" => $fillout->completed,
-                    "hk_name" => !$hk_names ? null : $hk_names,
-                    "hk_listed" => !$hk_listed_arr ? null : $hk_listed_arr,
+                    "hk_name" => isset($hk_names) ? $hk_names : null,
+                    "hk_listed" => isset($hk_listed_arr) ? $hk_listed_arr : null,
                     "final_harvesting" => $final_harvesting,
                 ];
 
