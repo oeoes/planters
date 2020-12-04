@@ -16,6 +16,7 @@ class CreateFillHarvestingTable extends Migration
         Schema::create('fill_harvestings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('harvest_id')->constrained('harvestings');
+            $table->foreignId('afdelling_id')->constrained();
             $table->float('ftarget_coverage', 8, 2); // hasil panen aktual , total panen
             $table->float('bjr', 8, 2);
             $table->float('total_harvesting', 8, 2); // list dari nama karyawan dan total_harvesting

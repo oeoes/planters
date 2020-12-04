@@ -55,7 +55,7 @@ Daftar Mandor Bidang
                                     </div>
                                     <div class="modal-body">
                                         <form
-                                            action="{{ route('subforeman.update', ['subforeman' => $subforeman->id]) }}"
+                                            action="{{ route('assistant.subforeman.update', ['subforeman' => $subforeman->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('PUT')
@@ -117,7 +117,7 @@ Daftar Mandor Bidang
                                     </div>
                                     <div class="modal-body">
                                         <form
-                                            action="{{ route('subforeman.delete', ['subforeman' => $subforeman->id]) }}"
+                                            action="{{ route('assistant.subforeman.delete', ['subforeman' => $subforeman->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('DELETE')
@@ -146,7 +146,7 @@ Daftar Mandor Bidang
                 Tambah Mandor Bidang
             </div>
             <div class="card-body">
-                <form action="{{ route('subforeman.store') }}" method="post">
+                <form action="{{ route('assistant.subforeman.store') }}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="subforeman">Nama</label>

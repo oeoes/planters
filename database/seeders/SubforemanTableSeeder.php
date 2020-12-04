@@ -32,7 +32,7 @@ class SubforemanTableSeeder extends Seeder
         $faker = Faker::create('id_ID');
 
         for ($i=0; $i < 50; $i++) { 
-            if ($i < 5)  $jobtype = 1;
+            if ($i < 5 && $i > 0)  $jobtype = 1;
             if ($i <= 5 && $i < 10)  $jobtype = 2;
             if ($i >= 10 && $i < 15)  $jobtype = 3;
             if ($i >= 15 && $i < 20)  $jobtype = 4;

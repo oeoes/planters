@@ -61,7 +61,20 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        SprayingType::create($request->all());
+        $data = [
+            'block_ref_id' => $request->block_ref_id,
+            'foreman_id' => $request->foreman_id,
+            'subforeman_id' => $request->subforeman_id,
+            'afdelling_id' => fme()->afdelling_id,
+            'date' => $request->date,
+            'ingredients_type' => $request->ingredients_type,
+            'ingredients_amount' => $request->ingredients_amount,
+            'target_coverage' => $request->target_coverage,
+            'hk_used' => $request->hk_used,
+            'foreman_note ' => $request->foreman_note
+        ];
+
+        SprayingType::create($data);
 
         $subforeman->increment('active');
         $subforeman->save();

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'PLANTERS - Block References')
+@section('title', 'Block References')
 
 @section('content-title')
 Daftar Referensi Block
@@ -67,7 +67,7 @@ Daftar Referensi Block
                                     </div>
                                     <div class="modal-body">
                                         <form
-                                            action="{{ route('block_reference.update', ['block_reference' => $block_reference->id]) }}"
+                                            action="{{ route('assistant.block_reference.update', ['block_reference' => $block_reference->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('PUT')
@@ -149,7 +149,7 @@ Daftar Referensi Block
                                     </div>
                                     <div class="modal-body">
                                         <form
-                                            action="{{ route('block_reference.delete', ['block_reference' => $block_reference->id]) }}"
+                                            action="{{ route('assistant.block_reference.delete', ['block_reference' => $block_reference->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('DELETE')

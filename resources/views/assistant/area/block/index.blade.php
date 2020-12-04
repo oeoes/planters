@@ -52,7 +52,7 @@ Daftar Block
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('block.update', ['block' => $block->id]) }}"
+                                        <form action="{{ route('assistant.block.update', ['block' => $block->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('PUT')
@@ -95,7 +95,7 @@ Daftar Block
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('block.delete', ['block' => $block->id]) }}"
+                                        <form action="{{ route('assistant.block.delete', ['block' => $block->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('DELETE')
@@ -124,7 +124,7 @@ Daftar Block
                 Add block
             </div>
             <div class="card-body">
-                <form action="{{ route('block.store') }}" method="post">
+                <form action="{{ route('assistant.block.store') }}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="block">Block</label>

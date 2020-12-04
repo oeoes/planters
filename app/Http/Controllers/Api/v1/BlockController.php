@@ -130,173 +130,144 @@ class BlockController extends Controller
 
     public function det_active_block_references($block_ref_id) {
         $single_ref = BlockReference::find($block_ref_id);
-
-        // jika blok referensi udah dibuat
-        if ($single_ref) {
-            $data = $single_ref->model::where('block_ref_id', $block_ref_id)->latest()->first();
-            if ($data) {
-                // kalo data terakhir completed, berarti dia diarahin untuk buat rkh baru
-                if ($data->completed == 1) {
-                    
-                    if ($single_ref->jobtype_id == 7) {
-                        $data = [
-                            'block_code' => block($single_ref->block_id),
-                            'job_type' => $single_ref->jobtype_id,
-                            'available_coverage' => $single_ref->available_coverage,
-                            'population_coverage' => $single_ref->population_coverage,
-                        ];
-                    } else {
-                        $data = [
-                            'block_code' => block($single_ref->block_id),
-                            'job_type' => $single_ref->jobtype_id,
-                            'available_coverage' => $single_ref->available_coverage
-                        ];
-                    }
-                    return res(true, 200, 'Please create RKH First', $data);
-
-                } else {
-                    // jika data terakhir blm completed, dia harus completing dulu
-
-                    if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-                        $ingredients_amount = $data->ingredients_amount;
-                        $ingredients_type = $data->ingredients_type;
-                        $akp = null;
-                        $bjr = null;
-                    } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
-                        $ingredients_amount = null;
-                        $ingredients_type = null;
-                        $akp = null;
-                        $bjr = null;
-                    } else if (in_array($single_ref->jobtype_id, [7])) {
-                        $ingredients_amount = null;
-                        $ingredients_type = null;
-                        $akp = $data->akp;
-                        $bjr = $data->bjr;
-                    }
-        
-                    $foreman = [
-                        'date' => date('Y-m-d', strtotime($data->date)),
-                        'subforeman' => subforeman($data->subforeman_id)->name,
-                        'block_code' => block($single_ref->block_id),
-                        'job_type'   => $single_ref->jobtype_id,
-                        'target_coverage'    => $data->target_coverage,
-                        'akp' => $akp,
-                        'bjr' => $bjr,
-                        'taksasi' => $data->taksasi,
-                        'basis' => $data->basis,
-                        'ingredients_type'   => $ingredients_type,
-                        'ingredients_amount' => $ingredients_amount,
-                        'foreman_note' => $data->foreman_note,
-                        'hk_used'   => $data->hk_used,
-                        'completed' => 0,
-                    ];
-        
-                    switch ($single_ref->jobtype_id) {
-                        case 1:
-                            $fillout = $single_ref->fill::where('spraying_id', $data->id)->first();
-                            break;
-                        case 2:
-                            $fillout = $single_ref->fill::where('fertilizer_id', $data->id)->first();
-                            break;
-                        case 3:
-                            $fillout = $single_ref->fill::where('circle_id', $data->id)->first();
-                            break;
-                        case 4:
-                            $fillout = $single_ref->fill::where('pruning_id', $data->id)->first();
-                            break;
-                        case 5:
-                            $fillout = $single_ref->fill::where('gawangan_id', $data->id)->first();
-                            break;
-                        case 6:
-                            $fillout = $single_ref->fill::where('pcontrol_id', $data->id)->first();
-                            break;
-                        case 7:
-                            $fillout = $single_ref->fill::where('harvest_id', $data->id)->first();
-                            break;
-                    }
-        
-                    if ($fillout) {
-        
-                        if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-                            $ingredients_amount = $fillout->ingredients_amount;
-                            $ingredients_type   = $fillout->ingredients_type;
-                            $akp = null;
-                            $bjr = null;
-                            $hk_listed_arr = [];
-                            $final_harvesting = null;
-                        } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
-                            $ingredients_amount = null;
-                            $ingredients_type = null;
-                            $akp = null;
-                            $bjr = null;
-                            $hk_listed_arr = [];
-                            $final_harvesting = null;
-                        } else if (in_array($single_ref->jobtype_id, [7])) {
-                            $ingredients_amount = null;
-                            $ingredients_type = null;
-                            $akp = $fillout->akp;
-                            $bjr = $fillout->bjr;
-                            $harvest_id = $data->id;
-                            $employee_harvestings = EmployeeHarvesting::where('harvest_id', $harvest_id)->get();
-                            $hk_listed = $employee_harvestings;
-                            $hk_listed_arr = [];
-                            $final_harvesting = 0;
-                            foreach ($hk_listed as $hk) {
-                                $hk_listed_arr [] = [
-                                    'name' => $hk['name'],
-                                    'total_harvesting' => $hk['total_harvesting']
-                                ];
-                                $final_harvesting += $hk['total_harvesting'];
-                            }
-                        }
-        
-                        $subforeman = [
-                            "begin" => $fillout->begin,
-                            "ended" => $fillout->ended,
-                            "target_coverage"    => $fillout->ftarget_coverage,
-                            "ingredients_type"   => $ingredients_type,
-                            "ingredients_amount" => $ingredients_amount,
-                            "image" => $fillout->image,
-                            "subforeman_note" => $fillout->subforeman_note,
-                            "completed" => $fillout->completed,
-                            "hk_listed" => $hk_listed_arr,
-                            "final_harvesting" => $final_harvesting,
-                        ];
-        
-                    } else {
-        
-                        $subforeman = null;
-        
-                    }
-        
-                    $data = [
-                        "foreman" => $foreman,
-                        "subforeman" => $subforeman
-                    ];
-
-                    return res(true, 200, 'You must completed this RKH to start next RKH', $data); 
-
-                }
-            } else {
-                if ($single_ref->jobtype_id == 7) {
-                    $data = [
-                        'block_code' => block($single_ref->block_id),
-                        'job_type' => $single_ref->jobtype_id,
-                        'available_coverage' => $single_ref->available_coverage,
-                        'population_coverage' => $single_ref->population_coverage,
-                    ];
-                } else {
-                    $data = [
-                        'block_code' => block($single_ref->block_id),
-                        'job_type' => $single_ref->jobtype_id,
-                        'available_coverage' => $single_ref->available_coverage
-                    ];
-                }
-                return res(true, 200, 'Please create RKH First', $data);
+        $today = date('Y-m-d');
+        //search today where rkh didnot completed
+        $data = $single_ref->model::where('date', $today)->where('block_ref_id', $block_ref_id)->where('completed', 0)->first();
+        if ($data) {
+            if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
+                $ingredients_amount = $data->ingredients_amount;
+                $ingredients_type = $data->ingredients_type;
+                $akp = null;
+                $bjr = null;
+            } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
+                $ingredients_amount = null;
+                $ingredients_type = null;
+                $akp = null;
+                $bjr = null;
+            } else if (in_array($single_ref->jobtype_id, [7])) {
+                $ingredients_amount = null;
+                $ingredients_type = null;
+                $akp = $data->akp;
+                $bjr = $data->bjr;
             }
-        }
 
-    return res(false, 404, 'Block reference not found');
+            $foreman = [
+                'date' => date('Y-m-d', strtotime($data->date)),
+                'subforeman' => subforeman($data->subforeman_id)->name,
+                'block_code' => block($single_ref->block_id),
+                'job_type'   => $single_ref->jobtype_id,
+                'target_coverage'    => $data->target_coverage,
+                'akp' => $akp,
+                'bjr' => $bjr,
+                'taksasi' => $data->taksasi,
+                'basis' => $data->basis,
+                'ingredients_type'   => $ingredients_type,
+                'ingredients_amount' => $ingredients_amount,
+                'foreman_note' => $data->foreman_note,
+                'hk_used'   => $data->hk_used,
+                'completed' => 0,
+            ];
+
+            switch ($single_ref->jobtype_id) {
+                case 1:
+                    $fillout = $single_ref->fill::where('spraying_id', $data->id)->first();
+                    break;
+                case 2:
+                    $fillout = $single_ref->fill::where('fertilizer_id', $data->id)->first();
+                    break;
+                case 3:
+                    $fillout = $single_ref->fill::where('circle_id', $data->id)->first();
+                    break;
+                case 4:
+                    $fillout = $single_ref->fill::where('pruning_id', $data->id)->first();
+                    break;
+                case 5:
+                    $fillout = $single_ref->fill::where('gawangan_id', $data->id)->first();
+                    break;
+                case 6:
+                    $fillout = $single_ref->fill::where('pcontrol_id', $data->id)->first();
+                    break;
+                case 7:
+                    $fillout = $single_ref->fill::where('harvest_id', $data->id)->first();
+                    break;
+            }
+
+            if ($fillout) {
+
+                if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
+                    $ingredients_amount = $fillout->ingredients_amount;
+                    $ingredients_type   = $fillout->ingredients_type;
+                    $akp = null;
+                    $bjr = null;
+                    $hk_listed_arr = [];
+                    $final_harvesting = null;
+                } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
+                    $ingredients_amount = null;
+                    $ingredients_type = null;
+                    $akp = null;
+                    $bjr = null;
+                    $hk_listed_arr = [];
+                    $final_harvesting = null;
+                } else if (in_array($single_ref->jobtype_id, [7])) {
+                    $ingredients_amount = null;
+                    $ingredients_type = null;
+                    $akp = $fillout->akp;
+                    $bjr = $fillout->bjr;
+                    $harvest_id = $data->id;
+                    $employee_harvestings = EmployeeHarvesting::where('harvest_id', $harvest_id)->get();
+                    $hk_listed = $employee_harvestings;
+                    $hk_listed_arr = [];
+                    $final_harvesting = 0;
+                    foreach ($hk_listed as $hk) {
+                        $hk_listed_arr [] = [
+                            'name' => $hk['name'],
+                            'total_harvesting' => $hk['total_harvesting']
+                        ];
+                        $final_harvesting += $hk['total_harvesting'];
+                    }
+                }
+
+                $subforeman = [
+                    "begin" => $fillout->begin,
+                    "ended" => $fillout->ended,
+                    "target_coverage"    => $fillout->ftarget_coverage,
+                    "ingredients_type"   => $ingredients_type,
+                    "ingredients_amount" => $ingredients_amount,
+                    "image" => $fillout->image,
+                    "subforeman_note" => $fillout->subforeman_note,
+                    "completed" => $fillout->completed,
+                    "hk_listed" => $hk_listed_arr,
+                    "final_harvesting" => $final_harvesting,
+                ];
+
+            } else {
+                $subforeman = null;
+            }
+
+            $data = [
+                "foreman" => $foreman,
+                "subforeman" => $subforeman
+            ];
+
+            return res(true, 200, 'Detail RKH', $data); 
+        } else {
+            if ($single_ref->jobtype_id == 7) {
+                $data = [
+                    'block_code' => block($single_ref->block_id),
+                    'job_type' => $single_ref->jobtype_id,
+                    'available_coverage' => $single_ref->available_coverage,
+                    'population_coverage' => $single_ref->population_coverage,
+                ];
+            } else {
+                $data = [
+                    'block_code' => block($single_ref->block_id),
+                    'job_type' => $single_ref->jobtype_id,
+                    'available_coverage' => $single_ref->available_coverage
+                ];
+            }
+
+            return res(true, 200, 'There is no schedule today, create another RKH for tomorrow', $data);
+        }
 
     }   
 
