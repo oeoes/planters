@@ -39,27 +39,27 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="{{ route('maintain.fertilizer') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Fertilizer</p>
                 </a>
               </li><li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="{{ route('maintain.circle') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Manual Circle</p>
                 </a>
               </li><li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="{{ route('maintain.pruning') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Manual Pruning</p>
                 </a>
               </li><li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="{{ route('maintain.gawangan') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Manual Gawangan</p>
                 </a>
               </li><li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="{{ route('maintain.pestcontrol') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Pest Control</p>
                 </a>
