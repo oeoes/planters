@@ -137,7 +137,7 @@ class BlockController extends Controller
             if ($data) {
                 // kalo data terakhir completed, berarti dia diarahin untuk buat rkh baru
                 // if ($data->completed == 1) {
-                if ($data->completed == 1) {
+                if ($data->completed != 1) {
                     
                     if ($single_ref->jobtype_id == 7) {
                         $data = [
