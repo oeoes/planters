@@ -236,8 +236,8 @@ class BlockController extends Controller
                             $ingredients_type = null;
                             $akp = $fillout->akp;
                             $bjr = $fillout->bjr;
-                            $harvesting_id = $data->id;
-                            $employee_harvestings = EmployeeHarvesting::where('harvesting_id', $harvesting_id)->get();
+                            $harvest_id = $data->id;
+                            $employee_harvestings = EmployeeHarvesting::where('harvest_id', $harvest_id)->get();
                             $hk_listed = $employee_harvestings;
                             $hk_listed_arr = [];
                             $final_harvesting = 0;
