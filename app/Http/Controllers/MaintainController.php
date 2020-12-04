@@ -248,4 +248,8 @@ class MaintainController extends Controller
         ]);
 
     }
+
+    public function spraying() {
+        return view('maintain.spraying');
+    }
 }
