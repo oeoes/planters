@@ -199,14 +199,14 @@ class BlockController extends Controller
                     $ingredients_type   = $fillout->ingredients_type;
                     $akp = null;
                     $bjr = null;
-                    $hk_listed_arr = $fillout->hk_name;
+                    $hk_names = $fillout->hk_name;
                     $final_harvesting = null;
                 } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
                     $ingredients_amount = null;
                     $ingredients_type = null;
                     $akp = null;
                     $bjr = null;
-                    $hk_listed_arr = $fillout->hk_name;
+                    $hk_names = $fillout->hk_name;
                     $final_harvesting = null;
                 } else if (in_array($single_ref->jobtype_id, [7])) {
                     $ingredients_amount = null;
@@ -236,6 +236,7 @@ class BlockController extends Controller
                     "image" => $fillout->image,
                     "subforeman_note" => $fillout->subforeman_note,
                     "completed" => $fillout->completed,
+                    "hk_name" => !$hk_names ? null : $hk_names,
                     "hk_listed" => $hk_listed_arr,
                     "final_harvesting" => $final_harvesting,
                 ];
