@@ -770,6 +770,8 @@ class DwpmaintainController extends Controller
             $ingredients_amount = null;
             $ingredients_type = null;
             $bjr = $data->bjr;
+            $akp = $data->akp;
+            $taksasi = $data->taksasi;
         }
 
         
@@ -781,6 +783,8 @@ class DwpmaintainController extends Controller
             'hk_used' => $data->hk_used,
             'target_coverage' => $data->target_coverage,
             'bjr' => $bjr,
+            'akp' => $akp,
+            'taksasi' => $taksasi,
             'ingredients_type' => $ingredients_type,
             'ingredients_amount' => $ingredients_amount,
             'foreman_note' => $data->foreman_note
