@@ -71,7 +71,7 @@ class DwpmaintainController extends Controller
             'ingredients_amount' => $request->ingredients_amount,
             'target_coverage' => $request->target_coverage,
             'hk_used' => $request->hk_used,
-            'foreman_note ' => $request->foreman_note
+            'foreman_note' => $request->foreman_note
         ];
 
         SprayingType::create($data);
