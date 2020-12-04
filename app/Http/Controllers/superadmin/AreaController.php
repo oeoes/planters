@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\superadmin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
 use App\Models\Farm;
 use App\Models\Afdelling;
 use App\Models\Block;
@@ -17,7 +17,7 @@ class AreaController extends Controller
 {
     public function job_type() {
         $job_types = JobType::all();
-        return view('superadmin.area.job_type.index', [
+        return view('assistant.area.job_type.index', [
             'job_types' => $job_types
         ]);
     }
@@ -43,7 +43,7 @@ class AreaController extends Controller
 
     public function farm() {
         $farms = Farm::all();
-        return view('superadmin.area.farm.index', [
+        return view('assistant.area.farm.index', [
             'farms' => $farms
         ]);
     }
@@ -73,7 +73,7 @@ class AreaController extends Controller
                     ->select('afdellings.*', 'farms.name as farm')->get();
         $farms = Farm::all();
 
-        return view('superadmin.area.afdelling.index', [
+        return view('assistant.area.afdelling.index', [
             'afdellings' => $afdellings, 
             'farms' => $farms
         ]);
@@ -110,7 +110,7 @@ class AreaController extends Controller
                 ->get();
         $afdellings = Afdelling::all();
 
-        return view('superadmin.area.block.index', [
+        return view('assistant.area.block.index', [
             'blocks' => $blocks,
             'afdellings' => $afdellings
         ]);
@@ -154,7 +154,7 @@ class AreaController extends Controller
         $job_types = JobType::all();
         $foremans = Foreman::all();
 
-        return view('superadmin.area.block.block_reference', [
+        return view('assistant.area.block.block_reference', [
             'block_references' => $block_references,
             'blocks' => $blocks,
             'job_types' => $job_types,
@@ -220,4 +220,5 @@ class AreaController extends Controller
         $block = Block::whereIn('id', $block)->get();
         return response()->json($block);
     }
+
 }

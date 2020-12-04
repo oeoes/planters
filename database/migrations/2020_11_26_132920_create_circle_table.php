@@ -28,6 +28,7 @@ class CreateCircleTable extends Migration
         });
     }
 
+
     /**
      * Reverse the migrations.
      *

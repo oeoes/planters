@@ -129,10 +129,12 @@ class BlockController extends Controller
     }
 
     public function det_active_block_references($block_ref_id) {
+
         $single_ref = BlockReference::find($block_ref_id);
         $today = date('Y-m-d');
         //search today where rkh didnot completed
         $data = $single_ref->model::where('date', $today)->where('block_ref_id', $block_ref_id)->where('completed', 0)->first();
+
         if ($data) {
             if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
                 $ingredients_amount = $data->ingredients_amount;
@@ -169,27 +171,13 @@ class BlockController extends Controller
             ];
 
             switch ($single_ref->jobtype_id) {
-                case 1:
-                    $fillout = $single_ref->fill::where('spraying_id', $data->id)->first();
-                    break;
-                case 2:
-                    $fillout = $single_ref->fill::where('fertilizer_id', $data->id)->first();
-                    break;
-                case 3:
-                    $fillout = $single_ref->fill::where('circle_id', $data->id)->first();
-                    break;
-                case 4:
-                    $fillout = $single_ref->fill::where('pruning_id', $data->id)->first();
-                    break;
-                case 5:
-                    $fillout = $single_ref->fill::where('gawangan_id', $data->id)->first();
-                    break;
-                case 6:
-                    $fillout = $single_ref->fill::where('pcontrol_id', $data->id)->first();
-                    break;
-                case 7:
-                    $fillout = $single_ref->fill::where('harvest_id', $data->id)->first();
-                    break;
+                case 1: $fillout = $single_ref->fill::where('spraying_id', $data->id)->first(); break;
+                case 2: $fillout = $single_ref->fill::where('fertilizer_id', $data->id)->first(); break;
+                case 3: $fillout = $single_ref->fill::where('circle_id', $data->id)->first(); break;
+                case 4: $fillout = $single_ref->fill::where('pruning_id', $data->id)->first(); break;
+                case 5: $fillout = $single_ref->fill::where('gawangan_id', $data->id)->first(); break;
+                case 6: $fillout = $single_ref->fill::where('pcontrol_id', $data->id)->first(); break;
+                case 7: $fillout = $single_ref->fill::where('harvest_id', $data->id)->first(); break;
             }
 
             if ($fillout) {
@@ -250,7 +238,9 @@ class BlockController extends Controller
             ];
 
             return res(true, 200, 'Detail RKH', $data); 
+
         } else {
+
             if ($single_ref->jobtype_id == 7) {
                 $data = [
                     'block_code' => block($single_ref->block_id),
@@ -267,6 +257,7 @@ class BlockController extends Controller
             }
 
             return res(true, 200, 'There is no schedule today, create another RKH for tomorrow', $data);
+
         }
 
     }   
