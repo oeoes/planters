@@ -136,26 +136,28 @@ class BlockController extends Controller
             $data = $single_ref->model::where('block_ref_id', $block_ref_id)->latest()->first();
             if ($data) {
                 // kalo data terakhir completed, berarti dia diarahin untuk buat rkh baru
-                if ($data->completed == 1) {
+                // if ($data->completed == 1) {
                     
-                    if ($single_ref->jobtype_id == 7) {
-                        $data = [
-                            'block_code' => block($single_ref->block_id),
-                            'job_type' => $single_ref->jobtype_id,
-                            'available_coverage' => $single_ref->available_coverage,
-                            'population_coverage' => $single_ref->population_coverage,
-                        ];
-                    } else {
-                        $data = [
-                            'block_code' => block($single_ref->block_id),
-                            'job_type' => $single_ref->jobtype_id,
-                            'available_coverage' => $single_ref->available_coverage
-                        ];
-                    }
-                    return res(true, 200, 'Please create RKH First', $data);
+                //     if ($single_ref->jobtype_id == 7) {
+                //         $data = [
+                //             'block_code' => block($single_ref->block_id),
+                //             'job_type' => $single_ref->jobtype_id,
+                //             'available_coverage' => $single_ref->available_coverage,
+                //             'population_coverage' => $single_ref->population_coverage,
+                //         ];
+                //     } else {
+                //         $data = [
+                //             'block_code' => block($single_ref->block_id),
+                //             'job_type' => $single_ref->jobtype_id,
+                //             'available_coverage' => $single_ref->available_coverage
+                //         ];
+                //     }
+                //     return res(true, 200, 'Please create RKH First', $data);
 
-                } else {
-                    // jika data terakhir blm completed, dia harus completing dulu
+                // } else {
+                    
+                // }
+                // jika data terakhir blm completed, dia harus completing dulu
 
                     if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
                         $ingredients_amount = $data->ingredients_amount;
@@ -274,9 +276,7 @@ class BlockController extends Controller
                         "subforeman" => $subforeman
                     ];
 
-                    return res(true, 200, 'You must completed this RKH to start next RKH', $data); 
-
-                }
+                    return res(true, 200, 'You must completed this RKH to start next RKH', $data);
             } else {
                 if ($single_ref->jobtype_id == 7) {
                     $data = [
