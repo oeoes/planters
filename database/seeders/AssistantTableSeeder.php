@@ -15,8 +15,8 @@ class AssistantTableSeeder extends Seeder
     public function run()
     {
         DB::table('assistants')->insert([
-            'name' => 'Super Admin',
-            'email' => 'auper_admin@planters.com',
+            'name' => 'assistant',
+            'email' => 'assistant@planterdev.com',
             'password' => bcrypt('password'), // password
             'role' => 1
         ]);
