@@ -23,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        if(auth('foreman')->user()) {
+            \Config::set( 'auth.defaults.guard', 'foreman' );
+        } else {
+            \Config::set( 'auth.defaults.guard', 'subforeman' );
+        }
     }
 }

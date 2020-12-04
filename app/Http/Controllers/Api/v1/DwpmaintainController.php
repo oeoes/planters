@@ -61,28 +61,23 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        SprayingType::create($request->all());
-
-        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
-        $current_hk = $hk->available_hk;
-        $used_hk    = $request->hk_used;
-        $limit_hk   = $current_hk - $used_hk;
-        $hk->update(['available_hk' => $limit_hk]);
-
-        $subforeman->increment('active');
-        $subforeman->save();
-
         $data = [
-            'block_ref_id' => (int) $request->block_ref_id,
-            'foreman' => foreman($request->foreman_id)->name,
-            'subforeman'=> subforeman($request->subforeman_id)->name,
+            'block_ref_id' => $request->block_ref_id,
+            'foreman_id' => $request->foreman_id,
+            'subforeman_id' => $request->subforeman_id,
+            'afdelling_id' => fme()->afdelling_id,
             'date' => $request->date,
             'ingredients_type' => $request->ingredients_type,
-            'ingredients_amount' => (float) $request->ingredients_amount,
-            'target_coverage'  => (float) $request->target_coverage,
+            'ingredients_amount' => $request->ingredients_amount,
+            'target_coverage' => $request->target_coverage,
             'hk_used' => $request->hk_used,
             'foreman_note' => $request->foreman_note
         ];
+
+        SprayingType::create($data);
+
+        $subforeman->increment('active');
+        $subforeman->save();
 
         return res(true, 200, 'Daily work plan spraying added');
     }
@@ -122,26 +117,8 @@ class DwpmaintainController extends Controller
 
         FertilizerType::create($request->all());
 
-        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
-        $current_hk = $hk->available_hk;
-        $used_hk    = $request->hk_used;
-        $limit_hk   = $current_hk - $used_hk;
-        $hk->update(['available_hk' => $limit_hk]);
-
         $subforeman->increment('active');
         $subforeman->save();
-
-        $data = [
-            'block_ref_id' => (int) $request->block_ref_id,
-            'foreman' => foreman($request->foreman_id)->name,
-            'subforeman'=> subforeman($request->subforeman_id)->name,
-            'date' => $request->date,
-            'ingredients_type' => $request->ingredients_type,
-            'ingredients_amount' => (float) $request->ingredients_amount,
-            'target_coverage'  => (float) $request->target_coverage,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ];
 
         return res(true, 200, 'Daily work plan fertilizer added');
     }
@@ -181,26 +158,8 @@ class DwpmaintainController extends Controller
 
         PestControl::create($request->all());
 
-        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
-        $current_hk = $hk->available_hk;
-        $used_hk    = $request->hk_used;
-        $limit_hk   = $current_hk - $used_hk;
-        $hk->update(['available_hk' => $limit_hk]);
-
         $subforeman->increment('active');
         $subforeman->save();
-
-        $data = [
-            'block_ref_id' => (int) $request->block_ref_id,
-            'foreman' => foreman($request->foreman_id)->name,
-            'subforeman'=> subforeman($request->subforeman_id)->name,
-            'date' => $request->date,
-            'ingredients_type' => $request->ingredients_type,
-            'ingredients_amount' => (float) $request->ingredients_amount,
-            'target_coverage'  => (float) $request->target_coverage,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ];
 
         return res(true, 200, 'Daily work plan pest control added');
     }
@@ -238,24 +197,8 @@ class DwpmaintainController extends Controller
 
         CircleType::create($request->all());
 
-        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
-        $current_hk = $hk->available_hk;
-        $used_hk    = $request->hk_used;
-        $limit_hk   = $current_hk - $used_hk;
-        $hk->update(['available_hk' => $limit_hk]);
-
         $subforeman->increment('active');
         $subforeman->save();
-
-        $data = [
-            'block_ref_id' => (int) $request->block_ref_id,
-            'foreman' => foreman($request->foreman_id)->name,
-            'subforeman'=> subforeman($request->subforeman_id)->name,
-            'date' => $request->date,
-            'target_coverage'  => (float) $request->target,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ];
 
         return res(true, 200, 'Daily work plan manual circle added');
 
@@ -297,16 +240,6 @@ class DwpmaintainController extends Controller
         $subforeman->increment('active');
         $subforeman->save();
 
-        $data = [
-            'block_ref_id' => (int) $request->block_ref_id,
-            'foreman' => foreman($request->foreman_id)->name,
-            'subforeman'=> subforeman($request->subforeman_id)->name,
-            'date' => $request->date,
-            'target_coverage'  => (float) $request->target,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ];
-
         return res(true, 200, 'Daily work plan pruning added');
     }
 
@@ -343,24 +276,8 @@ class DwpmaintainController extends Controller
 
         GawanganType::create($request->all());
 
-        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
-        $current_hk = $hk->available_hk;
-        $used_hk    = $request->hk_used;
-        $limit_hk   = $current_hk - $used_hk;
-        $hk->update(['available_hk' => $limit_hk]);
-
         $subforeman->increment('active');
         $subforeman->save();
-
-        $data = [
-            'block_ref_id' => (int) $request->block_ref_id,
-            'foreman' => foreman($request->foreman_id)->name,
-            'subforeman'=> subforeman($request->subforeman_id)->name,
-            'date' => $request->date,
-            'target_coverage'  => (float) $request->target_coverage,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ];
 
         return res(true, 200, 'Daily work plan pruning added');
     }
@@ -374,8 +291,6 @@ class DwpmaintainController extends Controller
         if ($subforeman->isEmpty()) 
             return res(false, 404, "All subforeman were working");
             return res(true, 200, 'Subforeman listed', $subforeman);
-
-
     }
 
     // For mandor bidang
@@ -426,9 +341,6 @@ class DwpmaintainController extends Controller
         $used_coverage = $request->ftarget_coverage;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
         
         return res(true, 200, 'Spraying report filled successfully');
     }
@@ -480,9 +392,6 @@ class DwpmaintainController extends Controller
         $used_coverage = $request->expectation;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
         
         return res(true, 200, 'fertilizer report filled successfully');
     }
@@ -533,9 +442,6 @@ class DwpmaintainController extends Controller
         $used_coverage = $request->expectation;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
         
         return res(true, 200, 'fertilizer report filled successfully');
     }
@@ -544,7 +450,6 @@ class DwpmaintainController extends Controller
         $validator = Validator::make($request->all(), [
             'circle_id' => 'required',
             'ftarget_coverage' => 'required',
-            'fingredients_amount' => 'required',
             'begin' => 'required',
             'ended' => 'required',
         ]);
@@ -585,9 +490,7 @@ class DwpmaintainController extends Controller
         $used_coverage = $request->expectation;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-        
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
+    
 
         return res(true, 200, 'Manual circle report filled successfully');
     }
@@ -636,9 +539,6 @@ class DwpmaintainController extends Controller
         $used_coverage = $request->expectation;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
         
         return res(true, 200, 'Manual pruning report filled successfully');
     }
@@ -687,9 +587,6 @@ class DwpmaintainController extends Controller
         $used_coverage = $request->expectation;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
 
         return res(true, 200, 'Manual gawangan report filled successfully');
     }
@@ -751,18 +648,18 @@ class DwpmaintainController extends Controller
             if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
                 $ingredients_amount = $data->ingredients_amount;
                 $ingredients_type = $data->ingredients_type;
-                $target_akp = null;
-                $target_bjr = null;
+                $akp = null;
+                $bjr = null;
             } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
                 $ingredients_amount = null;
                 $ingredients_type = null;
-                $target_akp = null;
-                $target_bjr = null;
+                $akp = null;
+                $bjr = null;
             } else if (in_array($single_ref->jobtype_id, [7])) {
                 $ingredients_amount = null;
                 $ingredients_type = null;
-                $target_akp = $data->target_akp;
-                $target_bjr = $data->target_bjr;
+                $akp = $data->akp;
+                $bjr = $data->bjr;
             }
 
             $foreman = [
@@ -771,8 +668,8 @@ class DwpmaintainController extends Controller
                 'block_code' => block($single_ref->block_id),
                 'job_type'   => $single_ref->jobtype_id,
                 'target_coverage'    => $data->target_coverage,
-                'target_akp' => $target_akp,
-                'target_bjr' => $target_bjr,
+                'akp' => $akp,
+                'bjr' => $bjr,
                 'ingredients_type'   => $ingredients_type,
                 'ingredients_amount' => $ingredients_amount,
                 'foreman_note' => $data->foreman_note,
@@ -811,32 +708,32 @@ class DwpmaintainController extends Controller
                 if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
                     $ingredients_amount = $fillout->fingredients_amount;
                     $ingredients_type = $fillout->fingredients_type;
-                    $target_akp = null;
-                    $target_bjr = null;
+                    $akp = null;
+                    $bjr = null;
                 } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
                     // circle, pruning, gawangan
                     $ingredients_amount = null;
                     $ingredients_type = null;
-                    $target_akp = null;
-                    $target_bjr = null;
+                    $akp = null;
+                    $bjr = null;
                 } else if (in_array($single_ref->jobtype_id, [7])) {
                     $ingredients_amount = null;
                     $ingredients_type = null;
-                    $target_akp = $fillout->target_akp;
-                    $target_bjr = $fillout->target_bjr;
+                    $akp = $fillout->akp;
+                    $bjr = $fillout->bjr;
                 }
 
                 $subforeman = [
                     "begin" => $fillout->begin,
                     "ended" => $fillout->ended,
                     "target_coverage" => $fillout->ftarget_coverage,
-                    'target_akp' => $target_akp,
-                    'target_bjr' => $target_bjr,
+                    'bjr' => $bjr,
                     'ingredients_type'   => $ingredients_type,
                     'ingredients_amount' => $ingredients_amount,
                     "image" => $fillout->image,
                     "subforeman_note" => $fillout->subforeman_note,
                     "hk_name" => $fillout->hk_name,
+                    "completed" => $fillout->completed
                 ];
             }
 
@@ -849,38 +746,15 @@ class DwpmaintainController extends Controller
     }
 
     public function check_job_today($subforeman_id) {
-        // date
-        // mandor 1
-        // blok
-        // hk used
-        // target luas
-        // jenis pupuk
-        // target berat
-        // catata
         $joblists = [
-            SprayingType::where('subforeman_id', $subforeman_id)
-                        ->where('date', date('Y-m-d'))
-                        ->where('completed', 0)->first(),
-            FertilizerType::where('subforeman_id', $subforeman_id)
-                        ->where('date', date('Y-m-d'))
-                        ->where('completed', 0)->first(),
-            CircleType::where('subforeman_id', $subforeman_id)
-                        ->where('date', date('Y-m-d'))
-                        ->where('completed', 0)->first(),
-            PruningType::where('subforeman_id', $subforeman_id)
-                        ->where('date', date('Y-m-d'))
-                        ->where('completed', 0)->first(),
-            GawanganType::where('subforeman_id', $subforeman_id)
-                        ->where('date', date('Y-m-d'))
-                        ->where('completed', 0)->first(),
-            PestControl::where('subforeman_id', $subforeman_id)
-                        ->where('date', date('Y-m-d'))
-                        ->where('completed', 0)->first(),
-            HarvestingType::where('subforeman_id', $subforeman_id)
-                        ->where('date', date('Y-m-d'))
-                        ->where('completed', 0)->first(),
+            SprayingType::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
+            FertilizerType::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
+            CircleType::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
+            PruningType::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
+            GawanganType::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
+            PestControl::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
+            HarvestingType::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
         ];
-        
         $data = '';
         $job_type = '';
         for ($i = 0; $i < count($joblists) ; $i++) { 
@@ -891,45 +765,64 @@ class DwpmaintainController extends Controller
             }
         }
         if ($data == '') {
-            return res(false, 404, 'There is no job today');
+            return res(false, 404, 'There is no job');
         }
         
         $blockref = BlockReference::where('id', $data->block_ref_id)->first();
         $block = block($blockref->block_id);
 
-        if (! $data->ingredients_type) {
+        if (in_array($blockref->jobtype_id, [1, 2, 6])) {
+            $ingredients_amount = $data->ingredients_amount;
+            $ingredients_type   = $data->ingredients_type;
+            $bjr = null;
+        } else if (in_array($blockref->jobtype_id, [3, 4, 5])) {
+            $ingredients_amount = null;
             $ingredients_type = null;
-            $ingredientes_amount = null;
-        } else {
-            $ingredients_type = $data->ingredients_type;
-            $ingredientes_amount = $data->ingredients_amount;
+            $bjr = null;
+        } else if (in_array($blockref->jobtype_id, [7])) {
+            $ingredients_amount = null;
+            $ingredients_type = null;
+            $bjr = $data->bjr;
+            $akp = $data->akp;
+            $taksasi = $data->taksasi;
         }
 
-        $dataArr = [
+        
+        $subforeman = [
             'date' => $data->date,
             'job_type_id' => $data->id,
-            // 'foreman' => foreman($data->foreman_id),
             'foreman' => Foreman::where('id', $data->foreman_id)->select('name', 'email')->first(),
             'block_code' => $block,
             'hk_used' => $data->hk_used,
             'target_coverage' => $data->target_coverage,
+            'bjr' => $bjr,
+            'akp' => !$data->akp ? $data->akp : null,
+            'taksasi' => !$data->taksasi ? $data->taksasi : null,
             'ingredients_type' => $ingredients_type,
-            'ingredients_amount' => $ingredientes_amount,
+            'ingredients_amount' => $ingredients_amount,
             'foreman_note' => $data->foreman_note
         ];
 
-        return res(true, 200, 'Job today', $dataArr);
+        return res(true, 200, 'Job today', $subforeman);
     }
 
     public function set_complete_rkh($block_ref_id) {
-        $ref = BlockReference::find($block_ref_id);
-        $data = $ref->model::where('block_ref_id', $block_ref_id)
-                            ->where('foreman_id', auth()->guard('foreman')->user()->id)
-                            ->where('completed', 0)
-                            ->first();
+        $ref = BlockReference::where('id', $block_ref_id)->first();
+        if (! $ref) {
+            return res(false, 404, 'Block reference not found');
+        }
+
+        $data = $ref->model::where('block_ref_id', $block_ref_id)->where('completed', 0)->first();
         if ($data) {
-            $ref->model::increment('completed');
-            Subforeman::where('id', $data->subforeman_id)->decrement('active');
+            $data->update(['completed' => 1]);
+
+            $subforeman = Subforeman::where('id', $data->subforeman_id)->first();
+            $subforeman->update(['active' => 0]);
+
+            if ($ref->available_coverage == 0) {
+                $ref->increment('completed');
+                    return res(true, 200, 'Block spreading completed, view this block on history menu');
+            }
             return res(true, 200, 'Daily work plan completed');
         } else {
             return res(false, 404, 'Daily work plan not found');

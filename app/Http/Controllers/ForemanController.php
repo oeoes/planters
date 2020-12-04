@@ -28,7 +28,6 @@ class ForemanController extends Controller
             'name' => $request->foreman,
             'email' => $request->email,
             'afdelling_id' => $request->afdelling_id,
-            'role' => 1,
             'password' => Hash::make($request->password),
         ]);
 
@@ -39,7 +38,6 @@ class ForemanController extends Controller
         $foreman->update([
             'name' => $request->foreman,
             'email' => $request->email,
-            'role' => 1,
             'afdelling_id' => $request->afdelling_id,
             'password' => Hash::make($request->password),
         ]);

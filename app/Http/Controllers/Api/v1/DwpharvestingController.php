@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AfdellingReference;
 use App\Models\BlockReference;
 use App\Models\Foreman;
+use App\Models\Harvesting\EmployeeHarvesting;
 use App\Models\Harvesting\FillHarvesting;
 use App\Models\Harvesting\HarvestingType;
 use App\Models\Maintain\CircleType;
@@ -35,8 +36,8 @@ class DwpharvestingController extends Controller
             'subforeman_id' => 'required',
             'date' => 'required',
             'target_coverage' => 'required', 
-            'target_akp' => 'required', 
-            'target_bjr' => 'required', 
+            'akp' => 'required', 
+            'bjr' => 'required', 
             'hk_used' => 'required',
         ]);
 
@@ -52,22 +53,16 @@ class DwpharvestingController extends Controller
             return res(false, 404, 'Wrong foreman or block references');
 
         if ($blockrefs->jobtype_id != 7 || $subforeman->jobtype_id != 7) 
-                return res(false, 404, 'Wrong job type for block', [$blockrefs->jobtype_id, $subforeman->jobtype_id]);
+            return res(false, 404, 'Wrong job type for block', [$blockrefs->jobtype_id, $subforeman->jobtype_id]);
 
         $harvesting = HarvestingType::where('block_ref_id', $request->block_ref_id)->where('foreman_id', $request->foreman_id)->latest()->first();
         if ($harvesting) {
             // if harvesting created less 1
             if ($harvesting->date == $request->date || $harvesting->completed == 0)
-            return res(false, 404, 'Cannot do next, please fill this form first!');
+                return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
         HarvestingType::create($request->all());
-
-        $hk = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->where('available_date', date('Y-m-d'))->first();
-        $current_hk = $hk->available_hk;
-        $used_hk    = $request->hk_used;
-        $limit_hk   = $current_hk - $used_hk;
-        $hk->update(['available_hk' => $limit_hk]);
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -80,8 +75,7 @@ class DwpharvestingController extends Controller
         $validator = Validator::make($request->all(), [
             'harvest_id' => 'required',
             'ftarget_coverage' => 'required',
-            'ftarget_akp' => 'required',
-            'ftarget_bjr' => 'required',
+            'bjr' => 'required',
             'begin' => 'required',
             'ended' => 'required',
         ]);
@@ -104,16 +98,28 @@ class DwpharvestingController extends Controller
             $image_url = null;
         }
 
+        $employees = json_decode($request->hk_listed);
+        // return $employees;
+        $total_harvesting = 0;
+        foreach ($employees as $key => $value) {
+            EmployeeHarvesting::create([
+                'harvest_id' => $request->harvest_id,
+                'name' => $value->name,
+                'total_harvesting' => $value->total_harvesting,
+            ]);
+            $total_harvesting += $value->total_harvesting;
+        }
+        
         FillHarvesting::create([
             'harvest_id' => $request->harvest_id,
             'ftarget_coverage' => $request->ftarget_coverage,
-            'ftarget_akp' => $request->ftarget_akp,
-            'ftarget_bjr' => $request->ftarget_bjr,
+            'bjr' => $request->bjr,
+            'total_harvesting' => $total_harvesting,
+            'final_harvesting' => (float) $request->bjr * $total_harvesting,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
             'ended' => $request->ended,
-            'hk_name' => $request->hk_name
         ]);
 
         $reference = HarvestingType::find($request->harvest_id);

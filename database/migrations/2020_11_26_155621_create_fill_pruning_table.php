@@ -16,12 +16,14 @@ class CreateFillPruningTable extends Migration
         Schema::create('fill_prunings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pruning_id')->constrained();
+            $table->foreignId('afdelling_id')->constrained();
             $table->float('ftarget_coverage', 8, 2);
             $table->string('image')->nullable();
             $table->text('hk_name');
             $table->text('subforeman_note')->nullable();
             $table->time('begin');
             $table->time('ended');
+            $table->integer('completed')->default(1);
             $table->timestamps();
         });
     }

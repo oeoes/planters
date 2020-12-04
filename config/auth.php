@@ -3,7 +3,7 @@
 return [
 
     'defaults' => [
-        'guard' => 'foreman',
+        'guard' => '',
         'passwords' => 'users',
     ],
 
@@ -12,6 +12,16 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'assistants',
+        ],
+
+        'superadmin' => [
+            'driver' => 'session',
+            'provider' => 'superadmin',
+        ],
+
+        'farmmanager' => [
+            'driver' => 'session',
+            'provider' => 'farmmanager',
         ],
 
         'assistant' => [
@@ -35,6 +45,17 @@ return [
 
 
     'providers' => [
+
+        'superadmin' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\SuperAdmin::class,
+        ],
+
+        'farmmanager' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\FarmManager::class,
+        ],
+
         'assistants' => [
             'driver' => 'eloquent',
             'model' => App\Models\Assistant::class,

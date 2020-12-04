@@ -7,6 +7,7 @@ use App\Models\Afdelling;
 use App\Models\AfdellingReference;
 use App\Models\Block;
 use App\Models\BlockReference;
+use App\Models\Harvesting\EmployeeHarvesting;
 use App\Models\Harvesting\FillHarvesting;
 use App\Models\Maintain\CircleType;
 use App\Models\Maintain\FertilizerType;
@@ -34,13 +35,11 @@ class BlockController extends Controller
             'jobtype_id' => 'required',
             'planting_year' => 'required',
             'population_coverage' => 'required',
-            // 'population_perblock' => 'required', = pop.coverage / total.coverage
             'total_coverage' => 'required',
         ]);
 
         if ($request->foreman_id != fme()->id)
-                return res(false, 404, 'Foreman not authenticated');
-            
+            return res(false, 404, 'Foreman not authenticated');
 
         if ($validator->fails())
             return res(false, 404, $validator->errors());
@@ -50,16 +49,13 @@ class BlockController extends Controller
             return res(false, 404, 'Block not allowed');
 
         $block_references = BlockReference::where('block_id', $request->block_id)->where('planting_year', $request->planting_year)->first();
-        if ($block_references) 
-            return res(false, 400, 'Reference of block already created', [ 'block_reference_id' => $block_references->id]);
-            $population_perblock = ($request->population_coverage /  $request->total_coverage);
-        
-        $afdelling_ref = AfdellingReference::where('afdelling_id', fme()->afdelling_id)->first();
-        if ($afdelling_ref != null) {
-            if ($afdelling_ref->available_hk == 0 && $afdelling_ref->available_date == date('Y-m-d')) {
-                return res(false, 404, 'Cannot create block reference for today, there is no employees available');
-            }   
+        if ($block_references ) {
+            if (in_array($request->jobtype_id, [1, 2, 3, 4, 5, 6])) {
+                return res(false, 400, 'Reference of block already created', [ 'block_reference_id' => $block_references->id]);
+            }
         }
+            
+        $population_perblock = $request->total_coverage * $request->population_coverage;
 
         BlockReference::create([
             'block_id'   => $request->block_id,
@@ -74,25 +70,12 @@ class BlockController extends Controller
             'fill'  => fill($request->jobtype_id),
             'completed' => 0,
         ]);
-        $last_block_reference = BlockReference::where('foreman_id', fme()->id)->latest()->first();
-        $data = [
-            'block_reference_id'   => (int) $last_block_reference->id,
-            'block_code' => (int) block($request->block_id),
-            'foreman'    => foreman($request->foreman_id)->name,
-            'job_type'   => (int) $request->jobtype_id,
-            'planting_year' => (int) $request->planting_year,
-            'population_coverage' => (float) $request->population_coverage,
-            'population_perblock' => (float) $population_perblock,
-            'total_coverage'      => (float) $request->total_coverage,
-            'available_coverage'  => (float) $request->total_coverage,
-            'completed' => 0,
-        ];
 
         return res(true, 200, 'Reference of block created');
     }
 
-    public function blocks() {
-        $blocks = Block::all();
+    public function blocks($afdelling_id) {
+        $blocks = Block::where('afdelling_id', $afdelling_id)->get();
         $data = [];
         foreach ($blocks as $key => $value) {
             $data [] = [
@@ -111,7 +94,9 @@ class BlockController extends Controller
                                 ->orderByDesc('created_at')
                                 ->get();
         $data = [];
-        if (! $refs->isEmpty()) {
+        if ($refs->isEmpty()) {
+            return res(true, 200, 'Empty blocks');
+        } else {
             foreach ($refs as $value) {
                 $data [] = [
                     'block_reference_id' => $value['id'],
@@ -120,79 +105,50 @@ class BlockController extends Controller
                 ];
             }
             return res(true, 200, 'Blocks listed', $data);
-        } else {
-            return res(true, 200, 'Empty blocks');
         }
     }
 
     // active block references
     public function active_block_references() {
-        $refs = BlockReference::where('foreman_id', fme()->id)
-                              ->where('completed', 0)
-                              ->orderByDesc('created_at')
-                              ->get();
-        $data = [];
-
-        if (! $refs->isEmpty()) {
-            foreach ($refs as $value) {
-                $data [] = [
+        $refs = BlockReference::where('foreman_id', fme()->id)->where('completed', 0)->get();
+        if ($refs->isEmpty()) {
+            return res(true, 200, 'Empty block references');
+        }
+            
+        $active = [];
+        foreach ($refs as $value) {
+            if ($value['completed'] == 0) {
+                $active [] = [
                     'block_reference_id' => $value['id'],
                     'planting_year' => $value['planting_year'],
                     'block_code' => block($value['block_id']),
                 ];
             }
-            return res(true, 200, 'Blocks listed', $data);
-        } else {
-            return res(true, 200, 'There is no active blocks reference');
         }
+        return res(true, 200, 'Blocks listed', $active);
     }
 
     public function det_active_block_references($block_ref_id) {
         $single_ref = BlockReference::find($block_ref_id);
-        $afdelling_id = auth()->guard('foreman')->user()->afdelling_id;
-        $now = date('Y-m-d');
-        $data = $single_ref->model::where('block_ref_id', $block_ref_id)->where('completed', 0)->first();
-
-        if(! $data) {
-            $afdelling_ref = AfdellingReference::whereDate('available_date', date('Y-m-d'))->where('afdelling_id', $afdelling_id)->first();
-            $afdelling = Afdelling::where('id', fme()->afdelling_id)->first();
-            if (! $afdelling_ref) {
-                AfdellingReference::create([
-                    'afdelling_id' => fme()->afdelling_id,
-                    'available_hk' => $afdelling->hk_total,
-                    'available_date' => $now 
-                ]);   
-                $afdelling_ref = AfdellingReference::where('available_date', $now)->first();
-                $available_hk = $afdelling_ref->available_hk;
-            } else {
-                $available_hk = $afdelling_ref->available_hk;
-            }
-
-            $data = [
-                'block_code' => block($single_ref->block_id),
-                'job_type' => $single_ref->jobtype_id,
-                'available_hk' => $available_hk,
-                'available_coverage' => $single_ref->available_coverage
-            ];
-            return res(true, 200, 'Cannot find RKH for today', $data);
-            
-        } else {
-
+        $today = date('Y-m-d');
+        //search today where rkh didnot completed
+        $data = $single_ref->model::where('date', $today)->where('block_ref_id', $block_ref_id)->where('completed', 0)->first();
+        if ($data) {
             if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
                 $ingredients_amount = $data->ingredients_amount;
                 $ingredients_type = $data->ingredients_type;
-                $target_akp = null;
-                $target_bjr = null;
+                $akp = null;
+                $bjr = null;
             } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
                 $ingredients_amount = null;
                 $ingredients_type = null;
-                $target_akp = null;
-                $target_bjr = null;
+                $akp = null;
+                $bjr = null;
             } else if (in_array($single_ref->jobtype_id, [7])) {
                 $ingredients_amount = null;
                 $ingredients_type = null;
-                $target_akp = $data->target_akp;
-                $target_bjr = $data->target_bjr;
+                $akp = $data->akp;
+                $bjr = $data->bjr;
             }
 
             $foreman = [
@@ -201,8 +157,10 @@ class BlockController extends Controller
                 'block_code' => block($single_ref->block_id),
                 'job_type'   => $single_ref->jobtype_id,
                 'target_coverage'    => $data->target_coverage,
-                'target_akp' => $target_akp,
-                'target_bjr' => $target_bjr,
+                'akp' => $akp,
+                'bjr' => $bjr,
+                'taksasi' => $data->taksasi,
+                'basis' => $data->basis,
                 'ingredients_type'   => $ingredients_type,
                 'ingredients_amount' => $ingredients_amount,
                 'foreman_note' => $data->foreman_note,
@@ -234,48 +192,83 @@ class BlockController extends Controller
                     break;
             }
 
-            if (! $fillout) {
-                $subforeman = null;
-            } else {
+            if ($fillout) {
 
                 if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
                     $ingredients_amount = $fillout->ingredients_amount;
-                    $ingredients_type = $fillout->ingredients_type;
-                    $target_akp = null;
-                    $target_bjr = null;
+                    $ingredients_type   = $fillout->ingredients_type;
+                    $akp = null;
+                    $bjr = null;
+                    $hk_listed_arr = [];
+                    $final_harvesting = null;
                 } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
                     $ingredients_amount = null;
                     $ingredients_type = null;
-                    $target_akp = null;
-                    $target_bjr = null;
+                    $akp = null;
+                    $bjr = null;
+                    $hk_listed_arr = [];
+                    $final_harvesting = null;
                 } else if (in_array($single_ref->jobtype_id, [7])) {
                     $ingredients_amount = null;
                     $ingredients_type = null;
-                    $target_akp = $fillout->target_akp;
-                    $target_bjr = $fillout->target_bjr;
+                    $akp = $fillout->akp;
+                    $bjr = $fillout->bjr;
+                    $harvest_id = $data->id;
+                    $employee_harvestings = EmployeeHarvesting::where('harvest_id', $harvest_id)->get();
+                    $hk_listed = $employee_harvestings;
+                    $hk_listed_arr = [];
+                    $final_harvesting = 0;
+                    foreach ($hk_listed as $hk) {
+                        $hk_listed_arr [] = [
+                            'name' => $hk['name'],
+                            'total_harvesting' => $hk['total_harvesting']
+                        ];
+                        $final_harvesting += $hk['total_harvesting'];
+                    }
                 }
 
                 $subforeman = [
                     "begin" => $fillout->begin,
                     "ended" => $fillout->ended,
-                    "target_coverage" => $fillout->ftarget_coverage,
-                    'target_akp' => $target_akp,
-                    'target_bjr' => $target_bjr,
-                    'ingredients_type'   => $ingredients_type,
-                    'ingredients_amount' => $ingredients_amount,
+                    "target_coverage"    => $fillout->ftarget_coverage,
+                    "ingredients_type"   => $ingredients_type,
+                    "ingredients_amount" => $ingredients_amount,
                     "image" => $fillout->image,
                     "subforeman_note" => $fillout->subforeman_note,
-                    "hk_name" => $fillout->hk_name,
+                    "completed" => $fillout->completed,
+                    "hk_listed" => $hk_listed_arr,
+                    "final_harvesting" => $final_harvesting,
                 ];
+
+            } else {
+                $subforeman = null;
             }
 
             $data = [
                 "foreman" => $foreman,
                 "subforeman" => $subforeman
             ];
-            
-            return res(true, 200, 'Detail RKH', $data); 
-        }   
 
-    }
+            return res(true, 200, 'Detail RKH', $data); 
+        } else {
+            if ($single_ref->jobtype_id == 7) {
+                $data = [
+                    'block_code' => block($single_ref->block_id),
+                    'job_type' => $single_ref->jobtype_id,
+                    'available_coverage' => $single_ref->available_coverage,
+                    'population_coverage' => $single_ref->population_coverage,
+                ];
+            } else {
+                $data = [
+                    'block_code' => block($single_ref->block_id),
+                    'job_type' => $single_ref->jobtype_id,
+                    'available_coverage' => $single_ref->available_coverage
+                ];
+            }
+
+            return res(true, 200, 'There is no schedule today, create another RKH for tomorrow', $data);
+        }
+
+    }   
+
 }

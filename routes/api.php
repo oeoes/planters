@@ -27,7 +27,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
         Route::post('store-harvest', [DwpharvestingController::class, 'store_harvest']);
 
-        Route::get('blocks', [BlockController::class, 'blocks']);
+        Route::get('blocks/{afdelling_id}', [BlockController::class, 'blocks']);
         Route::post('store-block-references', [BlockController::class, 'store_block_references']);
         Route::get('completed-block-references', [BlockController::class, 'completed_block_references']);
         Route::get('active-block-references', [BlockController::class, 'active_block_references']);
@@ -57,6 +57,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
     });
 
 });
+
 
 route::get('allsfm', [TestController::class, 'allsfm']);
 route::get('allfm', [TestController::class, 'allfm']);
