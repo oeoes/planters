@@ -796,8 +796,8 @@ class DwpmaintainController extends Controller
             'hk_used' => $data->hk_used,
             'target_coverage' => $data->target_coverage,
             'bjr' => $bjr,
-            'akp' => $akp,
-            'taksasi' => $taksasi,
+            'akp' => !$data->akp ? $data->akp : null,
+            'taksasi' => !$data->taksasi ? $data->taksasi : null,
             'ingredients_type' => $ingredients_type,
             'ingredients_amount' => $ingredients_amount,
             'foreman_note' => $data->foreman_note
@@ -823,8 +823,6 @@ class DwpmaintainController extends Controller
                 $ref->increment('completed');
                     return res(true, 200, 'Block spreading completed, view this block on history menu');
             }
-            // ini langsung habis ajabang
-            $ref->increment('completed');
             return res(true, 200, 'Daily work plan completed');
         } else {
             return res(false, 404, 'Daily work plan not found');
