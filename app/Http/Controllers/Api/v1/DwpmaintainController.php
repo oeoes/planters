@@ -746,7 +746,7 @@ class DwpmaintainController extends Controller
 
         $subforeman = [
             'date' => $data->date,
-            'job_type_id' => $blockref->jobtype_id,
+            'job_type_id' => $data->id,
             'foreman' => Foreman::where('id', $data->foreman_id)->select('name', 'email')->first(),
             'block_code' => $block,
             'hk_used' => $data->hk_used,
