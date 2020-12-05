@@ -742,7 +742,7 @@ class DwpmaintainController extends Controller
 
         $blockref = BlockReference::where('id', $data->block_ref_id)->first();
         $block = block($blockref->block_id);
-        $subforeman_status = $blockref->fill::where('fertilizer_id', $data->id)->first();
+        $subforeman_status = $blockref->fill::where($blockref->fill_id, $data->id)->first();
 
         $subforeman = [
             'date' => $data->date,
