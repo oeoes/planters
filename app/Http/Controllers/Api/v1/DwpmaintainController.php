@@ -60,21 +60,10 @@ class DwpmaintainController extends Controller
             if ($spraying->date == $request->date || $spraying->completed == 0)
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
+        
+        $request['afdelling_id'] = fme()->afdelling_id;
 
-        $data = [
-            'block_ref_id' => $request->block_ref_id,
-            'foreman_id' => $request->foreman_id,
-            'subforeman_id' => $request->subforeman_id,
-            'afdelling_id' => fme()->afdelling_id,
-            'date' => $request->date,
-            'ingredients_type' => $request->ingredients_type,
-            'ingredients_amount' => $request->ingredients_amount,
-            'target_coverage' => $request->target_coverage,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ];
-
-        SprayingType::create($data);
+        SprayingType::create($request->all());
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -115,20 +104,8 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        $data = [
-            'block_ref_id' => $request->block_ref_id,
-            'foreman_id' => $request->foreman_id,
-            'subforeman_id' => $request->subforeman_id,
-            'afdelling_id' => fme()->afdelling_id,
-            'date' => $request->date,
-            'ingredients_type' => $request->ingredients_type,
-            'ingredients_amount' => $request->ingredients_amount,
-            'target_coverage' => $request->target_coverage,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ];
-
-        FertilizerType::create($data);
+        $request['afdelling_id'] = fme()->afdelling_id;
+        FertilizerType::create($request->all());
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -169,20 +146,8 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        $data = [
-            'block_ref_id' => $request->block_ref_id,
-            'foreman_id' => $request->foreman_id,
-            'subforeman_id' => $request->subforeman_id,
-            'afdelling_id' => fme()->afdelling_id,
-            'date' => $request->date,
-            'ingredients_type' => $request->ingredients_type,
-            'ingredients_amount' => $request->ingredients_amount,
-            'target_coverage' => $request->target_coverage,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ];
-
-        PestControl::create($data);
+        $request['afdelling_id'] = fme()->afdelling_id;
+        PestControl::create($request->all());
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -221,19 +186,8 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-       
-        $data = [
-            'block_ref_id' => $request->block_ref_id,
-            'foreman_id' => $request->foreman_id,
-            'subforeman_id' => $request->subforeman_id,
-            'afdelling_id' => fme()->afdelling_id,
-            'date' => $request->date,
-            'target_coverage' => $request->target_coverage,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ]; 
-
-        CircleType::create($data);
+        $request['afdelling_id'] = fme()->afdelling_id;
+        CircleType::create($request->all());
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -273,19 +227,8 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-
-    $data = [
-        'block_ref_id' => $request->block_ref_id,
-        'foreman_id' => $request->foreman_id,
-        'subforeman_id' => $request->subforeman_id,
-        'afdelling_id' => fme()->afdelling_id,
-        'date' => $request->date,
-        'target_coverage' => $request->target_coverage,
-        'hk_used' => $request->hk_used,
-        'foreman_note' => $request->foreman_note
-    ];
-
-        PruningType::create($data);
+        $request['afdelling_id'] = fme()->afdelling_id;
+        PruningType::create($request->all());
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -324,18 +267,9 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Cannot do next, please fill this form first!');
         }
 
-        $data = [
-            'block_ref_id' => $request->block_ref_id,
-            'foreman_id' => $request->foreman_id,
-            'subforeman_id' => $request->subforeman_id,
-            'afdelling_id' => fme()->afdelling_id,
-            'date' => $request->date,
-            'target_coverage' => $request->target_coverage,
-            'hk_used' => $request->hk_used,
-            'foreman_note' => $request->foreman_note
-        ];
 
-        GawanganType::create($data);
+        $request['afdelling_id'] = fme()->afdelling_id;
+        GawanganType::create($request->all());
 
         $subforeman->increment('active');
         $subforeman->save();
@@ -383,18 +317,8 @@ class DwpmaintainController extends Controller
             $image_url = null;
         }
 
-        FillSpraying::create([
-            'spraying_id' => $request->spraying_id,
-            'afdelling_id' => fme()->afdelling_id,
-            'ftarget_coverage' => $request->ftarget_coverage,
-            'fingredients_amount' => $request->fingredients_amount,
-            'afdelling_id' => fme()->afdelling_id,
-            'image' => $image_url,
-            'subforeman_note' => $request->subforeman_note,
-            'begin' => $request->begin,
-            'ended' => $request->ended,
-            'hk_name' => $request->hk_name
-        ]);
+        $request['afdelling_id'] = sfme()->afdelling_id;
+        FillSpraying::create($request->all());
 
         $reference = SprayingType::find($request->spraying_id);
         $block_ref_id = $reference->block_ref_id;
@@ -435,18 +359,8 @@ class DwpmaintainController extends Controller
             $image_url = null;
         }
 
-        FillFertilizer::create([
-            'fertilizer_id' => $request->fertilizer_id,
-            'ftarget_coverage' => $request->ftarget_coverage,
-            'fingredients_amount' => $request->fingredients_amount,
-            'afdelling_id' => fme()->afdelling_id,
-            'image' => $image_url,
-            'subforeman_note' => $request->subforeman_note,
-            'begin' => $request->begin,
-            'ended' => $request->ended,
-            'hk_name' => $request->hk_name
-        ]);
-
+        $request['afdelling_id'] = sfme()->afdelling_id;
+        FillFertilizer::create($request->all());
 
         $reference = FertilizerType::find($request->fertilizer_id);
         $block_ref_id = $reference->block_ref_id;
@@ -487,17 +401,8 @@ class DwpmaintainController extends Controller
             $image_url = null;
         }
 
-        FillPcontrols::create([
-            'pcontrol_id' => $request->pcontrol_id,
-            'ftarget_coverage' => $request->ftarget_coverage,
-            'fingredients_amount' => $request->fingredients_amount,
-            'image' => $image_url,
-            'afdelling_id' => fme()->afdelling_id,
-            'subforeman_note' => $request->subforeman_note,
-            'begin' => $request->begin,
-            'ended' => $request->ended,
-            'hk_name' => $request->hk_name
-        ]);
+        $request['afdelling_id'] = sfme()->afdelling_id;
+        FillPcontrols::create($request->all());
 
         $reference = PestControl::find($request->pcontrol_id);
         $block_ref_id = $reference->block_ref_id;
@@ -537,16 +442,8 @@ class DwpmaintainController extends Controller
             $image_url = null;
         }
 
-        FillCircle::create([
-            'circle_id' => $request->circle_id,
-            'ftarget_coverage' => $request->ftarget_coverage,
-            'image' => $image_url,
-            'afdelling_id' => fme()->afdelling_id,
-            'subforeman_note' => $request->subforeman_note,
-            'begin' => $request->begin,
-            'ended' => $request->ended,
-            'hk_name' => $request->hk_name
-        ]);
+        $request['afdelling_id'] = sfme()->afdelling_id;
+        FillCircle::create($request->all());
 
         $reference = CircleType::find($request->circle_id);
         $block_ref_id = $reference->block_ref_id;
@@ -587,16 +484,8 @@ class DwpmaintainController extends Controller
             $image_url = null;
         }
 
-        FillPruning::create([
-            'pruning_id' => $request->pruning_id,
-            'ftarget_coverage' => $request->ftarget_coverage,
-            'afdelling_id' => fme()->afdelling_id,
-            'image' => $image_url,
-            'subforeman_note' => $request->subforeman_note,
-            'begin' => $request->begin,
-            'ended' => $request->ended,
-            'hk_name' => $request->hk_name
-        ]);
+        $request['afdelling_id'] = sfme()->afdelling_id;
+        FillPruning::create($request->all());
 
         $reference = PruningType::find($request->pruning_id);
         $block_ref_id = $reference->block_ref_id;
@@ -636,16 +525,8 @@ class DwpmaintainController extends Controller
             $image_url = null;
         }
 
-        FillGawangan::create([
-            'gawangan_id' => $request->gawangan_id,
-            'ftarget_coverage' => $request->ftarget_coverage,
-            'afdelling_id' => fme()->afdelling_id,
-            'image' => $image_url,
-            'subforeman_note' => $request->subforeman_note,
-            'begin' => $request->begin,
-            'ended' => $request->ended,
-            'hk_name' => $request->hk_name
-        ]);
+        $request['afdelling_id'] = sfme()->afdelling_id;
+        FillGawangan::create($request->all());
 
         $reference = GawanganType::find($request->gawangan_id);
         $block_ref_id = $reference->block_ref_id;

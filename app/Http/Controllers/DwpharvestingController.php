@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class DashboardControlleclrr extends Controller
+class DwpharvestingController extends Controller
 {
     //
 }
