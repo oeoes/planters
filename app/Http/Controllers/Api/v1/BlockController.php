@@ -247,18 +247,7 @@ class BlockController extends Controller
             // kalo ada data untuk date diatas today
             $data_next = $single_ref->model::where('date', '>', $today)->where('block_ref_id', $block_ref_id)->first();
             if ($data_next) {
-                if ($single_ref->jobtype_id == 7) {
-                    $data = [
-                        'create' => 0,
-                    ];
-                } else {
-                    $data = [
-                        'create' => 0,
-                    ];
-                }
-
-                return res(true, 200, 'Your rkh is active for tomorrow', $data);
-
+                return res(true, 200, 'Your rkh is active for tomorrow', ['create' => 1]);
             } elseif (! $data_next) {
                 // kalo gada data rkh untuk besok
                 if ($single_ref->jobtype_id == 7) {
@@ -267,14 +256,14 @@ class BlockController extends Controller
                         'job_type' => $single_ref->jobtype_id,
                         'available_coverage' => $single_ref->available_coverage,
                         'population_coverage' => $single_ref->population_coverage,
-                        'create' => 1,
+                        'create' => 0,
                     ];
                 } else {
                     $data = [
                         'block_code' => block($single_ref->block_id),
                         'job_type' => $single_ref->jobtype_id,
                         'available_coverage' => $single_ref->available_coverage,
-                        'create' => 1,
+                        'create' => 0,
                     ];
                 }
 
