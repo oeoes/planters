@@ -116,7 +116,7 @@ class DwpharvestingController extends Controller
             'ftarget_coverage' => $request->ftarget_coverage,
             'bjr' => $request->bjr,
             'total_harvesting' => $total_harvesting,
-            'final_harvesting' => (float) $request->bjr * $total_harvesting,
+            'final_harvesting' => (float) $request->final_harvesting,
             'image' => $image,
             'subforeman_note' => $request->subforeman_note,
             'afdelling_id' => $request->afdelling_id,

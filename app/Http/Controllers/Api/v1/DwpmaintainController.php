@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AfdellingReference;
 use App\Models\BlockReference;
 use App\Models\Foreman;
+use App\Models\Harvesting\EmployeeHarvesting;
 use App\Models\Harvesting\FillHarvesting;
 use App\Models\Harvesting\HarvestingType;
 use App\Models\Maintain\CircleType;
@@ -663,32 +664,10 @@ class DwpmaintainController extends Controller
                 'ingredients_amount' => !$data->ingredients_amount ? null : $data->ingredients_amount,
                 'foreman_note' => $data->foreman_note,
                 'hk_used'   => $data->hk_used,
-                'completed' => 0,
+                'completed' => $data->completed,
             ];
 
-            switch ($single_ref->jobtype_id) {
-                case 1:
-                    $fillout = $single_ref->fill::where('spraying_id', $data->id)->first();
-                    break;
-                case 2:
-                    $fillout = $single_ref->fill::where('fertilizer_id', $data->id)->first();
-                    break;
-                case 3:
-                    $fillout = $single_ref->fill::where('circle_id', $data->id)->first();
-                    break;
-                case 4:
-                    $fillout = $single_ref->fill::where('pruning_id', $data->id)->first();
-                    break;
-                case 5:
-                    $fillout = $single_ref->fill::where('gawangan_id', $data->id)->first();
-                    break;
-                case 6:
-                    $fillout = $single_ref->fill::where('pcontrol_id', $data->id)->first();
-                    break;
-                case 7:
-                    $fillout = $single_ref->fill::where('harvest_id', $data->id)->first();
-                    break;
-            }
+            $fillout = $single_ref->fill::where($single_ref->fill_id, $data->id)->first();
 
             if (! $fillout) {
 
@@ -696,16 +675,29 @@ class DwpmaintainController extends Controller
 
             } else {
 
+                if ($single_ref->jobtype_id == 7) {
+                    $employee_harvestings = EmployeeHarvesting::where('harvest_id', $data->id)->get();
+                    $hk_listed_arr = [];
+                    foreach ($employee_harvestings as $hk) {
+                        $hk_listed_arr [] = [
+                            'name' => $hk['name'],
+                            'total_harvesting' => $hk['total_harvesting']
+                        ];
+                    }
+                }
+
                 $subforeman = [
                     "begin" => $fillout->begin,
                     "ended" => $fillout->ended,
                     "target_coverage" => $fillout->ftarget_coverage,
-                    'bjr' => !$fillout->bjr ? null : $fillout->bjr,
-                    'ingredients_type'   => !$fillout->fingredients_type ? null : $fillout->fingredients_type,
-                    'ingredients_amount' => !$fillout->fingredients_amount ? null : $fillout->fingredients_amount ,
+                    "bjr" => !$fillout->bjr ? null : $fillout->bjr,
+                    "ingredients_type"   => !$fillout->fingredients_type ? null : $fillout->fingredients_type,
+                    "ingredients_amount" => !$fillout->fingredients_amount ? null : $fillout->fingredients_amount ,
                     "image" => $fillout->image,
                     "subforeman_note" => $fillout->subforeman_note,
                     "hk_name" => $fillout->hk_name,
+                    "final_harvesting" => !$fillout->final_harvesting ? null : $fillout->final_harvesting,
+                    "hk_listed" => empty($hk_listed_arr) ? null : $hk_listed_arr,
                     "completed" => $fillout->completed
                 ];
             }
