@@ -10,7 +10,7 @@
   <div class="row">
       <div class="col-md-8">
           <div class="card">
-              <table id="myTable" class="table table-hover table-borderless">
+              <table id="myTable" class="table table-hover table-borderless table-responsive">
                   <thead class="text-muted">
                       <tr>
                           <th>#</th>
@@ -28,9 +28,10 @@
                           <td>{{ $afdelling->farm }}</td>
                           <td>{{ $afdelling->hk_total }}</td>
                           <td>
-                              <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3 mb-2" data-toggle="modal"
+                              <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
                                   data-target="#edit-afdelling{{$key}}"><i class="nav-icon fas fa-pen"></i>
                               </button>
+                              <div class="mb-1"></div>
                               <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"
                                   data-target="#delete-afdelling{{$key}}"><i class="nav-icon fas fa-trash"></i>
                               </button>

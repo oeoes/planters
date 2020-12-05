@@ -1,6 +1,6 @@
 @extends('superadmin.layouts.app')
 
-@section('title', 'Manager - Dashboard')
+@section('title', 'Super Admin - Dashboard')
 
 @section('content-title')
   <b>Rawat</b> <small class="text-muted font-weight-lighter" style="font-size: 14pt">Rencana Kerja Harian</small>

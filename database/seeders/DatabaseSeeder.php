@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         Assistant::factory(10)->create();
         $this->call([
-            AssistantTableSeeder::class,
+            SuperAdminTableSeeder::class,
             FarmTableSeeder::class,
             AfdellingTableSeeder::class,
             BlockTableSeeder::class,

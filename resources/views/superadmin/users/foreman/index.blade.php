@@ -1,9 +1,9 @@
 @extends('superadmin.layouts.app')
 
-@section('title', 'Block list')
+@section('title', 'Mandor')
 
 @section('content-title')
-Daftar Block
+Daftar Mandor
 @endsection
 
 @section('modal')
@@ -14,61 +14,71 @@ Daftar Block
 <div class="row">
     <div class="col-md-8">
         <div class="card">
-            <table id="myTable" class="table table-hover table-borderless">
+            <table id="myTable" class="table table-hover table-borderless table-responsive">
                 <thead class="text-muted">
                     <tr>
                         <th>#</th>
-                        <th>Block</th>
-                        <th>Afdelling</th>
-                        <th>Farm</th>
+                        <th>Nama Mandor</th>
+                        <th>Email</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($blocks as $key => $block)
+                    @foreach ($foremans as $key => $foreman)
                     <tr>
                         <td scope="row">{{ $loop->iteration }}</td>
-                        <td>{{ $block->code }}</td>
-                        <td>{{ $block->afdelling }}</td>
-                        <td>{{ $block->farm }}</td>
+                        <td>{{ $foreman->name }}</td>
+                        <td>{{ $foreman->email }}</td>
                         <td>
                             <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
-                                data-target="#edit-block{{$key}}"><i class="nav-icon fas fa-pen"></i>
+                                data-target="#edit-foreman{{$key}}"><i class="nav-icon fas fa-pen"></i>
                             </button>
                             <div class="mb-1"></div>
                             <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"
-                                data-target="#delete-block{{$key}}"><i class="nav-icon fas fa-trash"></i>
+                                data-target="#delete-foreman{{$key}}"><i class="nav-icon fas fa-trash"></i>
                             </button>
                         </td>
 
-                        <!-- Modal edit block -->
-                        <div class="modal fade" id="edit-block{{$key}}" tabindex="-1" aria-labelledby="edit-blockLabel"
-                            aria-hidden="true">
+                        <!-- Modal edit foreman -->
+                        <div class="modal fade" id="edit-foreman{{$key}}" tabindex="-1"
+                            aria-labelledby="edit-foremanLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="edit-blockLabel">Edit block</h5>
+                                        <h5 class="modal-title" id="edit-foremanLabel">Edit Mandor</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('superadmin.block.update', ['block' => $block->id]) }}"
+                                        <form action="{{ route('assistant.foreman.update', ['foreman' => $foreman->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('PUT')
                                             <div class="form-group">
-                                                <label for="block">block</label>
-                                                <input type="text" name="block" id="block" class="form-control"
-                                                    value="{{ $block->code }}">
+                                                <label for="foreman">Nama</label>
+                                                <input type="text" name="foreman" id="foreman" class="form-control"
+                                                    required value="{{ $foreman->name }}">
                                             </div>
                                             <div class="form-group">
-                                                <label for="afdelling">Afdelling</label>
-                                                <select name="afdelling_id" id="afdelling" class="form-control">
+                                                <label for="email">Email</label>
+                                                <input type="email" name="email" id="email" class="form-control"
+                                                    required value="{{ $foreman->email }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="afdelling_id">Afdelling</label>
+                                                <select name="afdelling_id" id="afdelling_id" class="form-control">
                                                     @foreach($afdellings as $af)
-                                                    <option <?php if($block->afdelling_id == $af->id) echo "selected" ?> value="{{$af->id}}">{{ $af->name }}</option>
+                                                    <option
+                                                        <?php if($af->id == $foreman->afdelling_id) echo "selected" ?>
+                                                        value="{{ $af->id }}">{{ $af->name }}</option>
                                                     @endforeach
                                                 </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="password">Password</label>
+                                                <input type="password" name="password" id="password"
+                                                    class="form-control" required>
                                             </div>
                                     </div>
                                     <div class="modal-footer">
@@ -84,23 +94,23 @@ Daftar Block
                             </div>
                         </div>
 
-                        <!-- Modal delete block -->
-                        <div class="modal fade" id="delete-block{{$key}}" tabindex="-1"
-                            aria-labelledby="delete-blockLabel" aria-hidden="true">
+                        <!-- Modal delete foreman -->
+                        <div class="modal fade" id="delete-foreman{{$key}}" tabindex="-1"
+                            aria-labelledby="delete-foremanLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="delete-blockLabel">Delete block</h5>
+                                        <h5 class="modal-title" id="delete-foremanLabel">Delete Mandor</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('superadmin.block.delete', ['block' => $block->id]) }}"
+                                        <form action="{{ route('assistant.foreman.delete', ['foreman' => $foreman->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('DELETE')
-                                            Are you sure to delete selected block <b>"{{ $block->code }}"</b>?
+                                            Are you sure to delete selected foreman <b>"{{ $foreman->name }}"</b>?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button"
@@ -122,22 +132,31 @@ Daftar Block
     <div class="col-md-4">
         <div class="card">
             <div class="card-header">
-                Add block
+                Tambah Mandor
             </div>
             <div class="card-body">
-                <form action="{{ route('superadmin.block.store') }}" method="post">
+                <form action="{{ route('assistant.foreman.store') }}" method="post">
                     @csrf
                     <div class="form-group">
-                        <label for="block">Block</label>
-                        <input type="text" name="block" id="block" class="form-control">
+                        <label for="foreman">Nama</label>
+                        <input type="text" name="foreman" id="foreman" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="afdelling">Afdelling</label>
-                        <select name="afdelling_id" id="afdelling" class="form-control">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="afdelling_id">Afdelling</label>
+                        <select name="afdelling_id" id="afdelling_id" class="form-control">
                             @foreach($afdellings as $af)
-                            <option value="{{$af->id}}">{{ $af->name }}</option>
+                            <option value="{{ $af->id }}">{{ $af->name }}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" class="form-control" required>
                     </div>
                     <button type="submit" class="btn btn-sm rounded-pill btn-outline-primary pl-3 pr-3">Add</button>
                 </form>

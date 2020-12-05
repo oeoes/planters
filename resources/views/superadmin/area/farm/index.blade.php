@@ -1,4 +1,4 @@
-@extends('assistant.layouts.app')
+@extends('superadmin.layouts.app')
 
 @section('title', 'Daftar Kebun')
 
@@ -24,10 +24,11 @@
                       <td scope="row">{{ $loop->iteration }}</td>
                       <td>{{ $farm->name }}</td>
                       <td>
-                        <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3 mb-2" data-toggle="modal"
+                        <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
                             data-target="#edit-farm{{$key}}"><i
                                 class="nav-icon fas fa-pen"></i>
                         </button>
+                        <div class="mb-1"></div>
                         <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"
                             data-target="#delete-farm{{$key}}"><i
                                 class="nav-icon fas fa-trash"></i>
@@ -46,7 +47,7 @@
                                       </button>
                                   </div>
                                   <div class="modal-body">
-                                      <form action="{{ route('assistant.farm.update', ['farm' => $farm->id]) }}" method="post">
+                                      <form action="{{ route('superadmin.farm.update', ['farm' => $farm->id]) }}" method="post">
                                           @csrf
                                           @method('PUT')
                                           <div class="form-group">
@@ -79,7 +80,7 @@
                                       </button>
                                   </div>
                                   <div class="modal-body">
-                                      <form action="{{ route('assistant.farm.delete', ['farm' => $farm->id]) }}" method="post">
+                                      <form action="{{ route('superadmin.farm.delete', ['farm' => $farm->id]) }}" method="post">
                                           @csrf
                                           @method('DELETE')
                                           Are you sure to delete selected farm <b>"{{ $farm->name }}"</b> ?
@@ -107,7 +108,7 @@
             Add Farm
         </div>
         <div class="card-body">
-            <form action="{{ route('assistant.farm.store') }}" method="post">
+            <form action="{{ route('superadmin.farm.store') }}" method="post">
                 @csrf
                 <div class="form-group">
                     <label for="farm">Farm</label>
