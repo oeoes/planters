@@ -43,7 +43,6 @@
             </div>
             <div class="content">
                 <div class="container-fluid" style="min-height: 1000px">
-
                     @include('assistant.layouts.messages')
 
                     @yield('content')

@@ -64,9 +64,7 @@ Daftar Block
                                             <div class="form-group">
                                                 <label for="afdelling">Afdelling</label>
                                                 <select name="afdelling_id" id="afdelling" class="form-control">
-                                                    @foreach($afdellings as $af)
-                                                    <option <?php if($block->afdelling_id == $af->id) echo "selected" ?> value="{{$af->id}}">{{ $af->name }}</option>
-                                                    @endforeach
+                                                    
                                                 </select>
                                             </div>
                                     </div>

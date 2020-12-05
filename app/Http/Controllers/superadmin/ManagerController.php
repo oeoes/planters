@@ -4,6 +4,8 @@ namespace App\Http\Controllers\superadmin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\FarmManager;
+use App\Models\Farm;
 
 class ManagerController extends Controller
 {
@@ -14,7 +16,9 @@ class ManagerController extends Controller
      */
     public function index()
     {
-        return view('superadmin.users.manager.index');
+        $managers = FarmManager::all();
+        $farms = Farm::all();
+        return view('superadmin.users.manager.index')->with(['managers' => $managers, 'farms' => $farms]);
     }
 
     /**
@@ -35,7 +39,13 @@ class ManagerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        FarmManager::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'afdelling_id' => $request->afdelling_id,
+            'password' => bcrypt($request->password),
+        ]);
+        return back();
     }
 
     /**
@@ -78,8 +88,9 @@ class ManagerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(FarmManager $manager_id)
     {
-        //
+        $manager_id->delete();
+        return back();
     }
 }

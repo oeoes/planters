@@ -25,21 +25,21 @@
               <p>Dashboard</p>
             </a>
           </li>
-          <li class="nav-header ml-1">Rencana Kerja Harian</li>
+          <!-- <li class="nav-header ml-1">Rencana Kerja Harian</li>
           <li class="nav-item has-threeview">
-            <a href="{{ route('assistant.maintain.index') }}" class="nav-link">
+            <a href="" class="nav-link">
               <i class="nav-icon fas fa-tasks"></i>
               <p>RKH Rawat <i class="right fas fa-angle-left"></i></p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('assistant.maintain.spraying') }}" class="nav-link">
+                <a href="" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Spraying</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('assistant.maintain.fertilizer') }}" class="nav-link">
+                <a href="" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Fertilizer</p>
                 </a>
@@ -77,7 +77,7 @@
               <i class="nav-icon fas fa-chart-line"></i>
               <p>Pemutuan Panen</p>
             </a>
-          </li>
+          </li> -->
 
           <li class="nav-header ml-1">Area</li>
           
