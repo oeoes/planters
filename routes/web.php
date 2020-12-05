@@ -114,11 +114,24 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
  * End
  */
 
+
+/** Farm Manager
+ * Start
+ */
+
 Route::group(['prefix' => 'manager', 'middleware' => ['auth:farmmanager']], function () {
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', [FM_DashboardController::class, 'index'])->name('manager.dashboard');    
     });
 });
+
+/** Farm Manager
+ * End
+ */
+
+ /** Assistant Start
+ * End
+ */
 
 Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], function () {
 
@@ -197,6 +210,10 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
     });
 
 });
+
+/** Assistant
+ * End
+ */
 
 Route::get('/clear', function() { return session()->flush();});
 // Route::get('/test', [TestController::class, 'each']);
