@@ -2,24 +2,25 @@
 
 use Illuminate\Support\Facades\Route;
 
+// ASSISTANT
 use App\Http\Controllers\DashboardController as AS_DashboardController;
-use App\Http\Controllers\manager\DashboardController as FM_DashboardController;
 
+
+
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ManagerController;
+
+// SUPERADMIN
 use App\Http\Controllers\superadmin\DashboardController  as SU_DashboardController;
 use App\Http\Controllers\superadmin\AreaController  as SU_AreaController;
-use App\Http\Controllers\superadmin\TestController as SU_TestController;
 use App\Http\Controllers\superadmin\MaintainController as SU_MaintainController;
 use App\Http\Controllers\superadmin\HarvestingController as SU_HarvestingController;
-use App\Http\Controllers\superadmin\EmployeeController as SU_EmployeeController;
 use App\Http\Controllers\superadmin\ForemanController as SU_ForemanController;
 use App\Http\Controllers\superadmin\SubforemanController as SU_SubforemanController;
 
-use App\Http\Controllers\AuthController;
-
-// SUPERADMIN
-
-
 // FARMMANAGER
+use App\Http\Controllers\manager\DashboardController as FM_DashboardController;
+
 
 Route::get('/test', function() {return view('root.app'); });
 
@@ -28,7 +29,8 @@ Route::get('/', function() {
 });
 Route::get('/login',  [AuthController::class, 'loginform'])->middleware('guest');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.process');
-Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:assistant,farmmanager,superadmin')->name('logout');
+Route::get('/logout', [AuthController::class, 'logout'])
+     ->middleware('auth:assistant,farmmanager,superadmin')->name('logout');
 
 /** Super Admin
  * Start
@@ -91,7 +93,11 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
         Route::delete('/delete/{foreman}', [SU_ForemanController::class, 'delete'])->name('superadmin.foreman.delete'); 
     });
 
-    Route::group(['prefix' => 'employee'], function () {
+    Route::group(['prefix' => 'manager'], function () {
+        Route::get('/', [ManagerController::class, 'super']);
+    });
+
+    Route::group(['prefix' => 'assistant'], function () {
         
     });
 
@@ -192,21 +198,13 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
         Route::delete('/delete/{foreman}', [ForemanController::class, 'delete'])->name('assistant.foreman.delete'); 
     });
 
-    Route::group(['prefix' => 'employee'], function () {
-        Route::get('/', [SU_EmployeeController::class, 'index'])->name('assistant.employee.index');
-    });
-
     Route::group(['prefix' => 'maintain'], function () {
-        // Route::get('/', [MaintainController::class, 'index'])->name('assistant.maintain.index');
-        // Route::post('/filter', [MaintainController::class, 'filter'])->name('assistant.maintain.filter');
-
-        Route::get('/spraying', [SU_MaintainController::class, 'spraying'])->name('assistant.maintain.spraying');
-        Route::get('/fertilizer', [SU_MaintainController::class, 'fertilizer'])->name('assistant.maintain.fertilizer');
-        Route::get('/circle', [SU_MaintainController::class, 'circle'])->name('assistant.maintain.circle');
-        Route::get('/pruning', [SU_MaintainController::class, 'pruning'])->name('assistant.maintain.pruning');
-        Route::get('/gawangan', [SU_MaintainController::class, 'gawangan'])->name('assistant.maintain.gawangan');
-        Route::get('/pestcontrol', [SU_MaintainController::class, 'pestcontrol'])->name('assistant.maintain.pestcontrol');
-
+        Route::get('/spraying', [MaintainController::class, 'spraying'])->name('assistant.maintain.spraying');
+        Route::get('/fertilizer', [MaintainController::class, 'fertilizer'])->name('assistant.maintain.fertilizer');
+        Route::get('/circle', [MaintainController::class, 'circle'])->name('assistant.maintain.circle');
+        Route::get('/pruning', [MaintainController::class, 'pruning'])->name('assistant.maintain.pruning');
+        Route::get('/gawangan', [MaintainController::class, 'gawangan'])->name('assistant.maintain.gawangan');
+        Route::get('/pestcontrol', [MaintainController::class, 'pestcontrol'])->name('assistant.maintain.pestcontrol');
     });
 
 });
