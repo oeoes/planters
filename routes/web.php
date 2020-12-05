@@ -217,3 +217,12 @@ Route::get('/clear', function() { return session()->flush();});
 // Route::get('/test', [TestController::class, 'each']);
 // Route::get('/img', [TestController::class, 'img']);
 
+
+
+/**
+ * Ajax Call
+ */
+
+ // get list afdelling based on farm id
+Route::get('/afdelling/list/{farm_id}', [SU_AreaController::class, 'get_afdelling_of_farm']);
+

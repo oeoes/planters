@@ -103,16 +103,16 @@ class AreaController extends Controller
     }
 
     public function block() {
+        $farms = Farm::all();
         $blocks = DB::table('blocks')
                 ->join('afdellings', 'afdellings.id', '=', 'blocks.afdelling_id')
                 ->join('farms', 'farms.id', '=', 'afdellings.farm_id')
                 ->select('blocks.*', 'afdellings.name as afdelling', 'afdellings.id as afdelling_id', 'farms.name as farm', 'farms.id as farm_id')
                 ->get();
-        $afdellings = Afdelling::all();
 
         return view('superadmin.area.block.index', [
             'blocks' => $blocks,
-            'afdellings' => $afdellings
+            'farms' => $farms
         ]);
     }
 
@@ -219,6 +219,14 @@ class AreaController extends Controller
         }
         $block = Block::whereIn('id', $block)->get();
         return response()->json($block);
+    }
+
+    /**
+     * Ajax Request
+     */
+
+    public function get_afdelling_of_farm ($farm_id) {
+        return response()->json(['afdellings' => Afdelling::where('farm_id', $farm_id)->get()]);
     }
 
 }
