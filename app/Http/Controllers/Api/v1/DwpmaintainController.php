@@ -324,7 +324,7 @@ class DwpmaintainController extends Controller
 
         FillSpraying::create([
             'spraying_id' => $request->spraying_id,
-            'afdelling_id' => fme()->afdelling_id,
+            'afdelling_id' => sfme()->afdelling_id,
             'ftarget_coverage' => $request->ftarget_coverage,
             'fingredients_amount' => $request->fingredients_amount,
             'image' => $image_url,
@@ -375,6 +375,7 @@ class DwpmaintainController extends Controller
 
         FillFertilizer::create([
             'fertilizer_id' => $request->fertilizer_id,
+            'afdelling_id' => sfme()->afdelling_id,
             'ftarget_coverage' => $request->ftarget_coverage,
             'fingredients_amount' => $request->fingredients_amount,
             'image' => $image_url,
@@ -426,6 +427,7 @@ class DwpmaintainController extends Controller
 
         FillPcontrols::create([
             'pcontrol_id' => $request->pcontrol_id,
+            'afdelling_id' => sfme()->afdelling_id,
             'ftarget_coverage' => $request->ftarget_coverage,
             'fingredients_amount' => $request->fingredients_amount,
             'image' => $image_url,
@@ -475,6 +477,7 @@ class DwpmaintainController extends Controller
 
         FillCircle::create([
             'circle_id' => $request->circle_id,
+            'afdelling_id' => sfme()->afdelling_id,
             'ftarget_coverage' => $request->ftarget_coverage,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
@@ -524,6 +527,7 @@ class DwpmaintainController extends Controller
 
         FillPruning::create([
             'pruning_id' => $request->pruning_id,
+            'afdelling_id' => sfme()->afdelling_id,
             'ftarget_coverage' => $request->ftarget_coverage,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
@@ -572,6 +576,7 @@ class DwpmaintainController extends Controller
 
         FillGawangan::create([
             'gawangan_id' => $request->gawangan_id,
+            'afdelling_id' => sfme()->afdelling_id,
             'ftarget_coverage' => $request->ftarget_coverage,
             'image' => $image_url,
             'subforeman_note' => $request->subforeman_note,
