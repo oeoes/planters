@@ -8,7 +8,6 @@ use App\Http\Controllers\DashboardController as AS_DashboardController;
 
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ManagerController;
 
 // SUPERADMIN
 use App\Http\Controllers\superadmin\DashboardController  as SU_DashboardController;
@@ -17,6 +16,8 @@ use App\Http\Controllers\superadmin\MaintainController as SU_MaintainController;
 use App\Http\Controllers\superadmin\HarvestingController as SU_HarvestingController;
 use App\Http\Controllers\superadmin\ForemanController as SU_ForemanController;
 use App\Http\Controllers\superadmin\SubforemanController as SU_SubforemanController;
+use App\Http\Controllers\superadmin\ManagerController as SU_ManagerController;
+use App\Http\Controllers\superadmin\AssistantController as SU_AssistantController;
 
 // FARMMANAGER
 
@@ -93,11 +94,11 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
     });
 
     Route::group(['prefix' => 'manager'], function () {
-        Route::get('/', [ManagerController::class, 'super']);
+        Route::get('/', [SU_ManagerController::class, 'index'])->name('superadmin.user.manager.index');
     });
 
     Route::group(['prefix' => 'assistant'], function () {
-        
+        Route::get('/', [SU_AssistantController::class, 'index'])->name('superadmin.user.assistant.index');
     });
 
     Route::group(['prefix' => 'maintain'], function () {

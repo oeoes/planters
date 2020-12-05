@@ -17,15 +17,15 @@ class AuthController extends Controller
 
         if (Auth::guard('assistant')->attempt($credentials)) {
 
-            return redirect()->intended('/assistant/dashboard');
+            return redirect('/assistant/dashboard/');
 
         } else if (Auth::guard('superadmin')->attempt($credentials)) {
-
-            return redirect()->intended('/superadmin/dashboard');
+            
+            return redirect('/superadmin/dashboard/');
 
         } else if (Auth::guard('farmmanager')->attempt($credentials)) {
 
-            return redirect()->route('manager.dashboard');
+            return redirect('/farmmanager/dashboard/');
 
         } else {
 

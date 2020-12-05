@@ -103,14 +103,14 @@
           <li class="nav-header ml-1">User</li>
 
           <li class="nav-item">
-            <a href="{{ route('superadmin.foreman.index') }}" class="nav-link">
+            <a href="{{ route('superadmin.user.manager.index') }}" class="nav-link">
               <i class="nav-icon fas fa-user-tie"></i>
               <p>Manager</p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="{{ route('superadmin.foreman.index') }}" class="nav-link">
+            <a href="{{ route('superadmin.user.assistant.index') }}" class="nav-link">
               <i class="nav-icon fas fa-user-tie"></i>
               <p>Assistant</p>
             </a>
