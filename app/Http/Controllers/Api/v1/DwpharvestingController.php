@@ -132,9 +132,6 @@ class DwpharvestingController extends Controller
         $used_coverage = $request->ftarget_coverage;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
         
         return res(true, 200, 'Harvesting report filled successfully');
     }
