@@ -133,8 +133,9 @@ class BlockController extends Controller
         $single_ref = BlockReference::find($block_ref_id);
         $today = date('Y-m-d');
         //search today where rkh didnot completed
-        $data = $single_ref->model::where('date', $today)->where('block_ref_id', $block_ref_id)->where('completed', 0)->first();
+        $data = $single_ref->model::where('date', $today)->where('block_ref_id', $block_ref_id)->first();
 
+        // kalo ada data hari ini
         if ($data) {
             if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
                 $ingredients_amount = $data->ingredients_amount;
@@ -240,24 +241,48 @@ class BlockController extends Controller
 
             return res(true, 200, 'Detail RKH', $data); 
 
+        // kalo gada data hari ini
         } else {
 
-            if ($single_ref->jobtype_id == 7) {
-                $data = [
-                    'block_code' => block($single_ref->block_id),
-                    'job_type' => $single_ref->jobtype_id,
-                    'available_coverage' => $single_ref->available_coverage,
-                    'population_coverage' => $single_ref->population_coverage,
-                ];
-            } else {
-                $data = [
-                    'block_code' => block($single_ref->block_id),
-                    'job_type' => $single_ref->jobtype_id,
-                    'available_coverage' => $single_ref->available_coverage
-                ];
+            // kalo ada data untuk date diatas today
+            $data_next = $single_ref->model::where('date', '>', $today)->where('block_ref_id', $block_ref_id)->first();
+            if ($data_next) {
+                if ($single_ref->jobtype_id == 7) {
+                    $data = [
+                        'create' => 0,
+                    ];
+                } else {
+                    $data = [
+                        'create' => 0,
+                    ];
+                }
+
+                return res(true, 200, 'Your rkh is active for tomorrow', $data);
+
+            } elseif (! $data_next) {
+                // kalo gada data rkh untuk besok
+                if ($single_ref->jobtype_id == 7) {
+                    $data = [
+                        'block_code' => block($single_ref->block_id),
+                        'job_type' => $single_ref->jobtype_id,
+                        'available_coverage' => $single_ref->available_coverage,
+                        'population_coverage' => $single_ref->population_coverage,
+                        'create' => 0,
+                    ];
+                } else {
+                    $data = [
+                        'block_code' => block($single_ref->block_id),
+                        'job_type' => $single_ref->jobtype_id,
+                        'available_coverage' => $single_ref->available_coverage,
+                        'create' => 0,
+                    ];
+                }
+
+                return res(true, 200, '', $data);
+
             }
 
-            return res(true, 200, 'There is no schedule today, create another RKH for tomorrow', $data);
+
 
         }
 
