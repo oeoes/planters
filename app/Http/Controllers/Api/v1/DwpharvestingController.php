@@ -119,6 +119,7 @@ class DwpharvestingController extends Controller
             'final_harvesting' => (float) $request->bjr * $total_harvesting,
             'image' => $image,
             'subforeman_note' => $request->subforeman_note,
+            'afdelling_id' => $request->afdelling_id,
             'begin' => $request->begin,
             'ended' => $request->ended,
         ]);
