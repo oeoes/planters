@@ -312,13 +312,23 @@ class DwpmaintainController extends Controller
             $image_folder = 'maintain/spraying';
             $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
             $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
-            $image_url = asset('/storage/' . $image_url);
+            $image = asset('/storage/' . $image_url);
         } else {
-            $image_url = null;
+            $image = null;
         }
 
-        $request['afdelling_id'] = sfme()->afdelling_id;
-        FillSpraying::create($request->all());
+        FillSpraying::create([
+            'spraying_id' => $request->spraying_id,
+            'afdelling_id' => $request->afdelling_id,
+            'ftarget_coverage' => $request->ftarget_coverage,
+            'fingredients_amount' => $request->fingredients_amount,
+            'image' => $image,
+            'hk_name' => $request->hk_name,
+            'subforeman_note' => $request->subforeman_note,
+            'begin' => $request->begin,
+            'ended' => $request->ended,
+            'completed' => 1
+        ]);
 
         $reference = SprayingType::find($request->spraying_id);
         $block_ref_id = $reference->block_ref_id;
@@ -344,9 +354,9 @@ class DwpmaintainController extends Controller
         if ($validator->fails())
             return res(false, 404, $validator->errors()->first());
 
-        $fillfertilizer = FillFertilizer::where('fertilizer_id', $request->fertilizer_id)->first();
-        if ($fillfertilizer) 
-            return res(false, 404, 'Data for today existed');
+        // $fillfertilizer = FillFertilizer::where('fertilizer_id', $request->fertilizer_id)->first();
+        // if ($fillfertilizer) 
+        //     return res(false, 404, 'Data for today existed');
 
         if ($request->hasFile('image')) {
             $request->validate([ 'image' => 'image:jpeg,png,jpg|max:2048' ]);
@@ -354,13 +364,23 @@ class DwpmaintainController extends Controller
             $image_folder = 'maintain/fertilizer';
             $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
             $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
-            $image_url = asset('/storage/' . $image_url);
+            $image = asset('/storage/' . $image_url);
         } else {
-            $image_url = null;
+            $image = null;
         }
-
-        $request['afdelling_id'] = sfme()->afdelling_id;
-        FillFertilizer::create($request->all());
+        
+        FillFertilizer::create([
+            'fertilizer_id' => $request->fertilizer_id,
+            'afdelling_id' => $request->afdelling_id,
+            'ftarget_coverage' => $request->ftarget_coverage,
+            'fingredients_amount' => $request->fingredients_amount,
+            'image' => $image,
+            'hk_name' => $request->hk_name,
+            'subforeman_note' => $request->subforeman_note,
+            'begin' => $request->begin,
+            'ended' => $request->ended,
+            'completed' => 1
+        ]);
 
         $reference = FertilizerType::find($request->fertilizer_id);
         $block_ref_id = $reference->block_ref_id;
@@ -396,13 +416,23 @@ class DwpmaintainController extends Controller
             $image_folder = 'maintain/pest_control';
             $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
             $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
-            $image_url = asset('/storage/' . $image_url);
+            $image = asset('/storage/' . $image_url);
         } else {
-            $image_url = null;
+            $image = null;
         }
 
-        $request['afdelling_id'] = sfme()->afdelling_id;
-        FillPcontrols::create($request->all());
+        FillPcontrols::create([
+            'pcontrol_id' => $request->pcontrol_id,
+            'afdelling_id' => $request->afdelling_id,
+            'ftarget_coverage' => $request->ftarget_coverage,
+            'fingredients_amount' => $request->fingredients_amount,
+            'image' => $image,
+            'hk_name' => $request->hk_name,
+            'subforeman_note' => $request->subforeman_note,
+            'begin' => $request->begin,
+            'ended' => $request->ended,
+            'completed' => 1
+        ]);
 
         $reference = PestControl::find($request->pcontrol_id);
         $block_ref_id = $reference->block_ref_id;
@@ -427,9 +457,9 @@ class DwpmaintainController extends Controller
         if ($validator->fails())
             return res(false, 404, $validator->errors()->first());
 
-        $fillcircle = FillCircle::where('circle_id', $request->circle_id)->first();
-        if ($fillcircle) 
-            return res(false, 404, 'Data for today existed');
+        // $fillcircle = FillCircle::where('circle_id', $request->circle_id)->first();
+        // if ($fillcircle) 
+        //     return res(false, 404, 'Data for today existed');
 
         if ($request->hasFile('image')) {
             $request->validate([ 'image' => 'image:jpeg,png,jpg|max:2048' ]);
@@ -437,13 +467,22 @@ class DwpmaintainController extends Controller
             $image_folder = 'maintain/circle';
             $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
             $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
-            $image_url = asset('/storage/' . $image_url);
+            $image = asset('/storage/' . $image_url);
         } else {
-            $image_url = null;
+            $image = null;
         }
-
-        $request['afdelling_id'] = sfme()->afdelling_id;
-        FillCircle::create($request->all());
+        
+        FillCircle::create([
+            'circle_id' => $request->circle_id,
+            'afdelling_id' => $request->afdelling_id,
+            'ftarget_coverage' => $request->ftarget_coverage,
+            'image' => $image,
+            'hk_name' => $request->hk_name,
+            'subforeman_note' => $request->subforeman_note,
+            'begin' => $request->begin,
+            'ended' => $request->ended,
+            'completed' => 1
+        ]);
 
         $reference = CircleType::find($request->circle_id);
         $block_ref_id = $reference->block_ref_id;
@@ -479,13 +518,22 @@ class DwpmaintainController extends Controller
             $image_folder = 'maintain/pruning';
             $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
             $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
-            $image_url = asset('/storage/' . $image_url);
+            $image = asset('/storage/' . $image_url);
         } else {
-            $image_url = null;
+            $image = null;
         }
 
-        $request['afdelling_id'] = sfme()->afdelling_id;
-        FillPruning::create($request->all());
+        FillPruning::create([
+            'pruning_id' => $request->pruning_id,
+            'afdelling_id' => $request->afdelling_id,
+            'ftarget_coverage' => $request->ftarget_coverage,
+            'image' => $image,
+            'hk_name' => $request->hk_name,
+            'subforeman_note' => $request->subforeman_note,
+            'begin' => $request->begin,
+            'ended' => $request->ended,
+            'completed' => 1
+        ]);
 
         $reference = PruningType::find($request->pruning_id);
         $block_ref_id = $reference->block_ref_id;
@@ -520,13 +568,22 @@ class DwpmaintainController extends Controller
             $image_folder = 'maintain/gawangan';
             $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
             $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
-            $image_url = asset('/storage/' . $image_url);
+            $image = asset('/storage/' . $image_url);
         } else {
-            $image_url = null;
+            $image = null;
         }
 
-        $request['afdelling_id'] = sfme()->afdelling_id;
-        FillGawangan::create($request->all());
+        FillGawangan::create([
+            'gawangan_id' => $request->gawangan_id,
+            'afdelling_id' => $request->afdelling_id,
+            'ftarget_coverage' => $request->ftarget_coverage,
+            'image' => $image,
+            'hk_name' => $request->hk_name,
+            'subforeman_note' => $request->subforeman_note,
+            'begin' => $request->begin,
+            'ended' => $request->ended,
+            'completed' => 1
+        ]);
 
         $reference = GawanganType::find($request->gawangan_id);
         $block_ref_id = $reference->block_ref_id;
@@ -594,23 +651,6 @@ class DwpmaintainController extends Controller
         $single_ref = BlockReference::find($block_ref_id);
         $data = $single_ref->model::where('block_ref_id', $block_ref_id)->where('date', $date)->first();
 
-            // if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-            //     $ingredients_amount = $data->ingredients_amount;
-            //     $ingredients_type = $data->ingredients_type;
-            //     $akp = null;
-            //     $bjr = null;
-            // } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
-            //     $ingredients_amount = null;
-            //     $ingredients_type = null;
-            //     $akp = null;
-            //     $bjr = null;
-            // } else if (in_array($single_ref->jobtype_id, [7])) {
-            //     $ingredients_amount = null;
-            //     $ingredients_type = null;
-            //     $akp = $data->akp;
-            //     $bjr = $data->bjr;
-            // }
-
             $foreman = [
                 'date' => date('Y-m-d', strtotime($data->date)),
                 'subforeman' => subforeman($data->subforeman_id)->name,
@@ -656,24 +696,6 @@ class DwpmaintainController extends Controller
 
             } else {
 
-                // if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-                //     $ingredients_amount = $fillout->fingredients_amount;
-                //     $ingredients_type = $fillout->fingredients_type;
-                //     $akp = null;
-                //     $bjr = null;
-                // } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
-                //     // circle, pruning, gawangan
-                //     $ingredients_amount = null;
-                //     $ingredients_type = null;
-                //     $akp = null;
-                //     $bjr = null;
-                // } else if (in_array($single_ref->jobtype_id, [7])) {
-                //     $ingredients_amount = null;
-                //     $ingredients_type = null;
-                //     $akp = $fillout->akp;
-                //     $bjr = $fillout->bjr;
-                // }
-
                 $subforeman = [
                     "begin" => $fillout->begin,
                     "ended" => $fillout->ended,
@@ -715,33 +737,16 @@ class DwpmaintainController extends Controller
                 break;
             }
         }
-        if ($data == '') {
+        if ($data == '')
             return res(false, 404, 'There is no job today');
-        }
-        
+
         $blockref = BlockReference::where('id', $data->block_ref_id)->first();
         $block = block($blockref->block_id);
+        $subforeman_status = $blockref->fill::where('fertilizer_id', $data->id)->first();
 
-        // if (in_array($blockref->jobtype_id, [1, 2, 6])) {
-        //     $ingredients_amount = $data->ingredients_amount;
-        //     $ingredients_type   = $data->ingredients_type;
-        //     $bjr = null;
-        // } else if (in_array($blockref->jobtype_id, [3, 4, 5])) {
-        //     $ingredients_amount = null;
-        //     $ingredients_type = null;
-        //     $bjr = null;
-        // } else if (in_array($blockref->jobtype_id, [7])) {
-        //     $ingredients_amount = null;
-        //     $ingredients_type = null;
-        //     $bjr = $data->bjr;
-        //     $akp = $data->akp;
-        //     $taksasi = $data->taksasi;
-        // }
-
-        
         $subforeman = [
             'date' => $data->date,
-            'job_type_id' => $data->id,
+            'job_type_id' => $blockref->jobtype_id,
             'foreman' => Foreman::where('id', $data->foreman_id)->select('name', 'email')->first(),
             'block_code' => $block,
             'hk_used' => $data->hk_used,
@@ -752,7 +757,7 @@ class DwpmaintainController extends Controller
             'ingredients_type'   => !$data->ingredients_type   ? null : $data->ingredients_type,
             'ingredients_amount' => !$data->ingredients_amount ? null : $data->ingredients_amount,
             'foreman_note' => $data->foreman_note,
-            'completed' => $data->completed,
+            'completed' => isset($subforeman_status->completed) ? $subforeman_status->completed : 0,
         ];
 
         return res(true, 200, 'Job today', $subforeman);
@@ -760,25 +765,25 @@ class DwpmaintainController extends Controller
 
     public function set_complete_rkh($block_ref_id) {
         $ref = BlockReference::where('id', $block_ref_id)->first();
-        if (! $ref) {
-            return res(false, 404, 'Block reference not found');
-        }
+        if (! $ref)  return res(false, 404, 'Block reference not found');
 
         $data = $ref->model::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->first();
         if ($data) {
-            $data->update(['completed' => 1]);
 
-            $subforeman = Subforeman::where('id', $data->subforeman_id)->first();
-            $subforeman->update(['active' => 0]);
+            $data->increment('completed');
+
+            // Subforeman::where('id', $data->subforeman_id)->update(['active' => 0]);
 
             if ($ref->available_coverage == 0) {
                 $ref->increment('completed');
                     return res(true, 200, 'Block spreading completed, view this block on history menu');
             }
+
             return res(true, 200, 'Daily work plan completed');
-        } else {
+
+        } 
+
             return res(false, 404, 'Daily work plan not found');
-        }
     }
 
     public static function get_job_type($index) {

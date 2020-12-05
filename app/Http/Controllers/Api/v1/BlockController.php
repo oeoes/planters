@@ -68,6 +68,7 @@ class BlockController extends Controller
             'available_coverage'  => $request->total_coverage,
             'model' => model($request->jobtype_id),
             'fill'  => fill($request->jobtype_id),
+            'fill_id' => fill_id($request->jobtype_id),
             'completed' => 0,
         ]);
 
@@ -132,27 +133,12 @@ class BlockController extends Controller
 
         $single_ref = BlockReference::find($block_ref_id);
         $today = date('Y-m-d');
+
         //search today where rkh didnot completed
         $data = $single_ref->model::where('date', $today)->where('block_ref_id', $block_ref_id)->first();
 
         // kalo ada data hari ini
         if ($data) {
-            if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-                $ingredients_amount = $data->ingredients_amount;
-                $ingredients_type = $data->ingredients_type;
-                $akp = null;
-                $bjr = null;
-            } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
-                $ingredients_amount = null;
-                $ingredients_type = null;
-                $akp = null;
-                $bjr = null;
-            } else if (in_array($single_ref->jobtype_id, [7])) {
-                $ingredients_amount = null;
-                $ingredients_type = null;
-                $akp = $data->akp;
-                $bjr = $data->bjr;
-            }
 
             $foreman = [
                 'date' => date('Y-m-d', strtotime($data->date)),
@@ -160,15 +146,15 @@ class BlockController extends Controller
                 'block_code' => block($single_ref->block_id),
                 'job_type'   => $single_ref->jobtype_id,
                 'target_coverage'    => $data->target_coverage,
-                'akp' => $akp,
-                'bjr' => $bjr,
-                'taksasi' => $data->taksasi,
-                'basis' => $data->basis,
-                'ingredients_type'   => $ingredients_type,
-                'ingredients_amount' => $ingredients_amount,
+                'akp'        => !$data->akp ? null : $data->akp,
+                'bjr'        => !$data->bjr ? null : $data->bjr,
+                'taksasi'    => !$data->taksasi ? null : $data->taksasi,
+                'basis'      => !$data->basis ? null : $data->basis,
+                'ingredients_type'   => !$data->ingredients_type ? null : $data->ingredients_type,
+                'ingredients_amount' => !$data->ingredients_amount ? null : $data->ingredients_amount,
                 'foreman_note' => $data->foreman_note,
-                'hk_used'   => $data->hk_used,
-                'completed' => 0,
+                'hk_used'      => $data->hk_used,
+                'completed'    => $data->completed,
             ];
 
             switch ($single_ref->jobtype_id) {
@@ -184,24 +170,12 @@ class BlockController extends Controller
             if ($fillout) {
 
                 if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-                    $ingredients_amount = $fillout->fingredients_amount;
-                    $ingredients_type   = $fillout->ingredients_type;
-                    $akp = null;
-                    $bjr = null;
                     $hk_names = $fillout->hk_name;
                     $final_harvesting = null;
                 } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
-                    $ingredients_amount = null;
-                    $ingredients_type = null;
-                    $akp = null;
-                    $bjr = null;
                     $hk_names = $fillout->hk_name;
                     $final_harvesting = null;
                 } else if (in_array($single_ref->jobtype_id, [7])) {
-                    $ingredients_amount = null;
-                    $ingredients_type = null;
-                    $akp = $fillout->akp;
-                    $bjr = $fillout->bjr;
                     $harvest_id = $data->id;
                     $employee_harvestings = EmployeeHarvesting::where('harvest_id', $harvest_id)->get();
                     $hk_listed = $employee_harvestings;
@@ -220,14 +194,15 @@ class BlockController extends Controller
                     "begin" => $fillout->begin,
                     "ended" => $fillout->ended,
                     "target_coverage"    => $fillout->ftarget_coverage,
-                    "ingredients_type"   => $ingredients_type,
-                    "ingredients_amount" => $ingredients_amount,
-                    "image" => $fillout->image,
+                    "ingredients_type"   => !$fillout->ingredients_type ? null : $fillout->ingredients_type,
+                    "ingredients_amount" => !$fillout->fingredients_amount ? null : $fillout->fingredients_amount,
+                    "image"     => $fillout->image,
                     "subforeman_note" => $fillout->subforeman_note,
                     "completed" => $fillout->completed,
-                    "hk_name" => isset($hk_names) ? $hk_names : null,
+                    "hk_name"   => isset($hk_names) ? $hk_names : null,
                     "hk_listed" => isset($hk_listed_arr) ? $hk_listed_arr : null,
-                    "final_harvesting" => $final_harvesting,
+                    "final_harvesting" => !$final_harvesting ? null : $final_harvesting,
+                    "bjr" => !$fillout->bjr ? null : $fillout->bjr,
                     "completed" => $fillout->completed,
                 ];
 

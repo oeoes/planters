@@ -94,9 +94,9 @@ class DwpharvestingController extends Controller
             $image_folder = 'harvesting';
             $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
             $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
-            $image_url = asset('/storage/' . $image_url);
+            $image = asset('/storage/' . $image_url);
         } else {
-            $image_url = null;
+            $image = null;
         }
 
         $employees = json_decode($request->hk_listed);
@@ -117,7 +117,7 @@ class DwpharvestingController extends Controller
             'bjr' => $request->bjr,
             'total_harvesting' => $total_harvesting,
             'final_harvesting' => (float) $request->bjr * $total_harvesting,
-            'image' => $image_url,
+            'image' => $image,
             'subforeman_note' => $request->subforeman_note,
             'begin' => $request->begin,
             'ended' => $request->ended,
