@@ -594,22 +594,22 @@ class DwpmaintainController extends Controller
         $single_ref = BlockReference::find($block_ref_id);
         $data = $single_ref->model::where('block_ref_id', $block_ref_id)->where('date', $date)->first();
 
-            if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-                $ingredients_amount = $data->ingredients_amount;
-                $ingredients_type = $data->ingredients_type;
-                $akp = null;
-                $bjr = null;
-            } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
-                $ingredients_amount = null;
-                $ingredients_type = null;
-                $akp = null;
-                $bjr = null;
-            } else if (in_array($single_ref->jobtype_id, [7])) {
-                $ingredients_amount = null;
-                $ingredients_type = null;
-                $akp = $data->akp;
-                $bjr = $data->bjr;
-            }
+            // if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
+            //     $ingredients_amount = $data->ingredients_amount;
+            //     $ingredients_type = $data->ingredients_type;
+            //     $akp = null;
+            //     $bjr = null;
+            // } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
+            //     $ingredients_amount = null;
+            //     $ingredients_type = null;
+            //     $akp = null;
+            //     $bjr = null;
+            // } else if (in_array($single_ref->jobtype_id, [7])) {
+            //     $ingredients_amount = null;
+            //     $ingredients_type = null;
+            //     $akp = $data->akp;
+            //     $bjr = $data->bjr;
+            // }
 
             $foreman = [
                 'date' => date('Y-m-d', strtotime($data->date)),
@@ -617,10 +617,10 @@ class DwpmaintainController extends Controller
                 'block_code' => block($single_ref->block_id),
                 'job_type'   => $single_ref->jobtype_id,
                 'target_coverage'    => $data->target_coverage,
-                'akp' => $akp,
-                'bjr' => $bjr,
-                'ingredients_type'   => $ingredients_type,
-                'ingredients_amount' => $ingredients_amount,
+                'akp' => !$data->akp ? null : $data->akp,
+                'bjr' => !$data->bjr ? null : $data->bjr,
+                'ingredients_type'   => !$data->ingredients_type ? null : $data->ingredients_type,
+                'ingredients_amount' => !$data->ingredients_amount ? null : $data->ingredients_amount,
                 'foreman_note' => $data->foreman_note,
                 'hk_used'   => $data->hk_used,
                 'completed' => 0,
@@ -651,34 +651,36 @@ class DwpmaintainController extends Controller
             }
 
             if (! $fillout) {
+
                 $subforeman = null;
+
             } else {
 
-                if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-                    $ingredients_amount = $fillout->fingredients_amount;
-                    $ingredients_type = $fillout->fingredients_type;
-                    $akp = null;
-                    $bjr = null;
-                } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
-                    // circle, pruning, gawangan
-                    $ingredients_amount = null;
-                    $ingredients_type = null;
-                    $akp = null;
-                    $bjr = null;
-                } else if (in_array($single_ref->jobtype_id, [7])) {
-                    $ingredients_amount = null;
-                    $ingredients_type = null;
-                    $akp = $fillout->akp;
-                    $bjr = $fillout->bjr;
-                }
+                // if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
+                //     $ingredients_amount = $fillout->fingredients_amount;
+                //     $ingredients_type = $fillout->fingredients_type;
+                //     $akp = null;
+                //     $bjr = null;
+                // } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
+                //     // circle, pruning, gawangan
+                //     $ingredients_amount = null;
+                //     $ingredients_type = null;
+                //     $akp = null;
+                //     $bjr = null;
+                // } else if (in_array($single_ref->jobtype_id, [7])) {
+                //     $ingredients_amount = null;
+                //     $ingredients_type = null;
+                //     $akp = $fillout->akp;
+                //     $bjr = $fillout->bjr;
+                // }
 
                 $subforeman = [
                     "begin" => $fillout->begin,
                     "ended" => $fillout->ended,
                     "target_coverage" => $fillout->ftarget_coverage,
-                    'bjr' => $bjr,
-                    'ingredients_type'   => $ingredients_type,
-                    'ingredients_amount' => $ingredients_amount,
+                    'bjr' => !$fillout->bjr ? null : $fillout->bjr,
+                    'ingredients_type'   => !$fillout->fingredients_type ? null : $fillout->fingredients_type,
+                    'ingredients_amount' => !$fillout->fingredients_amount ? null : $fillout->fingredients_amount ,
                     "image" => $fillout->image,
                     "subforeman_note" => $fillout->subforeman_note,
                     "hk_name" => $fillout->hk_name,
@@ -696,13 +698,13 @@ class DwpmaintainController extends Controller
 
     public function check_job_today($subforeman_id) {
         $joblists = [
-            SprayingType::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
-            FertilizerType::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
-            CircleType::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
-            PruningType::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
-            GawanganType::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
-            PestControl::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
-            HarvestingType::where('subforeman_id', $subforeman_id)->where('completed', 0)->first(),
+            SprayingType::where('subforeman_id', $subforeman_id)->where('date', date('Y-m-d'))->first(),
+            FertilizerType::where('subforeman_id', $subforeman_id)->where('date', date('Y-m-d'))->first(),
+            CircleType::where('subforeman_id', $subforeman_id)->where('date', date('Y-m-d'))->first(),
+            PruningType::where('subforeman_id', $subforeman_id)->where('date', date('Y-m-d'))->first(),
+            GawanganType::where('subforeman_id', $subforeman_id)->where('date', date('Y-m-d'))->first(),
+            PestControl::where('subforeman_id', $subforeman_id)->where('date', date('Y-m-d'))->first(),
+            HarvestingType::where('subforeman_id', $subforeman_id)->where('date', date('Y-m-d'))->first(),
         ];
         $data = '';
         $job_type = '';
@@ -714,27 +716,27 @@ class DwpmaintainController extends Controller
             }
         }
         if ($data == '') {
-            return res(false, 404, 'There is no job');
+            return res(false, 404, 'There is no job today');
         }
         
         $blockref = BlockReference::where('id', $data->block_ref_id)->first();
         $block = block($blockref->block_id);
 
-        if (in_array($blockref->jobtype_id, [1, 2, 6])) {
-            $ingredients_amount = $data->ingredients_amount;
-            $ingredients_type   = $data->ingredients_type;
-            $bjr = null;
-        } else if (in_array($blockref->jobtype_id, [3, 4, 5])) {
-            $ingredients_amount = null;
-            $ingredients_type = null;
-            $bjr = null;
-        } else if (in_array($blockref->jobtype_id, [7])) {
-            $ingredients_amount = null;
-            $ingredients_type = null;
-            $bjr = $data->bjr;
-            $akp = $data->akp;
-            $taksasi = $data->taksasi;
-        }
+        // if (in_array($blockref->jobtype_id, [1, 2, 6])) {
+        //     $ingredients_amount = $data->ingredients_amount;
+        //     $ingredients_type   = $data->ingredients_type;
+        //     $bjr = null;
+        // } else if (in_array($blockref->jobtype_id, [3, 4, 5])) {
+        //     $ingredients_amount = null;
+        //     $ingredients_type = null;
+        //     $bjr = null;
+        // } else if (in_array($blockref->jobtype_id, [7])) {
+        //     $ingredients_amount = null;
+        //     $ingredients_type = null;
+        //     $bjr = $data->bjr;
+        //     $akp = $data->akp;
+        //     $taksasi = $data->taksasi;
+        // }
 
         
         $subforeman = [
@@ -744,12 +746,13 @@ class DwpmaintainController extends Controller
             'block_code' => $block,
             'hk_used' => $data->hk_used,
             'target_coverage' => $data->target_coverage,
-            'bjr' => $bjr,
-            'akp' => !$data->akp ? $data->akp : null,
-            'taksasi' => !$data->taksasi ? $data->taksasi : null,
-            'ingredients_type' => $ingredients_type,
-            'ingredients_amount' => $ingredients_amount,
-            'foreman_note' => $data->foreman_note
+            'bjr'     => !$data->bjr     ? null : $data->bjr,
+            'akp'     => !$data->akp     ? null : $data->akp,
+            'taksasi' => !$data->taksasi ? null : $data->taksasi,
+            'ingredients_type'   => !$data->ingredients_type   ? null : $data->ingredients_type,
+            'ingredients_amount' => !$data->ingredients_amount ? null : $data->ingredients_amount,
+            'foreman_note' => $data->foreman_note,
+            'completed' => $data->completed,
         ];
 
         return res(true, 200, 'Job today', $subforeman);
@@ -761,7 +764,7 @@ class DwpmaintainController extends Controller
             return res(false, 404, 'Block reference not found');
         }
 
-        $data = $ref->model::where('block_ref_id', $block_ref_id)->where('completed', 0)->first();
+        $data = $ref->model::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->first();
         if ($data) {
             $data->update(['completed' => 1]);
 

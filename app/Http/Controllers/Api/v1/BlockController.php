@@ -228,6 +228,7 @@ class BlockController extends Controller
                     "hk_name" => isset($hk_names) ? $hk_names : null,
                     "hk_listed" => isset($hk_listed_arr) ? $hk_listed_arr : null,
                     "final_harvesting" => $final_harvesting,
+                    "completed" => $fillout->completed,
                 ];
 
             } else {
