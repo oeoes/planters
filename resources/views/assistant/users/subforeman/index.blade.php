@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('assistant.layouts.app')
 
 @section('title', 'PLANTERS - Mandor Bidang')
 
@@ -60,6 +60,14 @@ Daftar Mandor Bidang
                                             @csrf
                                             @method('PUT')
                                             <div class="form-group">
+                                                <label for="jobtype_id">Job Type</label>
+                                                <select name="jobtype_id" id="" class="form-control">
+                                                    @foreach ($job_types as $jt)
+                                                    <option <?php if($subforeman->afdelling_id == $jt->id) echo "selected" ?> value="{{ $jt->id }}">{{ $jt->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="subforeman">Nama</label>
                                                 <input type="text" name="subforeman" id="subforeman"
                                                     class="form-control" required value="{{ $subforeman->name }}">
@@ -68,22 +76,6 @@ Daftar Mandor Bidang
                                                 <label for="email">Email</label>
                                                 <input type="email" name="email" id="email" class="form-control"
                                                     required value="{{ $subforeman->email }}">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="afdelling_id">Afdelling</label>
-                                                <select name="afdelling_id" id="afdelling_id" class="form-control">
-                                                    @foreach($afdellings as $af)
-                                                    <option <?php if($af->id == $subforeman->afdelling_id) echo "selected"  ?> value="{{ $af->id }}">{{ $af->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="jobtype_id">Afdelling</label>
-                                                <select name="jobtype_id" id="jobtype_id" class="form-control">
-                                                    @foreach($job_types as $jt)
-                                                    <option <?php if($jt->id == $subforeman->jobtype_id) echo "selected"  ?> value="{{ $jt->id }}">{{ $jt->name }}</option>
-                                                    @endforeach
-                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="password">Password</label>
@@ -149,28 +141,33 @@ Daftar Mandor Bidang
                 <form action="{{ route('assistant.subforeman.store') }}" method="post">
                     @csrf
                     <div class="form-group">
+                        <label for="afdelling_id">Kebun</label>
+                        <input type="text" class="form-control" value="{{ $farm_af->farm }}" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="afdelling_id">Afdelling</label>
+                        <input type="text" class="form-control" value="{{ $farm_af->afdelling }}" readonly>
+                        <input name="afdelling_id" type="hidden" class="form-control"
+                            value="{{ $farm_af->afdelling_id }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="jobtype_id">Job Type</label>
+                        <select name="jobtype_id" id="" class="form-control">
+                            @foreach ($job_types as $jt)
+                            <option value="{{ $jt->id }}">{{ $jt->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="subforeman">Nama</label>
                         <input type="text" name="subforeman" id="subforeman" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" name="email" id="email" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="afdelling_id">Afdelling</label>
-                        <select name="afdelling_id" id="afdelling_id" class="form-control">
-                            @foreach($afdellings as $af)
-                            <option value="{{ $af->id }}">{{ $af->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="jobtype_id">Afdelling</label>
-                        <select name="jobtype_id" id="jobtype_id" class="form-control">
-                            @foreach($job_types as $jt)
-                            <option value="{{ $jt->id }}">{{ $jt->name }}</option>
-                            @endforeach
-                        </select>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>

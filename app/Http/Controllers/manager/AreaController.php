@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\assistant;
+namespace App\Http\Controllers\manager;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class AreaController extends Controller
 {
     public function job_type() {
         $job_types = JobType::all();
-        return view('assistant.area.job_type.index', [
+        return view('manager.area.job_type.index', [
             'job_types' => $job_types
         ]);
     }
@@ -43,7 +43,7 @@ class AreaController extends Controller
 
     public function farm() {
         $farms = Farm::all();
-        return view('assistant.area.farm.index', [
+        return view('manager.area.farm.index', [
             'farms' => $farms
         ]);
     }
@@ -68,14 +68,20 @@ class AreaController extends Controller
     }
 
     public function afdelling() {
+        $aff = Afdelling::find(auth()->guard('farmmanager')->user()->afdelling_id);
+        $fm = Farm::find($aff->farm_id);
         $afdellings = DB::table('afdellings')
                     ->leftJoin('farms', 'afdellings.farm_id', '=', 'farms.id')
+                    ->where('farms.id', '=', $fm->id)
                     ->select('afdellings.*', 'farms.name as farm')->get();
-        $farms = Farm::all();
+        $farm = DB::table('farms')->join('afdellings', 'afdellings.farm_id', '=', 'farms.id')
+                ->where('afdellings.id', auth()->guard('farmmanager')->user()->afdelling_id)
+                ->select('farms.name', 'farms.id')
+                ->first();
 
-        return view('assistant.area.afdelling.index', [
+        return view('manager.area.afdelling.index', [
             'afdellings' => $afdellings, 
-            'farms' => $farms
+            'farm' => $farm
         ]);
     }
 
@@ -103,21 +109,28 @@ class AreaController extends Controller
     }
 
     public function block() {
+        $aff = Afdelling::find(auth()->guard('farmmanager')->user()->afdelling_id);
+        $fm = Farm::find($aff->farm_id);
+        $afdellings = DB::table('afdellings')
+                    ->leftJoin('farms', 'afdellings.farm_id', '=', 'farms.id')
+                    ->where('farms.id', '=', $fm->id)
+                    ->select('afdellings.*', 'farms.name as farm')->get();
         $farm_af = DB::table('farms')
                     ->join('afdellings', 'farms.id', '=', 'afdellings.farm_id')
                     ->where('afdellings.id', auth()->guard()->user()->afdelling_id)
                     ->select('afdellings.id as afdelling_id', 'afdellings.name as afdelling', 'farms.name as farm')
                     ->first();
-        $blocks = DB::table('blocks')
-                ->join('afdellings', 'afdellings.id', '=', 'blocks.afdelling_id')
-                ->join('farms', 'farms.id', '=', 'afdellings.farm_id')
+        $blocks = DB::table('farms')
+                ->join('afdellings', 'farms.id', '=', 'afdellings.farm_id')
+                ->join('blocks', 'afdellings.id', '=', 'blocks.afdelling_id')
                 ->select('blocks.*', 'afdellings.name as afdelling', 'afdellings.id as afdelling_id', 'farms.name as farm', 'farms.id as farm_id')
-                ->where('afdellings.id', auth()->guard('assistant')->user()->afdelling_id)
+                ->where('farms.id', $fm->id)
                 ->get();
 
-        return view('assistant.area.block.index', [
+        return view('manager.area.block.index', [
             'blocks' => $blocks,
-            'farm_af' => $farm_af
+            'farm_af' => $farm_af,
+            'afdellings' => $afdellings
         ]);
     }
 
@@ -159,7 +172,7 @@ class AreaController extends Controller
         $job_types = JobType::all();
         $foremans = Foreman::all();
 
-        return view('assistant.area.block.block_reference', [
+        return view('manager.area.block.block_reference', [
             'block_references' => $block_references,
             'blocks' => $blocks,
             'job_types' => $job_types,

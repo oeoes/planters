@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\assistant;
+namespace App\Http\Controllers\manager;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Foreman;
+use App\Models\Farm;
 use App\Models\Afdelling;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -12,16 +13,23 @@ use Illuminate\Support\Facades\DB;
 class ForemanController extends Controller
 {
     public function index() {
-        $foremans = Foreman::orderByDesc('created_at')->where('afdelling_id', auth()->guard()->user()->afdelling_id)->get();
-        $farm_af = DB::table('farms')
-                    ->join('afdellings', 'farms.id', '=', 'afdellings.farm_id')
-                    ->where('afdellings.id', auth()->guard()->user()->afdelling_id)
-                    ->select('afdellings.id as afdelling_id', 'afdellings.name as afdelling', 'farms.name as farm')
-                    ->first();
+        $aff = Afdelling::find(auth()->guard('farmmanager')->user()->afdelling_id);
+        $farm_af = Farm::find($aff->farm_id);
+        $afdellings = DB::table('afdellings')
+                    ->leftJoin('farms', 'afdellings.farm_id', '=', 'farms.id')
+                    ->where('farms.id', '=', $farm_af->id)
+                    ->select('afdellings.*')->get();
+        $foremans = DB::table('farms')
+                ->join('afdellings', 'farms.id', '=', 'afdellings.farm_id')
+                ->join('foremans', 'afdellings.id', '=', 'foremans.afdelling_id')
+                ->select('foremans.*', 'afdellings.name as afdelling', 'afdellings.id as afdelling_id', 'farms.name as farm', 'farms.id as farm_id')
+                ->where('farms.id', $farm_af->id)
+                ->get();
 
-        return view('assistant.users.foreman.index', [
+        return view('manager.users.foreman.index', [
             'foremans' => $foremans,
             'farm_af' => $farm_af,
+            'afdellings' => $afdellings,
         ]);
     }
 

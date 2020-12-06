@@ -23,7 +23,6 @@
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
-        {{-- @include('sweetalert::alert') --}}
         @include('manager.layouts.navbar')
 
         @include('manager.layouts.sidebar')
