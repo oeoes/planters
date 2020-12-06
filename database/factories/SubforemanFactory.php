@@ -21,7 +21,7 @@ class SubforemanFactory extends Factory
      */
     public function definition()
     {
-        $arr = [1,2,3,4];
+        $arr = [1,2,3,4,5,6,7];
         return [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,

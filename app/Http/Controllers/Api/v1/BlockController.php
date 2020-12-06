@@ -131,11 +131,14 @@ class BlockController extends Controller
 
     public function det_active_block_references($block_ref_id) {
 
-        $single_ref = BlockReference::find($block_ref_id);
+        $single_ref = BlockReference::where('id', $block_ref_id)->where('completed', 0)->first();
         $today = date('Y-m-d');
 
         //search today where rkh didnot completed
-        $data = $single_ref->model::where('date', $today)->where('block_ref_id', $block_ref_id)->first();
+        $data = $single_ref->model::where('date', $today)
+                                    ->where('block_ref_id', $block_ref_id)
+                                    ->where('completed', 0)
+                                    ->first();
 
         // kalo ada data hari ini
         if ($data) {

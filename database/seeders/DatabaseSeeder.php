@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             // SuperadminTableSeeder::class,
         ]);
 
-        Subforeman::factory(100)->create();
+        Subforeman::factory(500)->create();
         Foreman::factory(4)->create();
         Assistant::factory(10)->create();
 
