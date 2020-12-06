@@ -19,7 +19,7 @@ class CreateFillHarvestingTable extends Migration
             $table->foreignId('afdelling_id')->constrained();
             $table->float('ftarget_coverage', 8, 2); // hasil panen aktual , total panen
             $table->float('bjr', 8, 2);
-            $table->float('total_harvesting', 8, 2); // list dari nama karyawan dan total_harvesting
+            $table->integer('total_harvesting', 8, 2); // list dari nama karyawan dan total_harvesting
             $table->float('final_harvesting', 8, 2); // total
             $table->string('image')->nullable();
             $table->text('subforeman_note')->nullable();

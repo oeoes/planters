@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             BlockTableSeeder::class,
             ForemanTableSeeder::class,
             JobTypeTableSeeder::class,
+            ManagerTableSeeder::class,
+            SuperadminTableSeeder::class,
             // SubforemanTableSeeder::class,
             // SuperadminTableSeeder::class,
         ]);

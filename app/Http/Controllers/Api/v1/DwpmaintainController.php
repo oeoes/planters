@@ -22,6 +22,7 @@ use App\Models\Maintain\PruningType;
 use App\Models\Maintain\SprayingType;
 use App\Models\Maintain\PestControl;
 use App\Models\Subforeman;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Validator;
@@ -599,18 +600,30 @@ class DwpmaintainController extends Controller
     }
 
     public function years() {
-        $block_reference = BlockReference::where('foreman_id', fme()->id)
-                        ->where('completed', 1)
-                        ->distinct('planting_year')
-                        ->select('planting_year')
+        $block_references = BlockReference::where('foreman_id', fme()->id)
+                        // ->distinct('planting_year')
+                        // ->select('planting_year')
                         ->get();
-        $block_reference = collect($block_reference)->sortBy('planting_year')->reverse()->toArray();
+
         $pyears = [];
-        foreach ($block_reference as $key => $value) {
-            $pyears [] = [
-                'planting_year' => $value['planting_year']
-            ];
+        foreach ($block_references as $value) {
+            // apakah foerman pernah set complete minimal 1
+            if ($value['model']::where('block_ref_id', $value['id'])->where('completed', 1)->count() > 0) {
+                $pyears [] = [
+                        'planting_year' => $value['planting_year']
+                    ];
+            }
         }
+
+        usort($pyears, function($time1, $time2) {
+            if (strtotime($time1['planting_year']) < strtotime($time2['planting_year'])) 
+                return 1; 
+            else if (strtotime($time1['planting_year']) > strtotime($time2['planting_year']))  
+                return -1; 
+            else
+                return 0; 
+        });
+
         return res(true, 200, 'Year listed!', $pyears);
     }
 
@@ -689,16 +702,18 @@ class DwpmaintainController extends Controller
                 $subforeman = [
                     "begin" => $fillout->begin,
                     "ended" => $fillout->ended,
-                    "target_coverage" => $fillout->ftarget_coverage,
-                    "bjr" => !$fillout->bjr ? null : $fillout->bjr,
-                    "ingredients_type"   => !$fillout->fingredients_type ? null : $fillout->fingredients_type,
-                    "ingredients_amount" => !$fillout->fingredients_amount ? null : $fillout->fingredients_amount ,
-                    "image" => $fillout->image,
+                    "target_coverage"    => $fillout->ftarget_coverage,
+                    "ingredients_type"   => !$fillout->ingredients_type ? null : $fillout->ingredients_type,
+                    "ingredients_amount" => !$fillout->fingredients_amount ? null : $fillout->fingredients_amount,
+                    "image"     => $fillout->image,
                     "subforeman_note" => $fillout->subforeman_note,
-                    "hk_name" => $fillout->hk_name,
+                    "completed" => $fillout->completed,
+                    "hk_name"   => isset($hk_names) ? $hk_names : null,
+                    "hk_listed" => isset($hk_listed_arr) ? $hk_listed_arr : null,
+                    "total_harvesting" => !$fillout->total_harvesting ? null : $fillout->total_harvesting,
                     "final_harvesting" => !$fillout->final_harvesting ? null : $fillout->final_harvesting,
-                    "hk_listed" => empty($hk_listed_arr) ? null : $hk_listed_arr,
-                    "completed" => $fillout->completed
+                    // "bjr" => !$fillout->bjr ? null : $fillout->bjr,
+                    "completed" => $fillout->completed,
                 ];
             }
 

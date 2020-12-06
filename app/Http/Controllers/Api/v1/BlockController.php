@@ -149,11 +149,11 @@ class BlockController extends Controller
                 'block_code' => block($single_ref->block_id),
                 'job_type'   => $single_ref->jobtype_id,
                 'target_coverage'    => $data->target_coverage,
-                'akp'        => !$data->akp ? null : $data->akp,
-                'bjr'        => !$data->bjr ? null : $data->bjr,
+                'akp'        => !$data->akp     ? null : $data->akp,
+                'bjr'        => !$data->bjr     ? null : $data->bjr,
                 'taksasi'    => !$data->taksasi ? null : $data->taksasi,
-                'basis'      => !$data->basis ? null : $data->basis,
-                'ingredients_type'   => !$data->ingredients_type ? null : $data->ingredients_type,
+                'basis'      => !$data->basis   ? null : $data->basis,
+                'ingredients_type'   => !$data->ingredients_type   ? null : $data->ingredients_type,
                 'ingredients_amount' => !$data->ingredients_amount ? null : $data->ingredients_amount,
                 'foreman_note' => $data->foreman_note,
                 'hk_used'      => $data->hk_used,
@@ -172,24 +172,14 @@ class BlockController extends Controller
 
             if ($fillout) {
 
-                if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-                    $hk_names = $fillout->hk_name;
-                    $final_harvesting = null;
-                } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
-                    $hk_names = $fillout->hk_name;
-                    $final_harvesting = null;
-                } else if (in_array($single_ref->jobtype_id, [7])) {
-                    $harvest_id = $data->id;
-                    $employee_harvestings = EmployeeHarvesting::where('harvest_id', $harvest_id)->get();
-                    $hk_listed = $employee_harvestings;
+                if ($single_ref->jobtype_id == 7) {
+                    $employee_harvestings = EmployeeHarvesting::where('harvest_id', $data->id)->get();
                     $hk_listed_arr = [];
-                    $final_harvesting = 0;
-                    foreach ($hk_listed as $hk) {
+                    foreach ($employee_harvestings as $hk) {
                         $hk_listed_arr [] = [
                             'name' => $hk['name'],
                             'total_harvesting' => $hk['total_harvesting']
                         ];
-                        $final_harvesting += $hk['total_harvesting'];
                     }
                 }
 
@@ -204,8 +194,9 @@ class BlockController extends Controller
                     "completed" => $fillout->completed,
                     "hk_name"   => isset($hk_names) ? $hk_names : null,
                     "hk_listed" => isset($hk_listed_arr) ? $hk_listed_arr : null,
-                    "final_harvesting" => !$final_harvesting ? null : $final_harvesting,
-                    "bjr" => !$fillout->bjr ? null : $fillout->bjr,
+                    "total_harvesting" => !$fillout->total_harvesting ? null : $fillout->total_harvesting,
+                    "final_harvesting" => !$fillout->final_harvesting ? null : $fillout->final_harvesting,
+                    // "bjr" => !$fillout->bjr ? null : $fillout->bjr,
                     "completed" => $fillout->completed,
                 ];
 
