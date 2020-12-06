@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\superadmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\BlockReference;
+use App\Models\Maintain\SprayingType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -10,33 +12,21 @@ class TypejobController extends Controller
 {
          // SPRAYING
          public function spraying () {
-            $sprayings = DB::table('block_references')
-                    ->leftJoin('sprayings', 'sprayings.block_ref_id', '=', 'block_references.id')
-                    ->leftJoin('fill_sprayings', 'fill_sprayings.spraying_id', '=', 'sprayings.id')
-                    ->leftJoin('foremans', 'foremans.id', '=', 'sprayings.foreman_id')
-                    ->leftJoin('subforemans', 'subforemans.id', '=', 'sprayings.subforeman_id')
-                    ->leftJoin('job_types', 'job_types.id', '=', 'block_references.jobtype_id')
-                    ->leftJoin('blocks', 'blocks.id', '=', 'block_references.block_id')
-                    ->select('block_references.foreman_id', 'sprayings.subforeman_id', 'sprayings.date', 'block_references.planting_year', 'block_references.total_coverage', 'block_references.available_coverage', 'block_references.population_coverage', 'block_references.population_perblock', 'blocks.code as block', 'foremans.name as foreman', 'subforemans.name as subforeman', 'job_types.name as job_type')
-                    ->where('block_references.jobtype_id', 1)
-                    ->orderByDesc('sprayings.created_at')
-                    ->get();
-            return view('superadmin.type.spraying.index')->with(['sprayings' => $sprayings]);
+            $sprayings = SprayingType::all();
+            return view('superadmin.type.spraying.index')->with([
+                'sprayings' => $sprayings
+            ]);
         }
     
-        public function spraying_detail($spraying_id) {
-            // $spraying = DB::table('block_references')
-            //         ->leftJoin('sprayings', 'sprayings.block_ref_id', '=', 'block_references.id')
-            //         ->leftJoin('fill_sprayings', 'fill_sprayings.spraying_id', '=', 'sprayings.id')
-            //         ->leftJoin('foremans', 'foremans.id', '=', 'sprayings.foreman_id')
-            //         ->leftJoin('subforemans', 'subforemans.id', '=', 'sprayings.subforeman_id')
-            //         ->leftJoin('job_types', 'job_types.id', '=', 'block_references.jobtype_id')
-            //         ->leftJoin('blocks', 'blocks.id', '=', 'block_references.block_id')
-            //         ->select('block_references.foreman_id', 'sprayings.subforeman_id', 'sprayings.date', 'block_references.planting_year', 'block_references.total_coverage', 'block_references.available_coverage', 'block_references.population_coverage', 'block_references.population_perblock', 'blocks.code as block', 'foremans.name as foreman', 'subforemans.name as subforeman', 'job_types.name as job_type')
-            //         ->where('block_references.jobtype_id', 1)
-            //         ->where('sprayings.id', $spraying_id)
-            //         ->first();
-            // dd($spraying);
+        public function spraying_detail($blok_ref_id, $spraying_id) {
+            $blok_reference = BlockReference::find($blok_ref_id);
+            $spraying = $blok_reference->model::find($spraying_id);
+            $fill = $blok_reference->fill::where($blok_reference->fill_id, $spraying_id)->first();
+            return view('superadmin.type.spraying.detail')->with([
+                'block_reference' => $blok_reference,
+                'spraying'        => !$spraying ? null : $spraying,
+                'fill'            => !$fill ? null : $fill,
+            ]);
         }
     
     
