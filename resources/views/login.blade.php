@@ -36,7 +36,7 @@
       <form action="/login" method="post">
         @csrf
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" name="email" value="manager@planters.com">
+          <input type="email" class="form-control" placeholder="Email" name="email" value="super_admin@planters-svipb.com">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -44,7 +44,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="password" value="password">
+          <input type="password" class="form-control" placeholder="Password" name="password" value="plantersvokasiipb">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>

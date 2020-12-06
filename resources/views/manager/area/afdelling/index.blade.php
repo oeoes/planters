@@ -1,6 +1,6 @@
-@extends('assistant.layouts.app')
+@extends('manager.layouts.app')
 
-@section('title', 'Daftar Afdelling')
+@section('title', 'Farm Manager - Daftar Afdelling')
 
 @section('content-title')
   Daftar Afdelling
@@ -48,20 +48,17 @@
                                           </button>
                                       </div>
                                       <div class="modal-body">
-                                          <form action="{{ route('assistant.afdelling.update', ['afdelling' => $afdelling->id]) }}"
+                                          <form action="{{ route('manager.afdelling.update', ['afdelling' => $afdelling->id]) }}"
                                               method="post">
                                               @csrf
                                               @method('PUT')
                                                <div class="form-group">
                                                    <label for="farm">Farm</label>
-                                                   <select name="farm_id" class="form-control">
-                                                       @foreach ($farms as $f)
-                                                       <option <?php if($f->id == $afdelling->farm_id) echo "selected" ?> value="{{ $f->id }}">{{ $f->name }}</option>
-                                                       @endforeach
-                                                   </select>
+                                                   <input type="text" class="form-control" value="{{ $farm->name}}" readonly>
+                                                   <input type="hidden" name="farm_id" class="form-control" value="{{ $farm->id}}">
                                                </div>
                                                <div class="form-group">
-                                                   <label for="afdelling">afdelling</label>
+                                                   <label for="afdelling">Afdelling</label>
                                                    <input type="text" name="afdelling" id="afdelling"
                                                        class="form-control" value="{{ $afdelling->name }}">
                                                </div>
@@ -70,11 +67,6 @@
                                                    <input type="text" name="hk_total" id="hk_total"
                                                        class="form-control" value="{{ $afdelling->hk_total }}">
                                                </div>
-                                              <div class="form-group">
-                                                  <label for="afdelling">afdelling</label>
-                                                  <input type="text" name="afdelling" id="afdelling" class="form-control"
-                                                      value="{{ $afdelling->name }}">
-                                              </div>
                                       </div>
                                       <div class="modal-footer">
                                           <button type="button"
@@ -101,7 +93,7 @@
                                           </button>
                                       </div>
                                       <div class="modal-body">
-                                          <form action="{{ route('assistant.afdelling.delete', ['afdelling' => $afdelling->id]) }}"
+                                          <form action="{{ route('manager.afdelling.delete', ['afdelling' => $afdelling->id]) }}"
                                               method="post">
                                               @csrf
                                               @method('DELETE')
@@ -130,15 +122,12 @@
                   Add afdelling
               </div>
               <div class="card-body">
-                  <form action="{{ route('assistant.afdelling.store') }}" method="post">
+                  <form action="{{ route('manager.afdelling.store') }}" method="post">
                       @csrf
                       <div class="form-group">
                           <label for="farm">Farm</label>
-                          <select name="farm_id" class="form-control">
-                              @foreach ($farms as $f)
-                              <option value="{{ $f->id }}">{{ $f->name }}</option>
-                              @endforeach
-                          </select>
+                          <input type="text" class="form-control" value="{{ $farm->name}}" readonly>
+                          <input type="hidden" name="farm_id" class="form-control" value="{{ $farm->id}}">
                       </div>
                       <div class="form-group">
                           <label for="afdelling">Afdelling</label>

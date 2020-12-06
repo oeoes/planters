@@ -26,7 +26,7 @@ Daftar Assistant
                 <tbody>
                     @foreach ($assistants as $key => $assistant)
                     <tr>
-                        <td scope="row">{{ $loop->iteration }}</td>
+                        <td scope="row">{{ $key+1 }}</td>
                         <td>{{ $assistant->name }}</td>
                         <td>{{ $assistant->email }}</td>
                         <td>
@@ -51,35 +51,10 @@ Daftar Assistant
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('assistant.foreman.update', ['foreman' => $foreman->id]) }}"
-                                            method="post">
+                                        <form action="" method="post">
                                             @csrf
                                             @method('PUT')
-                                            <div class="form-group">
-                                                <label for="foreman">Nama</label>
-                                                <input type="text" name="foreman" id="foreman" class="form-control"
-                                                    required value="{{ $foreman->name }}">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="email">Email</label>
-                                                <input type="email" name="email" id="email" class="form-control"
-                                                    required value="{{ $foreman->email }}">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="afdelling_id">Afdelling</label>
-                                                <select name="afdelling_id" id="afdelling_id" class="form-control">
-                                                    @foreach($afdellings as $af)
-                                                    <option
-                                                        <?php if($af->id == $foreman->afdelling_id) echo "selected" ?>
-                                                        value="{{ $af->id }}">{{ $af->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="password">Password</label>
-                                                <input type="password" name="password" id="password"
-                                                    class="form-control" required>
-                                            </div>
+
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button"
@@ -89,7 +64,6 @@ Daftar Assistant
                                             class="btn btn-sm rounded-pill btn-outline-primary pl-3 pr-3">Save
                                             changes</button>
                                     </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -106,11 +80,10 @@ Daftar Assistant
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('assistant.foreman.delete', ['foreman' => $foreman->id]) }}"
-                                            method="post">
+                                        <form action="" method="post">
                                             @csrf
                                             @method('DELETE')
-                                            Are you sure to delete selected foreman <b>"{{ $foreman->name }}"</b>?
+                                            Are you sure to delete selected foreman <b>""</b>?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button"
@@ -132,31 +105,37 @@ Daftar Assistant
     <div class="col-md-4">
         <div class="card">
             <div class="card-header">
-                Tambah Mandor
+                Tambah Assistant Kebun
             </div>
             <div class="card-body">
-                <form action="{{ route('assistant.foreman.store') }}" method="post">
+                <form action="{{ route('superadmin.user.assistant.store') }}" method="post">
                     @csrf
                     <div class="form-group">
-                        <label for="foreman">Nama</label>
-                        <input type="text" name="foreman" id="foreman" class="form-control" required>
+                        <label for="">Name</label>
+                        <input type="text" name="name" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" class="form-control" required>
+                        <label for="">Email</label>
+                        <input type="email" name="email" class="form-control">
                     </div>
-
                     <div class="form-group">
-                        <label for="afdelling_id">Afdelling</label>
-                        <select name="afdelling_id" id="afdelling_id" class="form-control">
-                            @foreach($afdellings as $af)
-                            <option value="{{ $af->id }}">{{ $af->name }}</option>
+                        <label for="">Password</label>
+                        <input type="password" name="password" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="farm">Farm</label>
+                        <select name="farm" id="farm_id" class="form-control">
+                            <option>Pilih Kebun</option>
+                            @foreach ($farms as $f)
+                            <option value="{{ $f->id }}">{{ $f->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password" class="form-control" required>
+                        <label for="afdelling">Afdelling</label>
+                        <select name="afdelling_id" id="store_afdelling" class="form-control">
+
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-sm rounded-pill btn-outline-primary pl-3 pr-3">Add</button>
                 </form>
@@ -167,7 +146,20 @@ Daftar Assistant
 @endsection
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-
+    $(document).ready(function () {
+        $(document).on('change', '#farm_id', function () {
+            $('#store_afdelling').children().remove()
+            axios.get(`/afdelling/list/${$('#farm_id').val()}`)
+                .then(function (response) {
+                    response.data.afdellings.forEach(function (e) {
+                        $('#store_afdelling').append(`
+                    <option value="${e.id}">${e.name}</option>
+                `)
+                    })
+                })
+        })
+    });
 </script>
 @endsection

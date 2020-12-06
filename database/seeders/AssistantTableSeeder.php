@@ -14,14 +14,10 @@ class AssistantTableSeeder extends Seeder
      */
     public function run()
     {
-        $ran = array(1,2,3,4);
-        for ($i=0; $i < 5; $i++) { 
-            DB::table('assistants')->insert([
-                'name' => 'assistant',
-                'email' => 'assistant@planterdev.com',
-                'password' => bcrypt('password'), // password
-                'afdelling_id' => $ran[array_rand($ran, 1)]
-            ]);
-        }
+        DB::table('assistants')->insert([
+            'name' => 'assistant',
+            'email' => 'assistant@planterdev.com',
+            'password' => bcrypt('password'), // password
+        ]);
     }
 }

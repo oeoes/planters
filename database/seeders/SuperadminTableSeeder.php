@@ -14,10 +14,11 @@ class SuperadminTableSeeder extends Seeder
      */
     public function run()
     {
+
         DB::table('super_admins')->insert([
-            'name' => 'superadmin',
-            'email' => 'super_admin@planters.com',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'name' => 'Super Admin',
+            'email' => 'super_admin@planters-svipb.com',
+            'password' => bcrypt('plantersvokasiipb'), // password
         ]);
     }
 }
