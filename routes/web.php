@@ -113,32 +113,32 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
     Route::group(['prefix' => 'type'], function () {
         Route::group(['prefix' => 'spraying'], function () {
             Route::get('/', [SU_TypejobController::class, 'spraying'])->name('superadmin.spraying.index');
-            Route::get('/detail', [SU_TypejobController::class, 'spraying_detail'])->name('superadmin.spraying.detail');
+            Route::get('/detail/{blok_ref_id}/{spraying_id}', [SU_TypejobController::class, 'spraying_detail'])->name('superadmin.spraying.detail');
         });
 
         Route::group(['prefix' => 'fertilizer'], function () {
             Route::get('/', [SU_TypejobController::class, 'fertilizer'])->name('superadmin.fertilizer.index');          
-            Route::get('/detail', [SU_TypejobController::class, 'fertilizer_detail'])->name('superadmin.fertilizer.detail');
+            Route::get('/detail/{blok_ref_id}/{fertilizer_id}', [SU_TypejobController::class, 'fertilizer_detail'])->name('superadmin.fertilizer.detail');
         });
 
         Route::group(['prefix' => 'circle'], function () {
             Route::get('/', [SU_TypejobController::class, 'circle'])->name('superadmin.circle.index');            
-            Route::get('/detail', [SU_TypejobController::class, 'circle_detail'])->name('superadmin.circle.detail');
+            Route::get('/detail/{blok_ref_id}/{circle_id}', [SU_TypejobController::class, 'circle_detail'])->name('superadmin.circle.detail');
         });
 
         Route::group(['prefix' => 'pruning'], function () {
             Route::get('/', [SU_TypejobController::class, 'pruning'])->name('superadmin.pruning.index');            
-            Route::get('/detail', [SU_TypejobController::class, 'pruning_class'])->name('superadmin.pruning.detail');
+            Route::get('/detail/{blok_ref_id}/{pruning_id}', [SU_TypejobController::class, 'pruning_class'])->name('superadmin.pruning.detail');
         });
 
         Route::group(['prefix' => 'gawangan'], function () {
             Route::get('/', [SU_TypejobController::class, 'gawangan'])->name('superadmin.gawangan.index');
-            Route::get('/detail', [SU_TypejobController::class, 'gawangan_detail'])->name('superadmin.gawangan.detail');
+            Route::get('/detail/{blok_ref_id}/{gawangan_id}', [SU_TypejobController::class, 'gawangan_detail'])->name('superadmin.gawangan.detail');
         }); 
 
         Route::group(['prefix' => 'pcontrol'], function () {
             Route::get('/', [SU_TypejobController::class, 'pestcontrol'])->name('superadmin.pestcontrol.index'); 
-            Route::get('/detail', [SU_TypejobController::class, 'pestcontrol_detail'])->name('superadmin.pestcontrol.detail');
+            Route::get('/detail/{blok_ref_id}/{pcontrol_id}', [SU_TypejobController::class, 'pestcontrol_detail'])->name('superadmin.pestcontrol.detail');
         });
         
         Route::group(['prefix' => 'harvesting'], function () {
