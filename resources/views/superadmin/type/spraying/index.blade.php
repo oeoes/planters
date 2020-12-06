@@ -39,7 +39,7 @@
                 <td>{{ $spraying->subforeman }}</td>
                 <td>{{ $spraying->job_type }}</td>
                 <td>
-                    <a href="{{  route('') }}"></a>
+                    <a href=""></a>
                 </td>
             </tr>
             @endforeach
