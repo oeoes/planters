@@ -178,8 +178,7 @@ class BlockController extends Controller
                     foreach ($employee_harvestings as $hk) {
                         $hk_listed_arr [] = [
                             'name' => $hk['name'],
-                            'total_harvesting' => $hk['total_harvesting']
-                        ];
+                            'total_harvesting' => $hk['total_harvesting']];
                     }
                 }
 
@@ -189,11 +188,11 @@ class BlockController extends Controller
                     "target_coverage"    => $fillout->ftarget_coverage,
                     "ingredients_type"   => !$fillout->ingredients_type ? null : $fillout->ingredients_type,
                     "ingredients_amount" => !$fillout->fingredients_amount ? null : $fillout->fingredients_amount,
-                    "image"     => $fillout->image,
-                    "subforeman_note" => $fillout->subforeman_note,
-                    "completed" => $fillout->completed,
-                    "hk_name"   => isset($hk_names) ? $hk_names : null,
-                    "hk_listed" => isset($hk_listed_arr) ? $hk_listed_arr : null,
+                    "image"              => $fillout->image,
+                    "subforeman_note"    => $fillout->subforeman_note,
+                    "completed"          => $fillout->completed,
+                    "hk_name"            => !$fillout->hk_name ? null : $fillout->hk_name,
+                    "hk_listed"          => isset($hk_listed_arr) ? $hk_listed_arr : null,
                     "total_harvesting" => !$fillout->total_harvesting ? null : $fillout->total_harvesting,
                     "final_harvesting" => !$fillout->final_harvesting ? null : $fillout->final_harvesting,
                     // "bjr" => !$fillout->bjr ? null : $fillout->bjr,
@@ -220,22 +219,31 @@ class BlockController extends Controller
                 return res(true, 200, 'Your rkh is active for tomorrow', ['create' => 1]);
             } elseif (! $data_next) {
                 // kalo gada data rkh untuk besok
-                if ($single_ref->jobtype_id == 7) {
-                    $data = [
-                        'block_code' => block($single_ref->block_id),
-                        'job_type' => $single_ref->jobtype_id,
-                        'available_coverage' => $single_ref->available_coverage,
-                        'population_coverage' => $single_ref->population_coverage,
-                        'create' => 0,
-                    ];
-                } else {
-                    $data = [
-                        'block_code' => block($single_ref->block_id),
-                        'job_type' => $single_ref->jobtype_id,
-                        'available_coverage' => $single_ref->available_coverage,
-                        'create' => 0,
-                    ];
-                }
+
+                // if ($single_ref->jobtype_id == 7) {
+                //     $data = [
+                //         'block_code' => block($single_ref->block_id),
+                //         'job_type' => $single_ref->jobtype_id,
+                //         'available_coverage' => $single_ref->available_coverage,
+                //         'population_coverage' => $single_ref->population_coverage,
+                //         'create' => 0,
+                //     ];
+                // } else {
+                //     $data = [
+                //         'block_code' => block($single_ref->block_id),
+                //         'job_type' => $single_ref->jobtype_id,
+                //         'available_coverage' => $single_ref->available_coverage,
+                //         'create' => 0,
+                //     ];
+                // }
+
+                $data = [
+                    'block_code' => block($single_ref->block_id),
+                    'job_type' => $single_ref->jobtype_id,
+                    'available_coverage' => $single_ref->available_coverage,
+                    'population_coverage' => !$single_ref->population_coverage ? null : $single_ref->population_coverage,
+                    'create' => 0,
+                ];
 
                 return res(true, 200, "Empty RKH for tomorrow, please create RKH First", $data);
 

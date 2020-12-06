@@ -100,6 +100,7 @@ class DwpharvestingController extends Controller
         }
 
         $employees = json_decode($request->hk_listed);
+        
         // return $employees;
         $total_harvesting = 0;
         foreach ($employees as $key => $value) {

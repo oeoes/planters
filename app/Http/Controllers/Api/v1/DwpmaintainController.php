@@ -318,6 +318,7 @@ class DwpmaintainController extends Controller
         } else {
             $image = null;
         }
+        // return $request->hk_name;
 
         FillSpraying::create([
             'spraying_id' => $request->spraying_id,
@@ -389,7 +390,7 @@ class DwpmaintainController extends Controller
 
         $tcov = BlockReference::find($block_ref_id);
         $current_coverage = $tcov->available_coverage;
-        $used_coverage = $request->expectation;
+        $used_coverage = $request->ftarget_coverage;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
         
@@ -441,7 +442,7 @@ class DwpmaintainController extends Controller
 
         $tcov = BlockReference::find($block_ref_id);
         $current_coverage = $tcov->available_coverage;
-        $used_coverage = $request->expectation;
+        $used_coverage = $request->ftarget_coverage;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
         
@@ -491,7 +492,7 @@ class DwpmaintainController extends Controller
 
         $tcov = BlockReference::find($block_ref_id);
         $current_coverage = $tcov->available_coverage;
-        $used_coverage = $request->expectation;
+        $used_coverage = $request->ftarget_coverage;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
     
@@ -542,7 +543,7 @@ class DwpmaintainController extends Controller
 
         $tcov = BlockReference::find($block_ref_id);
         $current_coverage = $tcov->available_coverage;
-        $used_coverage = $request->expectation;
+        $used_coverage = $request->ftarget_coverage;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
         
@@ -592,7 +593,7 @@ class DwpmaintainController extends Controller
 
         $tcov = BlockReference::find($block_ref_id);
         $current_coverage = $tcov->available_coverage;
-        $used_coverage = $request->expectation;
+        $used_coverage = $request->ftarget_coverage;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
 
@@ -628,15 +629,24 @@ class DwpmaintainController extends Controller
     }
 
     public function block($year) {
-        $block_reference = BlockReference::where('foreman_id', fme()->id)->where('planting_year', $year)
-            ->where('completed', 1)->orderBy('created_at', 'DESC')->get();
+        // $block_references = BlockReference::where('foreman_id', fme()->id)->where('planting_year', $year)
+        //     ->where('completed', 1)->orderBy('created_at', 'DESC')->get();
+
+        $block_references = BlockReference::where('foreman_id', fme()->id)
+                                            ->where('planting_year', $year)
+                                            ->orderBy('created_at', 'DESC')
+                                            ->get();
         $blocks = [];
-        foreach ($block_reference as $key => $value) {
-            $blocks [] = [
-                'block_id' => $value['block_id'],
-                'block_code' => block($value['block_id']),
-                'selected_year' => $year
-            ];
+        foreach ($block_references as $value) {
+            // jika blok refs minimal ada 1 data foreman,
+            if ($value['model']::where('block_ref_id', $value['id'])->where('completed', 1)->count() > 0) {
+                $blocks [] = [
+                    'block_id' => $value['block_id'],
+                    'block_code' => block($value['block_id']),
+                    'selected_year' => $year
+                ];
+            }
+
         }
         return res(true, 200, 'Blocks listed!', $blocks);
     }
@@ -645,13 +655,13 @@ class DwpmaintainController extends Controller
         // pasti gada yg sama [first] bukan get
         $reference = BlockReference::where('planting_year', $year)
                                     ->where('block_id', $block_id)
-                                    ->where('completed', 1)->first();
+                                    ->first();
         if (! $reference) {
             return res(false, 404, 'Cannot find the completed daily work plan');
         }
         $dates = $reference->model::where('block_ref_id', $reference->id)->orderBy('date', 'DESC')->get();
         $arrDates = [];
-        foreach ($dates as $key => $value) {
+        foreach ($dates as $value) {
             $arrDates [] =[
                 'block_reference_id' => $reference->id,
                 'date' => $value['date'],
@@ -705,13 +715,13 @@ class DwpmaintainController extends Controller
                     "target_coverage"    => $fillout->ftarget_coverage,
                     "ingredients_type"   => !$fillout->ingredients_type ? null : $fillout->ingredients_type,
                     "ingredients_amount" => !$fillout->fingredients_amount ? null : $fillout->fingredients_amount,
-                    "image"     => $fillout->image,
-                    "subforeman_note" => $fillout->subforeman_note,
-                    "completed" => $fillout->completed,
-                    "hk_name"   => isset($hk_names) ? $hk_names : null,
-                    "hk_listed" => isset($hk_listed_arr) ? $hk_listed_arr : null,
-                    "total_harvesting" => !$fillout->total_harvesting ? null : $fillout->total_harvesting,
-                    "final_harvesting" => !$fillout->final_harvesting ? null : $fillout->final_harvesting,
+                    "image"              => $fillout->image,
+                    "subforeman_note"    => $fillout->subforeman_note,
+                    "completed"          => $fillout->completed,
+                    "hk_name"            => !$fillout->hk_name ? null : $fillout->hk_name,
+                    "hk_listed"          => isset($hk_listed_arr) ? $hk_listed_arr : null,
+                    "total_harvesting"   => !$fillout->total_harvesting ? null : $fillout->total_harvesting,
+                    "final_harvesting"   => !$fillout->final_harvesting ? null : $fillout->final_harvesting,
                     // "bjr" => !$fillout->bjr ? null : $fillout->bjr,
                     "completed" => $fillout->completed,
                 ];
