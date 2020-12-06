@@ -136,7 +136,7 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
         });
         
         Route::group(['prefix' => 'harvesting'], function () {
-            Route::get('/', [SU_TypejobController::class, 'index'])->name('superadmin.harvesting.index');
+            Route::get('/', [SU_TypejobController::class, 'harvesting'])->name('superadmin.harvesting.harvesting');
             Route::get('/detail', [SU_TypejobController::class, 'harvesting_detail'])->name('superadmin.harvesting.detail');
         });
     });
