@@ -4,6 +4,8 @@ namespace App\Http\Controllers\superadmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlockReference;
+use App\Models\Maintain\FertilizerType;
+use App\Models\Maintain\PestControl;
 use App\Models\Maintain\SprayingType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,18 +34,21 @@ class TypejobController extends Controller
     
         // FERTILIZER
         public function fertilizer () {
-            $fertilizers = DB::table('block_references')
-                    ->leftJoin('fertilizers', 'fertilizers.block_ref_id', '=', 'block_references.id')
-                    ->leftJoin('fill_fertilizers', 'fill_fertilizers.fertilizer_id', '=', 'fertilizers.id')
-                    ->leftJoin('foremans', 'foremans.id', '=', 'fertilizers.foreman_id')
-                    ->leftJoin('subforemans', 'subforemans.id', '=', 'fertilizers.subforeman_id')
-                    ->leftJoin('job_types', 'job_types.id', '=', 'block_references.jobtype_id')
-                    ->leftJoin('blocks', 'blocks.id', '=', 'block_references.block_id')
-                    ->select('block_references.foreman_id', 'fertilizers.subforeman_id', 'fertilizers.date', 'block_references.planting_year', 'block_references.total_coverage', 'block_references.available_coverage', 'block_references.population_coverage', 'block_references.population_perblock', 'blocks.code as block', 'foremans.name as foreman', 'subforemans.name as subforeman', 'job_types.name as job_type')
-                    ->where('block_references.jobtype_id', 2)
-                    ->orderByDesc('fertilizers.created_at')
-                    ->get();
-            return view('superadmin.type.fertilizer.index')->with(['fertilizers' => $fertilizers]);
+            $fertilizers = FertilizerType::all();
+            return view('superadmin.type.fertilizer.index')->with([
+                'fertilizers' => $fertilizers
+            ]);
+        }
+
+        public function fertilizer_detail($blok_ref_id, $fertilizer_id) {
+            $blok_reference = BlockReference::find($blok_ref_id);
+            $fertilizer = $blok_reference->model::find($fertilizer_id);
+            $fill = $blok_reference->fill::where($blok_reference->fill_id, $fertilizer_id)->first();
+            return view('superadmin.type.fertilizer.detail')->with([
+                'block_reference' => $blok_reference,
+                'fertilizer'        => !$fertilizer ? null : $fertilizer,
+                'fill'            => !$fill ? null : $fill,
+            ]);
         }
     
         // CIRCLE
@@ -96,18 +101,21 @@ class TypejobController extends Controller
     
         // PEST CONTROL
         public function pestcontrol () {
-            $pest_controls = DB::table('block_references')
-                    ->leftJoin('pest_controls', 'pest_controls.block_ref_id', '=', 'block_references.id')
-                    ->leftJoin('fill_pcontrols', 'fill_pcontrols.pcontrol_id', '=', 'pest_controls.id')
-                    ->leftJoin('foremans', 'foremans.id', '=', 'pest_controls.foreman_id')
-                    ->leftJoin('subforemans', 'subforemans.id', '=', 'pest_controls.subforeman_id')
-                    ->leftJoin('job_types', 'job_types.id', '=', 'block_references.jobtype_id')
-                    ->leftJoin('blocks', 'blocks.id', '=', 'block_references.block_id')
-                    ->select('block_references.foreman_id', 'pest_controls.subforeman_id', 'pest_controls.date', 'block_references.planting_year', 'block_references.total_coverage', 'block_references.available_coverage', 'block_references.population_coverage', 'block_references.population_perblock', 'blocks.code as block', 'foremans.name as foreman', 'subforemans.name as subforeman', 'job_types.name as job_type')
-                    ->where('block_references.jobtype_id', 6)
-                    ->orderByDesc('pest_controls.created_at')
-                    ->get();
-            return view('superadmin.type.pcontrol.index')->with(['pest_controls' => $pest_controls]);
+            $pestcontrols = PestControl::all();
+            return view('superadmin.type.pcontrol.index')->with([
+                'pestcontrols' => $pestcontrols
+            ]);
+        }
+
+        public function pestcontrol_detail($blok_ref_id, $pestcontrol_id) {
+            $blok_reference = BlockReference::find($blok_ref_id);
+            $pestcontrol = $blok_reference->model::find($pestcontrol_id);
+            $fill = $blok_reference->fill::where($blok_reference->fill_id, $pestcontrol_id)->first();
+            return view('superadmin.type.pcontrol.detail')->with([
+                'block_reference' => $blok_reference,
+                'pestcontrol'     => !$pestcontrol ? null : $pestcontrol,
+                'fill'            => !$fill ? null : $fill,
+            ]);
         }
     
         // HARVESTING
