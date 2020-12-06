@@ -25,6 +25,7 @@ class CreateBlockReferenceTable extends Migration
             $table->double('population_perblock', 8, 2); // Total coverage *
             $table->string('model')->nullable();
             $table->string('fill')->nullable();
+            $table->string('fill_id')->nullable();
             $table->char('completed')->default(0);
             $table->timestamps();
         });

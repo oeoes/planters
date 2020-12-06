@@ -23,7 +23,7 @@ class CreateHarvestingTable extends Migration
             $table->float('target_coverage', 8, 2); // ls pnn
             $table->float('akp', 8, 2);
             $table->float('bjr', 8, 2);
-            $table->float('taksasi', 8, 2);
+            $table->decimal('taksasi', 12, 2);
             $table->float('basis', 8, 2);
             $table->integer('hk_used');
             $table->text('foreman_note')->nullable();
