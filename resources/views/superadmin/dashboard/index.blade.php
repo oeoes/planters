@@ -3,20 +3,14 @@
 @section('title', 'Super Admin - Dashboard')
 
 @section('content-title')
-  <b>Rawat</b> <small class="text-muted font-weight-lighter" style="font-size: 14pt">Rencana Kerja Harian</small>
-@endsection
-
-@section('css')
-@endsection
-
-@section('breadcumb')
+  <b>Dashboard</b> <small class="text-muted font-weight-lighter" style="font-size: 14pt">Rencana Kerja Harian</small>
 @endsection
 
 @section('content')
 
 <div class="card">
   <div class="card-body">
-    Lorem ipsum dolor sit amet.
+    
   </div>
 </div>
 @endsection
