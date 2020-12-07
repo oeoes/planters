@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="card col-md-12 table-responsive">
-    <table id="myTable" class="table" style="font-size:11pt">
+    <table id="myTable" class="table table-hover table-borderless" style="font-size:11pt">
         <thead class="text-muted bg-primary">
             <tr>
                 <th>#</th>

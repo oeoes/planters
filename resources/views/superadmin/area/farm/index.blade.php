@@ -9,7 +9,7 @@
 @section('content')
 <div class="row">
   <div class="col-md-8">
-      <div class="card">
+      <div class="card table-responsive">
           <table id="myTable" class="table table-hover table-borderless">
               <thead class="text-muted">
                   <tr>

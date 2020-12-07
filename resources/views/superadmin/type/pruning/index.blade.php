@@ -10,7 +10,7 @@
 <div class="row">
   <div class="col-md-12">
       <div class="card table-responsive">
-          <table id="myTable" class="table ">
+          <table id="myTable" class="table table-hover table-borderless">
               <thead class="text-muted bg-primary">
                   <tr>
                       <th>#</th>
