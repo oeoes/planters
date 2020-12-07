@@ -13,8 +13,19 @@ class DashboardController extends Controller
         $blockref = BlockReference::select('planting_year', DB::raw("sum(total_coverage) as coverage"))
                                  ->groupBy('planting_year')
                                  ->get();
-        // dd($blockref->toArray());
-        return view('superadmin.dashboard.index');
+        $coverage = [];
+        $plantingyear = [];
+        foreach ($blockref->toArray() as $key => $value) {
+            $coverage [] = $value['coverage'];
+            $plantingyear [] = $value['planting_year'];
+        }
+        $plantingyear = $blockref->implode('planting_year', ', ');
+        $coverage     = $blockref->implode('coverage', ', ');
+
+        return view('superadmin.dashboard.index', [
+            'coverage' => $coverage,
+            'plantingyear' => $plantingyear
+        ]);
     }
 
 
