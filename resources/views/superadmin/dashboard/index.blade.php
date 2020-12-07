@@ -6,12 +6,6 @@
   Overview (Dummy)
 @endsection
 
-@section('css')
-@endsection
-
-@section('breadcumb')
-@endsection
-
 @section('content')
 
 <div class="content">
@@ -26,33 +20,7 @@
                 </div>
               </div>
               <div class="card-body">
-                <div class="d-flex">
-                  <p class="d-flex flex-column">
-                    <span class="text-bold text-lg">820</span>
-                    <span>Visitors Over Time</span>
-                  </p>
-                  <p class="ml-auto d-flex flex-column text-right">
-                    <span class="text-success">
-                      <i class="fas fa-arrow-up"></i> 12.5%
-                    </span>
-                    <span class="text-muted">Since last week</span>
-                  </p>
-                </div>
-                <!-- /.d-flex -->
-
-                <div class="position-relative mb-4">
-                  <canvas id="visitors-chart" height="200"></canvas>
-                </div>
-
-                <div class="d-flex flex-row justify-content-end">
-                  <span class="mr-2">
-                    <i class="fas fa-square text-primary"></i> This Week
-                  </span>
-
-                  <span>
-                    <i class="fas fa-square text-gray"></i> Last Week
-                  </span>
-                </div>
+                <canvas id="myChart" width="400" height="400"></canvas>
               </div>
             </div>
             <!-- /.card -->
@@ -265,9 +233,33 @@
 @endsection
 
 @section('js')
-  <script src="{{ asset('js/Chart.js') }}"></script>
-  <script src="{{ asset('js/adminLte.js') }}"></script>
+  {{-- <script src="{{ asset('js/adminLte.js') }}"></script> --}}
   <script>
-    
-  </script>
+    var ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          datasets: [{
+            data: [10, 20, 30],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+          }],
+
+    // These labels appear in the legend and in the tooltips when hovering different arcs
+        labels: [
+            'Red',
+            'Yellow',
+            'Blue',
+            'orange',
+            'pink'
+        ]
+      },
+    });
+    </script>
 @endsection
