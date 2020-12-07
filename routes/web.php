@@ -33,7 +33,7 @@ Route::get('/test', function() {return view('root.app'); });
 Route::get('/', function() {
     return redirect('/login');
 });
-Route::get ('/login', [AuthController::class, 'loginform'])->middleware('guest');
+Route::get ('/login', [AuthController::class, 'loginform'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.process');
 Route::get ('/logout',[AuthController::class, 'logout'])
      ->middleware('auth:assistant,farmmanager,superadmin')->name('logout');

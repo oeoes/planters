@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-<div class="card col-md-12">
+<div class="card col-md-12 table-responsive">
     <table id="myTable" class="table" style="font-size:11pt">
         <thead class="text-muted bg-primary">
             <tr>

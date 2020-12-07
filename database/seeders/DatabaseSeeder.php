@@ -18,20 +18,20 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            FarmTableSeeder::class,
-            AfdellingTableSeeder::class,
-            BlockTableSeeder::class,
-            ForemanTableSeeder::class,
+            // FarmTableSeeder::class,
+            // AfdellingTableSeeder::class,
+            // BlockTableSeeder::class,
+            // ForemanTableSeeder::class,
             JobTypeTableSeeder::class,
-            ManagerTableSeeder::class,
+            // ManagerTableSeeder::class,
             SuperadminTableSeeder::class,
             // SubforemanTableSeeder::class,
             // SuperadminTableSeeder::class,
         ]);
 
-        Subforeman::factory(500)->create();
-        Foreman::factory(4)->create();
-        Assistant::factory(10)->create();
+        // Subforeman::factory(500)->create();
+        // Foreman::factory(4)->create();
+        // Assistant::factory(10)->create();
 
     }
 }
