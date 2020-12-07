@@ -233,7 +233,7 @@
 @endsection
 
 @section('js')
-  <script src="{{ asset('js/adminLte.js') }}"></script>
+  {{-- <script src="{{ asset('js/adminLte.js') }}"></script> --}}
   <script>
     var ctx = document.getElementById('myChart');
     var myChart = new Chart(ctx, {
