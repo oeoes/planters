@@ -255,7 +255,9 @@
         labels: [
             'Red',
             'Yellow',
-            'Blue'
+            'Blue',
+            'orange',
+            'pink'
         ]
       },
     });
