@@ -10,6 +10,115 @@
 
 <div class="content">
   <div class="container-fluid">
+    <h5 class="mb-2 mt-4">Small Box</h5>
+    <div class="row">
+      <div class="col-lg-3 col-6">
+        <!-- small card -->
+        <div class="small-box bg-info">
+          <div class="inner">
+            <h3>{{ App\Models\Farm::count() }}</h3>
+
+            <p>Farms</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <a href="#" class="small-box-footer">
+            More info <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small card -->
+        <div class="small-box bg-success">
+          <div class="inner">
+            <h3>{{ App\Models\Afdelling::count() }}</h3>
+
+            <p>Afdellings</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+          <a href="#" class="small-box-footer">
+            More info <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small card -->
+        <div class="small-box bg-warning">
+          <div class="inner">
+            <h3>{{ App\Models\Block::count() }}</h3>
+
+            <p>Bloks</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <a href="#" class="small-box-footer">
+            More info <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small card -->
+        <div class="small-box bg-danger">
+          <div class="inner">
+            @php
+            $today = date('Y-m-d');
+            $completed_jobs = [
+                  App\Models\Maintain\SprayingType::where('completed', 1)->where('date', $today)->count(),
+                  App\Models\Maintain\FertilizerType::where('completed', 1)->where('date', $today)->count(),
+                  App\Models\Maintain\CircleType::where('completed', 1)->where('date', $today)->count(),
+                  App\Models\Maintain\PruningType::where('completed', 1)->where('date', $today)->count(),
+                  App\Models\Maintain\GawanganType::where('completed', 1)->where('date', $today)->count(),
+                  App\Models\Maintain\PestControl::where('completed', 1)->where('date', $today)->count(),
+                  App\Models\Harvesting\HarvestingType::where('completed', 1)->where('date', $today)->count(),
+            ];
+
+            $completed = 0;
+            for ($i = 0; $i < count($completed_jobs); $i++) { 
+              if ($completed_jobs[$i] > 0) {
+                $completed += $completed_jobs[$i];
+              }
+            }
+
+            $incompleted_jobs = [
+                  App\Models\Maintain\SprayingType::where('completed', 0)->where('date', $today)->count(),
+                  App\Models\Maintain\FertilizerType::where('completed', 0)->where('date', $today)->count(),
+                  App\Models\Maintain\CircleType::where('completed', 0)->where('date', $today)->count(),
+                  App\Models\Maintain\PruningType::where('completed', 0)->where('date', $today)->count(),
+                  App\Models\Maintain\GawanganType::where('completed', 0)->where('date', $today)->count(),
+                  App\Models\Maintain\PestControl::where('completed', 0)->where('date', $today)->count(),
+                  App\Models\Harvesting\HarvestingType::where('completed', 0)->where('date', $today)->count(),
+            ];
+
+            $incompleted = 0;
+            for ($i = 0; $i < count($incompleted_jobs); $i++) { 
+              if ($incompleted_jobs[$i] > 0) {
+                $incompleted += $incompleted_jobs[$i];
+              }
+            }
+
+            
+            @endphp
+            <h3>{{ $completed }} <span style="font-size: 15pt">Of</span> {{ $completed + $incompleted }}</h3>
+
+            <p>RKH completed today</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-chart-pie"></i>
+          </div>
+          <a href="#" class="small-box-footer">
+            More info <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+      <!-- ./col -->
+    </div>
     <div class="row">
       <div class="col-lg-6">
         <div class="card">
