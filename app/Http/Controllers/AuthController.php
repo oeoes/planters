@@ -16,16 +16,14 @@ class AuthController extends Controller
         $credentials = ['email' => $request->email, 'password' => $request->password];
 
         if (Auth::guard('assistant')->attempt($credentials)) {
-            // dd('ok')            ;
 
             return redirect('/assistant/dashboard/');
 
         } else if (Auth::guard('superadmin')->attempt($credentials)) {
-            // dd('ok')            ;
+
             return redirect('/superadmin/dashboard/');
 
         } else if (Auth::guard('farmmanager')->attempt($credentials)) {
-            // dd('ok')            ;
 
             return redirect('/manager/dashboard/');
 

@@ -30,6 +30,35 @@ class TypejobController extends Controller
                 'fill'            => !$fill ? null : $fill,
             ]);
         }
+
+        public function spraying_history() {
+            $block_references = BlockReference::where('jobtype_id', 1)
+                                            ->where('completed', 1)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            return view('superadmin.type.spraying.history', [
+                'block_references' => $block_references
+            ]);
+        }
+
+        public function spraying_history_detail($block_ref_id) {
+            $block_reference = BlockReference::find($block_ref_id);
+            $seeds = $block_reference->model::where('block_ref_id', $block_ref_id)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            $filled = [];
+            foreach ($seeds as $key => $value) {
+                $filled [] = [ 
+                    $block_reference->fill::where($block_reference->fill_id, $value['id'])->first()->toArray()
+                ];
+            }
+
+            return view('superadmin.type.spraying.history_detail', [
+                'block_reference' => $block_reference,
+                'seeds' => $seeds,
+                'fills' => $filled
+            ]);
+        }
     
     
         // FERTILIZER

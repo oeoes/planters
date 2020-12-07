@@ -53,6 +53,9 @@ class Handler extends ExceptionHandler
             return res(false, 404, $exception->getMessage());
             
         } else {
+            // if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
+            //     return redirect('/login');
+                
             if(Auth::guard('assistant')->check()) {}
                 return parent::render($request, $exception);
 

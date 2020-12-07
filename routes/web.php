@@ -1,16 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 
 // ASSISTANT
 use App\Http\Controllers\DashboardController as AS_DashboardController;
 use App\Http\Controllers\assistant\AreaController as AS_AreaController;
 use App\Http\Controllers\assistant\ForemanController    as AS_ForemanController;
 use App\Http\Controllers\assistant\SubforemanController    as AS_SubforemanController;
-
-
-
-use App\Http\Controllers\AuthController;
 
 // SUPERADMIN
 use App\Http\Controllers\superadmin\DashboardController  as SU_DashboardController;
@@ -114,6 +112,8 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
         Route::group(['prefix' => 'spraying'], function () {
             Route::get('/', [SU_TypejobController::class, 'spraying'])->name('superadmin.spraying.index');
             Route::get('/detail/{blok_ref_id}/{spraying_id}', [SU_TypejobController::class, 'spraying_detail'])->name('superadmin.spraying.detail');
+            Route::get('/history', [SU_TypejobController::class, 'spraying_history'])->name('superadmin.spraying.history');
+            Route::get('/history/{block_ref_id}', [SU_TypejobController::class, 'spraying_history_detail'])->name('superadmin.spraying.history.detail');
         });
 
         Route::group(['prefix' => 'fertilizer'], function () {
@@ -314,3 +314,6 @@ Route::get('/clear', function() { return session()->flush();});
  // get list afdelling based on farm id
 Route::get('/afdelling/list/{farm_id}', [SU_AreaController::class, 'get_afdelling_of_farm']);
 
+
+// auth routes
+// Auth::routes();
