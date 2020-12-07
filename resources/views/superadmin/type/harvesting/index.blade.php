@@ -9,10 +9,10 @@
 @section('content')
 <div class="row">
   <div class="col-md-12">
-      <div class="card">
-          <table id="myTable" class="table table-hover table-borderless table-responsive">
-              <thead class="text-muted">
-                  <tr>
+      <div class="card table-responsive">
+          <table id="myTable" class="table table-hover table-borderless">
+            <thead class="text-muted bg-primary">
+                <tr>
                       <th>#</th>
                       <th>Mandor utama</th>
                       <th>Tahun tanam</th>
