@@ -10,12 +10,18 @@
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <link rel="stylesheet" href="{{ asset('template/dist/css/adminlte.min.css') }}">
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('css/animate.css') }}">
+  <style>
+    .error {
+      border-color: #dc3545;
+    }
+  </style>
 </head>
 
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="#"><b>Planter</b>DEV</a>
+    <a href="#"><b>PLANTERS</b><small> | Vokasi IPB</small></a>
   </div>
   {{-- @include('sweetalert::alert') --}}
   <!-- /.login-logo -->
@@ -33,10 +39,10 @@
         </div>
       @endif
 
-      <form action="/login" method="post">
+      <form id="login-form" method="post">
         @csrf
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" name="email" value="super_admin@planters-svipb.com">
+          <input id="email" type="email" class="form-control" placeholder="Email" name="email" value="super_admin@planters-svipb.com">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -44,7 +50,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="password" value="plantersvokasiipb">
+          <input id="password" type="password" class="form-control" placeholder="Password" name="password" value="plantersvokasiipb">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -53,15 +59,15 @@
         </div>
         <div class="row">
           <div class="col-8">
-            <div class="icheck-primary">
+            <!-- <div class="icheck-primary">
               <input type="checkbox" id="remember" name="remember">
               <label for="remember">
                 Remember Me
               </label>
-            </div>
+            </div> -->
           </div>
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            <button id="btn-login" type="submit" class="btn btn-sm btn-outline-primary rounded-pill pl-3 pr-3 btn-block">Sign In</button>
           </div>
         </div>
       </form>
@@ -72,6 +78,48 @@
 <script src="{{ asset('template/plugins/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('template/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('template/dist/js/adminlte.min.js') }}"></script>
+<script src="{{ asset('js/axios.js') }}"></script>
+<script>
+  $(document).ready(function () {
+    $(document).on('submit', '#login-form', function (e) {
+      e.preventDefault()
+    })
+
+    $(document).on('click', '#btn-login', function () {
+      $('#btn-login').text('Cheking...')
+      axios.post('/login', {
+        email: $('#email').val(),
+        password: $('#password').val(),
+      }).then(function(response) {
+        switch (response.data.role) {
+          case 'assistant':
+              location.href = '{{ route("assistant.dashboard") }}'
+            break;
+          
+          case 'farmmanager':
+              location.href = '{{ route("manager.dashboard") }}'
+            break;
+
+          case 'superadmin':
+              location.href = '{{ route("superadmin.dashboard") }}'
+            break;
+        }
+      })
+      .catch(function(error) {
+          $('#email').addClass('error animate__animated animate__shakeX')
+          $('#password').addClass('error animate__animated animate__shakeX')
+          $('.input-group-text').addClass('error animate__animated animate__shakeX')
+      }).finally(function() {
+        setTimeout(() => {
+          $('#email').removeClass('error animate__animated animate__shakeX')
+          $('#password').removeClass('error animate__animated animate__shakeX')
+          $('.input-group-text').removeClass('error animate__animated animate__shakeX')
+        }, 4500);
+        $('#btn-login').text('Sign In')
+      })
+    })
+  })
+</script>
 
 </body>
 </html>

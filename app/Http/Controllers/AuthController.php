@@ -18,20 +18,23 @@ class AuthController extends Controller
         if (Auth::guard('assistant')->attempt($credentials)) {
             // dd('ok')            ;
 
-            return redirect('/assistant/dashboard/');
+            // return redirect('/assistant/dashboard/');
+            return response()->json(['status' => true, 'role' => 'assistant'], 200);
 
         } else if (Auth::guard('superadmin')->attempt($credentials)) {
             // dd('ok')            ;
-            return redirect('/superadmin/dashboard/');
+            // return redirect('/superadmin/dashboard/');
+            return response()->json(['status' => true, 'role' => 'superadmin'], 200);
 
         } else if (Auth::guard('farmmanager')->attempt($credentials)) {
             // dd('ok')            ;
 
-            return redirect('/manager/dashboard/');
+            // return redirect('/manager/dashboard/');
+            return response()->json(['status' => true, 'role' => 'farmmanager'], 200);
 
         } else {
 
-            return back();
+            return response()->json(['status' => false, 'message' => 'Invalid Credentials'], 401);
 
         }
     }
