@@ -2,7 +2,7 @@
 
 @section('title', 'RKH - Spraying')
 
-@section('content-title', 'RKH - Spraying')
+@section('content-title', 'RKH - Spraying (detail)')
 
 @section('content')
 <div class="row">
@@ -55,7 +55,7 @@
                     <tr>
                         <td>Catatan</td>
                         <td> : </td>
-                        <td>{{ $spraying->subforeman_note }}</td>
+                        <td>{{ $spraying->foreman_note }}</td>
                     </tr>
                 </table>
             </div>
@@ -64,14 +64,13 @@
     <div class="col">
         <div class="card">
             <div class="card-body">
-                @if ($fill !== null)
-                    <span class="text-muted">
-                        Mandor bidang,
-                        <span class="font-weight-bolder">
-                            {{ subforeman($spraying->subforeman_id)->name }}
-                        </span>
+            @if ($fill !== null)
+                <span class="text-muted">
+                    Mandor bidang,
+                    <span class="font-weight-bolder">
+                        {{ subforeman($spraying->subforeman_id)->name }}
                     </span>
-                @endif
+                </span>
                 <table class="table table-striped">
                     <tr>
                         <td>Pelaksanaan</td>
@@ -99,6 +98,9 @@
                         <td>{{ $fill->subforeman_note }}</td>
                     </tr>
                 </table>
+            @else
+            <div class="card-title">Belum Ada Laporan</div>
+            @endif
             </div>
         </div>
     </div>

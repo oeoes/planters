@@ -47,6 +47,7 @@ function res($status, $code, $message, $data = null) {
         case 4: return 'Manual pruning'; break;
         case 5: return 'Manual gawangan'; break;
         case 6: return 'Pest control'; break;
+        case 7: return 'Harvesting'; break;
       }
     }
 

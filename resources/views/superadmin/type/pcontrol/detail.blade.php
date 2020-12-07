@@ -2,52 +2,112 @@
 
 @section('title', 'RKH - Pest Control')
 
-@section('content-title')
-  RKH - Pest Control
-@endsection
+@section('content-title', 'RKH - Pest Control (detail)')
 
 @section('content')
-<div class="card col-md-12">
-    <table id="myTable" class="table" style="font-size:11pt">
-        <thead class="text-muted bg-primary">
-            <tr>
-                <th>#</th>
-                <th>Date</th>
-                <th>Man. utama</th>
-                <th>Tot. cov</th>
-                <th>Pop. cov</th>
-                <th>SPH</th>
-                <th>Man. bidang</th>
-                <th>Pekerjaan</th>
-                <th>Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($pestcontrols as $key => $pestcontrol)
-            @php $reference = App\Models\BlockReference::find($pestcontrol->block_ref_id); @endphp
-            <tr>
-                <td scope="row">{{ $key+1 }}</td>
-                <td>{{ date('d-m-Y', strtotime($pestcontrol->date))}}</td>
-                <td>{{ foreman($pestcontrol->foreman_id)->name }}</td>
-                <td>{{ $reference->total_coverage }} Ha</td>
-                <td>{{ $reference->population_coverage }} Ha</td>
-                <td>{{ $reference->population_perblock }}</td>
-                <td>{{ subforeman($pestcontrol->subforeman_id)->name }}</td>
-                <td>{{ jobtype($reference->jobtype_id) }}</td>
-                <td>
-                    <a href="{{ route('superadmin.pestcontrol.detail', [$pestcontrol->block_ref_id, $pestcontrol->id]) }}" class="btn btn-default btn-sm">
-                        {{ $reference->planting_year }} - {{ block($reference->block_id) }}
-                    </a>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <span class="text-muted">Mandor utama</span>, 
+                <span class="font-weight-bolder">{{ foreman($block_reference->foreman_id)->name }}</span>
+                <table class="table table-striped">
+                    <tr>
+                        <td>Tahun Tanam</td>
+                        <td>:</td>
+                        <td>{{ $block_reference->planting_year }}</td>
+                    </tr>
+                    <tr>
+                        <td>Block</td>
+                        <td>:</td>
+                        <td>{{ block($block_reference->block_id) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Target luas block</td>
+                        <td>:</td>
+                        <td>{{ $block_reference->total_coverage }} Ha</td>
+                    </tr>
+                    <tr>
+                        <td>Luas block tersedia</td>
+                        <td>:</td>
+                        <td>{{ $block_reference->available_coverage }} of {{ $block_reference->total_coverage }} Ha</td>
+                    </tr>
+                    <tr>
+                        <td>Luas populasi</td>
+                        <td>:</td>
+                        <td>{{ $block_reference->population_coverage }} Ha</td>
+                    </tr>
+                    <tr>
+                        <td>Populasi perblock / SPH</td>
+                        <td>:</td>
+                        <td>{{ $block_reference->population_perblock }}</td>
+                    </tr>
+                    <tr>
+                        <td>Jenis bahan</td>
+                        <td>:</td>
+                        <td>{{ $pestcontrol->ingredients_type }}</td>
+                    </tr>
+                    <tr>
+                        <td>Qty bahan</td>
+                        <td>:</td>
+                        <td>{{ $pestcontrol->ingredients_amount }}</td>
+                    </tr>
+                    <tr>
+                        <td>Catatan</td>
+                        <td> : </td>
+                        <td>{{ $pestcontrol->foreman_note }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                @if ($fill !== null)
+                    <span class="text-muted">
+                        Mandor bidang,
+                        <span class="font-weight-bolder">
+                            {{ subforeman($pestcontrol->subforeman_id)->name }}
+                        </span>
+                    </span>
+                <table class="table table-striped">
+                    <tr>
+                        <td>Pelaksanaan</td>
+                        <td> : </td>
+                        <td>{{ $fill->begin }} &nbsp;<i class="fa fa-sm fa-arrow-right" aria-hidden="true"></i> {{ $fill->ended }}</td>
+                    </tr>
+                    <tr>
+                        <td>Capaian</td>
+                        <td> : </td>
+                        <td>{{ $fill->ftarget_coverage }} Ha</td>
+                    </tr>
+                    <tr>
+                        <td>Penggunaan HK</td>
+                        <td> : </td>
+                        <td>{{ $pestcontrol->hk_used }}</td>
+                    </tr>
+                    <tr>
+                        <td>Qty bahan</td>
+                        <td> : </td>
+                        <td>{{ $fill->fingredients_amount }}</td>
+                    </tr>
+                    <tr>
+                        <td>Catatan</td>
+                        <td> : </td>
+                        <td>{{ $fill->subforeman_note }}</td>
+                    </tr>
+                </table>
+            @else
+                <div class="card-title">Belum Ada Laporan</div>
+            @endif
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
 @section('js')
   <script>
     
-  </script>
-@endsection
+  </script> 

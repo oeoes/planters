@@ -128,7 +128,7 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
 
         Route::group(['prefix' => 'pruning'], function () {
             Route::get('/', [SU_TypejobController::class, 'pruning'])->name('superadmin.pruning.index');            
-            Route::get('/detail/{blok_ref_id}/{pruning_id}', [SU_TypejobController::class, 'pruning_class'])->name('superadmin.pruning.detail');
+            Route::get('/detail/{blok_ref_id}/{pruning_id}', [SU_TypejobController::class, 'pruning_detail'])->name('superadmin.pruning.detail');
         });
 
         Route::group(['prefix' => 'gawangan'], function () {
@@ -143,7 +143,7 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
         
         Route::group(['prefix' => 'harvesting'], function () {
             Route::get('/', [SU_TypejobController::class, 'harvesting'])->name('superadmin.harvesting.index');
-            Route::get('/detail/{}', [SU_TypejobController::class, 'harvesting_detail'])->name('superadmin.harvesting.detail');
+            Route::get('/detail/{blok_ref_id}/{harvesting_id}', [SU_TypejobController::class, 'harvesting_detail'])->name('superadmin.harvesting.detail');
         });
     });
 

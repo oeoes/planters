@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\BlockReference;
 use App\Models\Maintain\FertilizerType;
 use App\Models\Maintain\PestControl;
+use App\Models\Maintain\CircleType;
+use App\Models\Maintain\PruningType;
+use App\Models\Maintain\GawanganType;
+use App\Models\Harvesting\HarvestingType;
 use App\Models\Maintain\SprayingType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -53,50 +57,59 @@ class TypejobController extends Controller
     
         // CIRCLE
         public function circle () {
-            $circles = DB::table('block_references')
-                    ->leftJoin('circles', 'circles.block_ref_id', '=', 'block_references.id')
-                    ->leftJoin('fill_circles', 'fill_circles.circle_id', '=', 'circles.id')
-                    ->leftJoin('foremans', 'foremans.id', '=', 'circles.foreman_id')
-                    ->leftJoin('subforemans', 'subforemans.id', '=', 'circles.subforeman_id')
-                    ->leftJoin('job_types', 'job_types.id', '=', 'block_references.jobtype_id')
-                    ->leftJoin('blocks', 'blocks.id', '=', 'block_references.block_id')
-                    ->select('block_references.foreman_id', 'circles.subforeman_id', 'circles.date', 'block_references.planting_year', 'block_references.total_coverage', 'block_references.available_coverage', 'block_references.population_coverage', 'block_references.population_perblock', 'blocks.code as block', 'foremans.name as foreman', 'subforemans.name as subforeman', 'job_types.name as job_type')
-                    ->where('block_references.jobtype_id', 3)
-                    ->orderByDesc('circles.created_at')
-                    ->get();
-            return view('superadmin.type.circle.index')->with(['circles' => $circles]);
+            $circles = CircleType::all();
+            return view('superadmin.type.circle.index')->with([
+                'circles' => $circles
+            ]);
+        }
+
+        public function circle_detail($blok_ref_id, $circle_id) {
+            $blok_reference = BlockReference::find($blok_ref_id);
+            $circle = $blok_reference->model::find($circle_id);
+            $fill = $blok_reference->fill::where($blok_reference->fill_id, $circle_id)->first();
+            return view('superadmin.type.circle.detail')->with([
+                'block_reference' => $blok_reference,
+                'circle'        => !$circle ? null : $circle,
+                'fill'            => !$fill ? null : $fill,
+            ]);
         }
     
         // PRUNING
         public function pruning () {
-            $prunings = DB::table('block_references')
-                    ->leftJoin('prunings', 'prunings.block_ref_id', '=', 'block_references.id')
-                    ->leftJoin('fill_prunings', 'fill_prunings.pruning_id', '=', 'prunings.id')
-                    ->leftJoin('foremans', 'foremans.id', '=', 'prunings.foreman_id')
-                    ->leftJoin('subforemans', 'subforemans.id', '=', 'prunings.subforeman_id')
-                    ->leftJoin('job_types', 'job_types.id', '=', 'block_references.jobtype_id')
-                    ->leftJoin('blocks', 'blocks.id', '=', 'block_references.block_id')
-                    ->select('block_references.foreman_id', 'prunings.subforeman_id', 'prunings.date', 'block_references.planting_year', 'block_references.total_coverage', 'block_references.available_coverage', 'block_references.population_coverage', 'block_references.population_perblock', 'blocks.code as block', 'foremans.name as foreman', 'subforemans.name as subforeman', 'job_types.name as job_type')
-                    ->where('block_references.jobtype_id', 4)
-                    ->orderByDesc('prunings.created_at')
-                    ->get();
-            return view('superadmin.type.pruning.index')->with(['prunings' => $prunings]);
+            $prunings = PruningType::all();
+            return view('superadmin.type.pruning.index')->with([
+                'prunings' => $prunings
+            ]);
+        }
+
+        public function pruning_detail($blok_ref_id, $pruning_id) {
+            $blok_reference = BlockReference::find($blok_ref_id);
+            $pruning = $blok_reference->model::find($pruning_id);
+            $fill = $blok_reference->fill::where($blok_reference->fill_id, $pruning_id)->first();
+            return view('superadmin.type.pruning.detail')->with([
+                'block_reference' => $blok_reference,
+                'pruning'        => !$pruning ? null : $pruning,
+                'fill'            => !$fill ? null : $fill,
+            ]);
         }
     
         // GAWANGAN
         public function gawangan () {
-            $gawangans = DB::table('block_references')
-                    ->leftJoin('gawangans', 'gawangans.block_ref_id', '=', 'block_references.id')
-                    ->leftJoin('fill_gawangans', 'fill_gawangans.gawangan_id', '=', 'gawangans.id')
-                    ->leftJoin('foremans', 'foremans.id', '=', 'gawangans.foreman_id')
-                    ->leftJoin('subforemans', 'subforemans.id', '=', 'gawangans.subforeman_id')
-                    ->leftJoin('job_types', 'job_types.id', '=', 'block_references.jobtype_id')
-                    ->leftJoin('blocks', 'blocks.id', '=', 'block_references.block_id')
-                    ->select('block_references.foreman_id', 'gawangans.subforeman_id', 'gawangans.date', 'block_references.planting_year', 'block_references.total_coverage', 'block_references.available_coverage', 'block_references.population_coverage', 'block_references.population_perblock', 'blocks.code as block', 'foremans.name as foreman', 'subforemans.name as subforeman', 'job_types.name as job_type')
-                    ->where('block_references.jobtype_id', 5)
-                    ->orderByDesc('gawangans.created_at')
-                    ->get();
-            return view('superadmin.type.gawangan.index')->with(['gawangans' => $gawangans]);
+            $gawangans = GawanganType::all();
+            return view('superadmin.type.gawangan.index')->with([
+                'gawangans' => $gawangans
+            ]);
+        }
+
+        public function gawangan_detail($blok_ref_id, $gawangan_id) {
+            $blok_reference = BlockReference::find($blok_ref_id);
+            $gawangan = $blok_reference->model::find($gawangan_id);
+            $fill = $blok_reference->fill::where($blok_reference->fill_id, $gawangan_id)->first();
+            return view('superadmin.type.gawangan.detail')->with([
+                'block_reference' => $blok_reference,
+                'gawangan'        => !$gawangan ? null : $gawangan,
+                'fill'            => !$fill ? null : $fill,
+            ]);
         }
     
         // PEST CONTROL
@@ -120,30 +133,21 @@ class TypejobController extends Controller
     
         // HARVESTING
         public function harvesting () {
-            $harvestings = DB::table('block_references')
-                    ->leftJoin('harvestings', 'harvestings.block_ref_id', '=', 'block_references.id')
-                    ->leftJoin('fill_harvestings', 'fill_harvestings.harvest_id', '=', 'harvestings.id')
-                    ->leftJoin('foremans', 'foremans.id', '=', 'harvestings.foreman_id')
-                    ->leftJoin('subforemans', 'subforemans.id', '=', 'harvestings.subforeman_id')
-                    ->leftJoin('job_types', 'job_types.id', '=', 'block_references.jobtype_id')
-                    ->leftJoin('blocks', 'blocks.id', '=', 'block_references.block_id')
-                    ->select('block_references.id as block_ref_id', 'block_references.jobtype_id as jobtype_id', 'block_references.foreman_id', 'harvestings.subforeman_id', 'harvestings.date', 'block_references.planting_year', 'block_references.total_coverage', 'block_references.available_coverage', 'block_references.population_coverage', 'block_references.population_perblock', 'blocks.code as block', 'foremans.name as foreman', 'subforemans.name as subforeman', 'job_types.name as job_type')
-                    ->where('block_references.jobtype_id', 7)
-                    ->get();
+            $harvestings = HarvestingType::all();
+            return view('superadmin.type.harvesting.index')->with([
+                'harvestings' => $harvestings
+            ]);
             return view('superadmin.type.harvesting.index')->with(['harvestings' => $harvestings]);
         }
 
-        public function harvesting_detail ($block_ref_id) {
-            $harvestings = DB::table('block_references')
-                    ->leftJoin('harvestings', 'harvestings.block_ref_id', '=', 'block_references.id')
-                    ->leftJoin('fill_harvestings', 'fill_harvestings.harvest_id', '=', 'harvestings.id')
-                    ->leftJoin('foremans', 'foremans.id', '=', 'harvestings.foreman_id')
-                    ->leftJoin('subforemans', 'subforemans.id', '=', 'harvestings.subforeman_id')
-                    ->leftJoin('job_types', 'job_types.id', '=', 'block_references.jobtype_id')
-                    ->leftJoin('blocks', 'blocks.id', '=', 'block_references.block_id')
-                    // ->select('block_references.foreman_id', 'harvestings.subforeman_id', 'harvestings.date', 'block_references.planting_year', 'block_references.total_coverage', 'block_references.available_coverage', 'block_references.population_coverage', 'block_references.population_perblock', 'blocks.code as block', 'foremans.name as foreman', 'subforemans.name as subforeman', 'job_types.name as job_type')
-                    ->where('block_references.jobtype_id', $job)
-                    ->get();
-            return view('superadmin.type.harvesting.detail')->with(['harvestings' => $harvestings]);
+        public function harvesting_detail ($blok_ref_id, $harvesting_id) {
+            $blok_reference = BlockReference::find($blok_ref_id);
+            $harvesting = $blok_reference->model::find($harvesting_id);
+            $fill = $blok_reference->fill::where($blok_reference->fill_id, $harvesting_id)->first();
+            return view('superadmin.type.harvesting.detail')->with([
+                'block_reference' => $blok_reference,
+                'harvesting'     => !$harvesting ? null : $harvesting,
+                'fill'            => !$fill ? null : $fill,
+            ]);
         }
 }
