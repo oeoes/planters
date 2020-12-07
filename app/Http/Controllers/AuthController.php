@@ -27,7 +27,7 @@ class AuthController extends Controller
         } else if (Auth::guard('farmmanager')->attempt($credentials)) {
             // dd('ok')            ;
 
-            return redirect('/farmmanager/dashboard/');
+            return redirect('/manager/dashboard/');
 
         } else {
 

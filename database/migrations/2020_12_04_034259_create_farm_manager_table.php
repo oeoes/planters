@@ -17,6 +17,7 @@ class CreateFarmManagerTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->foreignId('afdelling_id')->constrained('afdellings');
             $table->string('password');
             $table->timestamps();
         });

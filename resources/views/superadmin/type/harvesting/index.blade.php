@@ -42,15 +42,10 @@
                       <td>{{ $harvesting->subforeman }}</td>
                       <td>{{ $harvesting->job_type }}</td>
                       <td>
-                        <button class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
+                        <a href="" class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
                             data-target="#edit-farm{{$key}}"><i
-                                class="nav-icon fas fa-pen"></i>
-                        </button>
-                        <div class="mb-1"></div>
-                        <button class="btn btn-sm rounded-pill btn-outline-danger pl-3 pr-3" data-toggle="modal"
-                            data-target="#delete-farm{{$key}}"><i
-                                class="nav-icon fas fa-trash"></i>
-                        </button>
+                                class="nav-icon fas fa-eye"></i>
+                        </a>
                       </td>
                   </tr>
                   @endforeach

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\superadmin;
 use App\Http\Controllers\Controller;
 use App\Models\Assistant;
 use Illuminate\Http\Request;
+use App\Models\Farm;
 
 class AssistantController extends Controller
 {
@@ -15,9 +16,11 @@ class AssistantController extends Controller
      */
     public function index()
     {
-        $assistants = Assistant::groupBy('afdelling_id')->get();
+        $assistants = Assistant::all();
+        $farms = Farm::all();
         return view('superadmin.users.assistant.index', [
-            'assistants' => $assistants
+            'assistants' => $assistants,
+            'farms' => $farms
         ]); 
     }
 
@@ -39,7 +42,13 @@ class AssistantController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Assistant::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'afdelling_id' => $request->afdelling_id,
+            'password' => bcrypt($request->password),
+        ]);
+        return back();
     }
 
     /**

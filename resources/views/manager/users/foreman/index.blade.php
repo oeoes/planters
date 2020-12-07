@@ -1,6 +1,6 @@
-@extends('assistant.layouts.app')
+@extends('manager.layouts.app')
 
-@section('title', 'PLANTERS - Mandor')
+@section('title', 'Farm Manager - Mandor')
 
 @section('content-title')
 Daftar Mandor
@@ -50,7 +50,7 @@ Daftar Mandor
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('assistant.foreman.update', ['foreman' => $foreman->id]) }}"
+                                        <form action="{{ route('manager.foreman.update', ['foreman' => $foreman->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('PUT')
@@ -95,7 +95,7 @@ Daftar Mandor
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ route('assistant.foreman.delete', ['foreman' => $foreman->id]) }}"
+                                        <form action="{{ route('manager.foreman.delete', ['foreman' => $foreman->id]) }}"
                                             method="post">
                                             @csrf
                                             @method('DELETE')
@@ -124,17 +124,20 @@ Daftar Mandor
                 Tambah Mandor
             </div>
             <div class="card-body">
-                <form action="{{ route('assistant.foreman.store') }}" method="post">
+                <form action="{{ route('manager.foreman.store') }}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="afdelling_id">Kebun</label>
-                        <input type="text" class="form-control" value="{{ $farm_af->farm }}" readonly>
+                        <input type="text" class="form-control" value="{{ $farm_af->name }}" readonly>
                     </div>
 
                     <div class="form-group">
                         <label for="afdelling_id">Afdelling</label>
-                        <input type="text" class="form-control" value="{{ $farm_af->afdelling }}" readonly>
-                        <input name="afdelling_id" type="hidden" class="form-control" value="{{ $farm_af->afdelling_id }}">
+                        <select name="afdelling_id" id="" class="form-control">
+                            @foreach($afdellings as $af)
+                                <option value="{{ $af->id }}">{{ $af->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="form-group">
