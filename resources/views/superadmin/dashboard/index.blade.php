@@ -23,7 +23,7 @@
           <div class="icon">
             <i class="fas fa-shopping-cart"></i>
           </div>
-          <a href="#" class="small-box-footer">
+          <a href="{{ route('superadmin.farm') }}" class="small-box-footer">
             More info <i class="fas fa-arrow-circle-right"></i>
           </a>
         </div>
@@ -40,7 +40,7 @@
           <div class="icon">
             <i class="ion ion-stats-bars"></i>
           </div>
-          <a href="#" class="small-box-footer">
+          <a href="{{ route('superadmin.afdelling') }}" class="small-box-footer">
             More info <i class="fas fa-arrow-circle-right"></i>
           </a>
         </div>
@@ -57,7 +57,7 @@
           <div class="icon">
             <i class="fas fa-user-plus"></i>
           </div>
-          <a href="#" class="small-box-footer">
+          <a href="{{ route('superadmin.block') }}" class="small-box-footer">
             More info <i class="fas fa-arrow-circle-right"></i>
           </a>
         </div>
