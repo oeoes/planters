@@ -23,7 +23,6 @@
                       <th>Population perblock</th>
                       <th>Block</th>
                       <th>Mandor Bidang</th>
-                      <th>Jenis Pekerjaan</th>
                       <th>Action</th>
                   </tr>
               </thead>
@@ -34,13 +33,12 @@
                       <td>{{ $harvesting->foreman }}</td>
                       <td>{{ $harvesting->planting_year }}</td>
                       <td>{{ $harvesting->date }}</td>
-                      <td>{{ $harvesting->total_coverage }}</td>
-                      <td>{{ $harvesting->available_coverage }}</td>
-                      <td>{{ $harvesting->population_coverage }}</td>
+                      <td>{{ $harvesting->total_coverage }} Ha</td>
+                      <td>{{ $harvesting->available_coverage }} Ha</td>
+                      <td>{{ $harvesting->population_coverage }} Ha</td>
                       <td>{{ $harvesting->population_perblock }}</td>
                       <td>{{ $harvesting->block }}</td>
                       <td>{{ $harvesting->subforeman }}</td>
-                      <td>{{ $harvesting->job_type }}</td>
                       <td>
                         <a href="" class="btn btn-sm rounded-pill btn-outline-info pl-3 pr-3" data-toggle="modal"
                             data-target="#edit-farm{{$key}}"><i
