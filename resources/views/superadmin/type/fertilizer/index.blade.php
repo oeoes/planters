@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+<a href="{{ route('superadmin.fertilizer.history') }}" class="btn btn-default mb-2">History</a>
 <div class="card col-md-12 table-responsive">
     <table id="myTable" class="table table-hover table-borderless" style="font-size:11pt">
         <thead class="text-muted bg-primary">

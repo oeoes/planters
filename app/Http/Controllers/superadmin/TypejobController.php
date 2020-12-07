@@ -83,6 +83,35 @@ class TypejobController extends Controller
                 'fill'            => !$fill ? null : $fill,
             ]);
         }
+
+        public function fertilizer_history() {
+            $block_references = BlockReference::where('jobtype_id', 1)
+                                            ->where('completed', 1)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            return view('superadmin.type.fertilizer.history', [
+                'block_references' => $block_references
+            ]);
+        }
+
+        public function fertilizer_history_detail($block_ref_id) {
+            $block_reference = BlockReference::find($block_ref_id);
+            $seeds = $block_reference->model::where('block_ref_id', $block_ref_id)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            $filled = [];
+            foreach ($seeds as $key => $value) {
+                $filled [] = [ 
+                    $block_reference->fill::where($block_reference->fill_id, $value['id'])->first()->toArray()
+                ];
+            }
+
+            return view('superadmin.type.fertilizer.history_detail', [
+                'block_reference' => $block_reference,
+                'seeds' => $seeds,
+                'fills' => $filled
+            ]);
+        }
     
         // CIRCLE
         public function circle () {
@@ -100,6 +129,35 @@ class TypejobController extends Controller
                 'block_reference' => $blok_reference,
                 'circle'        => !$circle ? null : $circle,
                 'fill'            => !$fill ? null : $fill,
+            ]);
+        }
+
+        public function circle_history() {
+            $block_references = BlockReference::where('jobtype_id', 1)
+                                            ->where('completed', 1)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            return view('superadmin.type.circle.history', [
+                'block_references' => $block_references
+            ]);
+        }
+
+        public function circle_history_detail($block_ref_id) {
+            $block_reference = BlockReference::find($block_ref_id);
+            $seeds = $block_reference->model::where('block_ref_id', $block_ref_id)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            $filled = [];
+            foreach ($seeds as $key => $value) {
+                $filled [] = [ 
+                    $block_reference->fill::where($block_reference->fill_id, $value['id'])->first()->toArray()
+                ];
+            }
+
+            return view('superadmin.type.circle.history_detail', [
+                'block_reference' => $block_reference,
+                'seeds' => $seeds,
+                'fills' => $filled
             ]);
         }
     
@@ -121,6 +179,35 @@ class TypejobController extends Controller
                 'fill'            => !$fill ? null : $fill,
             ]);
         }
+
+        public function pruning_history() {
+            $block_references = BlockReference::where('jobtype_id', 1)
+                                            ->where('completed', 1)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            return view('superadmin.type.pruning.history', [
+                'block_references' => $block_references
+            ]);
+        }
+
+        public function pruning_history_detail($block_ref_id) {
+            $block_reference = BlockReference::find($block_ref_id);
+            $seeds = $block_reference->model::where('block_ref_id', $block_ref_id)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            $filled = [];
+            foreach ($seeds as $key => $value) {
+                $filled [] = [ 
+                    $block_reference->fill::where($block_reference->fill_id, $value['id'])->first()->toArray()
+                ];
+            }
+
+            return view('superadmin.type.pruning.history_detail', [
+                'block_reference' => $block_reference,
+                'seeds' => $seeds,
+                'fills' => $filled
+            ]);
+        }
     
         // GAWANGAN
         public function gawangan () {
@@ -138,6 +225,35 @@ class TypejobController extends Controller
                 'block_reference' => $blok_reference,
                 'gawangan'        => !$gawangan ? null : $gawangan,
                 'fill'            => !$fill ? null : $fill,
+            ]);
+        }
+
+        public function gawangan_history() {
+            $block_references = BlockReference::where('jobtype_id', 1)
+                                            ->where('completed', 1)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            return view('superadmin.type.gawangan.history', [
+                'block_references' => $block_references
+            ]);
+        }
+
+        public function gawangan_history_detail($block_ref_id) {
+            $block_reference = BlockReference::find($block_ref_id);
+            $seeds = $block_reference->model::where('block_ref_id', $block_ref_id)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            $filled = [];
+            foreach ($seeds as $key => $value) {
+                $filled [] = [ 
+                    $block_reference->fill::where($block_reference->fill_id, $value['id'])->first()->toArray()
+                ];
+            }
+
+            return view('superadmin.type.gawangan.history_detail', [
+                'block_reference' => $block_reference,
+                'seeds' => $seeds,
+                'fills' => $filled
             ]);
         }
     
@@ -159,6 +275,35 @@ class TypejobController extends Controller
                 'fill'            => !$fill ? null : $fill,
             ]);
         }
+
+        public function pestcontrol_history() {
+            $block_references = BlockReference::where('jobtype_id', 1)
+                                            ->where('completed', 1)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            return view('superadmin.type.pcontrol.history', [
+                'block_references' => $block_references
+            ]);
+        }
+
+        public function pestcontrol_history_detail($block_ref_id) {
+            $block_reference = BlockReference::find($block_ref_id);
+            $seeds = $block_reference->model::where('block_ref_id', $block_ref_id)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            $filled = [];
+            foreach ($seeds as $key => $value) {
+                $filled [] = [ 
+                    $block_reference->fill::where($block_reference->fill_id, $value['id'])->first()->toArray()
+                ];
+            }
+
+            return view('superadmin.type.pcontrol.history_detail', [
+                'block_reference' => $block_reference,
+                'seeds' => $seeds,
+                'fills' => $filled
+            ]);
+        }
     
         // HARVESTING
         public function harvesting () {
@@ -177,6 +322,35 @@ class TypejobController extends Controller
                 'block_reference' => $blok_reference,
                 'harvesting'     => !$harvesting ? null : $harvesting,
                 'fill'            => !$fill ? null : $fill,
+            ]);
+        }
+
+        public function harvesting_history() {
+            $block_references = BlockReference::where('jobtype_id', 1)
+                                            ->where('completed', 1)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            return view('superadmin.type.harvesting.history', [
+                'block_references' => $block_references
+            ]);
+        }
+
+        public function harvesting_history_detail($block_ref_id) {
+            $block_reference = BlockReference::find($block_ref_id);
+            $seeds = $block_reference->model::where('block_ref_id', $block_ref_id)
+                                            ->orderByDesc('created_at')
+                                            ->get();
+            $filled = [];
+            foreach ($seeds as $key => $value) {
+                $filled [] = [ 
+                    $block_reference->fill::where($block_reference->fill_id, $value['id'])->first()->toArray()
+                ];
+            }
+
+            return view('superadmin.type.harvesting.history_detail', [
+                'block_reference' => $block_reference,
+                'seeds' => $seeds,
+                'fills' => $filled
             ]);
         }
 }
