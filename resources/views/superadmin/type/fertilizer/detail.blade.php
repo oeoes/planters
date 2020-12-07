@@ -2,7 +2,7 @@
 
 @section('title', 'RKH - Fertilizer')
 
-@section('content-title', 'RKH - Fertilizer')
+@section('content-title', 'RKH - Fertilizer (detail)')
 
 @section('content')
 <div class="row">
@@ -55,7 +55,7 @@
                     <tr>
                         <td>Catatan</td>
                         <td> : </td>
-                        <td>{{ $fertilizer->subforeman_note }}</td>
+                        <td>{{ $fertilizer->foreman_note }}</td>
                     </tr>
                 </table>
             </div>
@@ -71,7 +71,6 @@
                             {{ subforeman($fertilizer->subforeman_id)->name }}
                         </span>
                     </span>
-                @endif
                 <table class="table table-striped">
                     <tr>
                         <td>Pelaksanaan</td>
@@ -99,6 +98,9 @@
                         <td>{{ $fill->subforeman_note }}</td>
                     </tr>
                 </table>
+            @else
+                <div class="card-title">Belum Ada Laporan</div>
+            @endif
             </div>
         </div>
     </div>

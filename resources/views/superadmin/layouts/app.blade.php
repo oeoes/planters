@@ -10,16 +10,18 @@
     <link rel="stylesheet" href="{{ asset('template/dist/css/adminlte.min.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('template/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('template/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('template/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="{{ asset('js/Chart.js') }}"></script>
 
 
     <style>
-      #myTable_wrapper {
-        padding: 10px
-      }
+        #myTable_wrapper {
+            padding: 10px
+        }
+
     </style>
     @yield('css')
 </head>
@@ -87,6 +89,18 @@
         $(document).ready(function () {
             $('#myTable').DataTable();
         });
+
+        function setResponsiveness(x) {
+            if (x.matches) { // If media query matches
+                $('#myTable').addClass('table-responsive')
+            } else {
+                $('#myTable').removeClass('table-responsive')
+            }
+        }
+
+        var x = window.matchMedia("(max-width: 767px)")
+        setResponsiveness(x) // Call listener function at run time
+        x.addListener(setResponsiveness)
 
     </script>
     @yield('js')

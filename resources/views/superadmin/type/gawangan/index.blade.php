@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+<a href="{{ route('superadmin.gawangan.history') }}" class="btn btn-default mb-2">History</a>
 <div class="row">
   <div class="col-md-12">
       <div class="card table-responsive">
@@ -56,23 +57,6 @@
                   @endforeach
               </tbody>
           </table>
-      </div>
-  </div>
-  <div class="col-md-4">
-      <div class="card">
-        <div class="card-header">
-            Add Farm
-        </div>
-        <div class="card-body">
-            <form action="{{ route('superadmin.farm.store') }}" method="post">
-                @csrf
-                <div class="form-group">
-                    <label for="farm">Farm</label>
-                    <input type="text" name="farm" id="farm" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-sm rounded-pill btn-outline-primary pl-3 pr-3">Add</button>
-            </form>
-        </div>
       </div>
   </div>
 </div>

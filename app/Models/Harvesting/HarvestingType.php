@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Harvesting;;
+namespace App\Models\Harvesting;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
