@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 
 // ASSISTANT
-use App\Http\Controllers\DashboardController as AS_DashboardController;
+use App\Http\Controllers\assistant\DashboardController as AS_DashboardController;
 use App\Http\Controllers\assistant\AreaController as AS_AreaController;
 use App\Http\Controllers\assistant\ForemanController    as AS_ForemanController;
 use App\Http\Controllers\assistant\SubforemanController    as AS_SubforemanController;

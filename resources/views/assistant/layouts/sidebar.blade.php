@@ -20,7 +20,7 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-            <a href="{{ route('manager.dashboard') }}" class="nav-link">
+            <a href="{{ route('assistant.dashboard') }}" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Dashboard</p>
             </a>
@@ -29,19 +29,19 @@
           <li class="nav-header ml-1">Area</li>
           
           <!-- <li class="nav-item">
-            <a href="{{ route('manager.farm') }}" class="nav-link">
+            <a href="{{ route('assistant.farm') }}" class="nav-link">
               <i class="nav-icon fas fa-tree"></i>
               <p>Kebun</p>
             </a>
           </li> -->
           <li class="nav-item">
-            <a href="{{ route('manager.afdelling') }}" class="nav-link">
+            <a href="{{ route('assistant.afdelling') }}" class="nav-link">
               <i class="nav-icon fas fa-tractor"></i>
               <p>Afdelling</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ route('manager.block') }}" class="nav-link">
+            <a href="{{ route('assistant.block') }}" class="nav-link">
               <i class="nav-icon fas fa-th-large"></i>
               <p>Block</p>
             </a>
@@ -49,14 +49,14 @@
 
           <li class="nav-header ml-1">User</li>
           <li class="nav-item">
-            <a href="{{ route('manager.foreman.index') }}" class="nav-link">
+            <a href="{{ route('assistant.foreman.index') }}" class="nav-link">
               <i class="nav-icon fas fa-user-tie"></i>
               <p>Mandor</p>
             </a>
           </li>
 
             <li class="nav-item">
-            <a href="{{ route('manager.subforeman.index') }}" class="nav-link">
+            <a href="{{ route('assistant.subforeman.index') }}" class="nav-link">
               <i class="nav-icon fas fa-users-cog"></i>
               <p>Mandor Bidang</p>
             </a>
