@@ -3,14 +3,14 @@
 @section('title', 'Super Admin - Dashboard')
 
 @section('content-title')
-  Overview (Dummy)
+  Overview
 @endsection
 
 @section('content')
 
 <div class="content">
   <div class="container-fluid">
-    <h5 class="mb-2 mt-4">Small Box</h5>
+    <!-- <h5 class="mb-2 mt-4">Small Box</h5> -->
     <div class="row">
       <div class="col-lg-3 col-6">
         <!-- small card -->
@@ -21,7 +21,7 @@
             <p>Farms</p>
           </div>
           <div class="icon">
-            <i class="fas fa-shopping-cart"></i>
+            <i class="fas fa-tree"></i>
           </div>
           <a href="{{ route('superadmin.farm') }}" class="small-box-footer">
             More info <i class="fas fa-arrow-circle-right"></i>
@@ -38,7 +38,7 @@
             <p>Afdellings</p>
           </div>
           <div class="icon">
-            <i class="ion ion-stats-bars"></i>
+            <i class="fas fa-tractor"></i>
           </div>
           <a href="{{ route('superadmin.afdelling') }}" class="small-box-footer">
             More info <i class="fas fa-arrow-circle-right"></i>
@@ -52,10 +52,10 @@
           <div class="inner">
             <h3>{{ App\Models\Block::count() }}</h3>
 
-            <p>Bloks</p>
+            <p>Blocks</p>
           </div>
           <div class="icon">
-            <i class="fas fa-user-plus"></i>
+            <i class="fas fa-th-large"></i>
           </div>
           <a href="{{ route('superadmin.block') }}" class="small-box-footer">
             More info <i class="fas fa-arrow-circle-right"></i>
@@ -124,17 +124,38 @@
         <div class="card">
           <div class="card-header border-0">
             <div class="d-flex justify-content-between">
-              <h3 class="card-title">Spraying last 5 years</h3>
-              <a href="javascript:void(0);">View Report</a>
+              <div class="d-inline-flex p-2">
+                <h3 class="card-title">Spraying last 5 years</h3>
+              </div>
+              
+              <div class="d-inline-flex p-2">
+                <select id="" class="form-control form-control-sm rounded-pill pr-4 pl-4">
+                    <option value="">Spraying</option>
+                    <option value="">Fertilizer</option>
+                    <option value="">Circle</option>
+                    <option value="">Pruning</option>
+                    <option value="">Gawangan</option>
+                    <option value="">Pest Control</option>
+                    <option value="">Harvesting</option>
+                  </select>
+              </div>
             </div>
           </div>
           <div class="card-body">
-            <canvas id="myChart" width="400" height="400"></canvas>
+            <div class="position-relative mb-4">
+              <canvas id="myChart" width="400" height="400"></canvas>
+            </div>
+
+            <div class="d-flex flex-row justify-content-end">
+              <span class="mr-2">
+                <i class="fas fa-square text-primary"></i> Total Coverage in Ha
+              </span>
+            </div>
           </div>
         </div>
         <!-- /.card -->
 
-        <div class="card">
+        <!-- <div class="card">
           <div class="card-header border-0">
             <h3 class="card-title">Products</h3>
             <div class="card-tools">
@@ -237,38 +258,52 @@
               </tbody>
             </table>
           </div>
-        </div>
+        </div> -->
         <!-- /.card -->
       </div>
+      
       <!-- /.col-md-6 -->
       <div class="col-lg-6">
         <div class="card">
           <div class="card-header border-0">
             <div class="d-flex justify-content-between">
-              <h3 class="card-title">Sales</h3>
-              <a href="javascript:void(0);">View Report</a>
+              <div class="d-inline-flex p-2">
+                <h3 class="card-title">Ketuntasan Pekerjaan</h3>
+              </div>
+              <div class="d-inline-flex p-2">
+                <select id="" class="form-control form-control-sm rounded-pill pr-4 pl-4">
+                    <option value="">2015</option>
+                    <option value="">2016</option>
+                    <option value="">2017</option>
+                    <option value="">2018</option>
+                    <option value="">2019</option>
+                    <option value="">2020</option>
+                  </select>
+              </div>
+              
+              <!-- <a href="javascript:void(0);">View Report</a> -->
             </div>
           </div>
           <div class="card-body">
             <div class="d-flex">
-              <p class="d-flex flex-column">
+              <!-- <p class="d-flex flex-column">
                 <span class="text-bold text-lg">$18,230.00</span>
                 <span>Sales Over Time</span>
-              </p>
-              <p class="ml-auto d-flex flex-column text-right">
+              </p> -->
+              <!-- <p class="ml-auto d-flex flex-column text-right">
                 <span class="text-success">
                   <i class="fas fa-arrow-up"></i> 33.1%
                 </span>
                 <span class="text-muted">Since last month</span>
-              </p>
+              </p> -->
             </div>
             <!-- /.d-flex -->
 
             <div class="position-relative mb-4">
-              <canvas id="sales-chart" height="200"></canvas>
+              <canvas id="myChart1" height="200"></canvas>
             </div>
 
-            <div class="d-flex flex-row justify-content-end">
+            <!-- <div class="d-flex flex-row justify-content-end">
               <span class="mr-2">
                 <i class="fas fa-square text-primary"></i> This year
               </span>
@@ -276,12 +311,13 @@
               <span>
                 <i class="fas fa-square text-gray"></i> Last year
               </span>
-            </div>
+            </div> -->
+
           </div>
         </div>
         <!-- /.card -->
 
-        <div class="card">
+        <!-- <div class="card">
           <div class="card-header border-0">
             <h3 class="card-title">Online Store Overview</h3>
             <div class="card-tools">
@@ -305,7 +341,7 @@
                 <span class="text-muted">CONVERSION RATE</span>
               </p>
             </div>
-            <!-- /.d-flex -->
+            
             <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
               <p class="text-warning text-xl">
                 <i class="ion ion-ios-cart-outline"></i>
@@ -317,7 +353,7 @@
                 <span class="text-muted">SALES RATE</span>
               </p>
             </div>
-            <!-- /.d-flex -->
+            
             <div class="d-flex justify-content-between align-items-center mb-0">
               <p class="text-danger text-xl">
                 <i class="ion ion-ios-people-outline"></i>
@@ -329,9 +365,9 @@
                 <span class="text-muted">REGISTRATION RATE</span>
               </p>
             </div>
-            <!-- /.d-flex -->
+            
           </div>
-        </div>
+        </div> -->
       </div>
       <!-- /.col-md-6 -->
     </div>
@@ -344,6 +380,8 @@
 @section('js')
   {{-- <script src="{{ asset('js/adminLte.js') }}"></script> --}}
   <script>
+    console.log(<?= $plantingyear ?>);
+    
     var ctx = document.getElementById('myChart');
     var myChart = new Chart(ctx, {
         type: 'pie',
@@ -363,6 +401,51 @@
     // These labels appear in the legend and in the tooltips when hovering different arcs
         labels: [<?= $plantingyear ?>]
       },
+    });
+
+    var ctx1 = document.getElementById('myChart1').getContext('2d');
+    var myChart1 = new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: ['Spraying', 'Fertilizer', 'Circle', 'Pruning', 'Gawangan', 'Pest control', 'Harvesting'],
+            datasets: [{
+                label: 'Coverage',
+                data: [12, 19, 3, 5, 2, 3, 7],
+                backgroundColor: 'rgba(108, 25, 255, 0.2)',
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            },
+          {
+                label: 'HK',
+                data: [5, 8, 3, 2, 6, 3, 8],
+                backgroundColor: 'rgba(233, 30, 99, 0.2)',
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
     });
     </script>
 @endsection
