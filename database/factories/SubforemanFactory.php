@@ -21,12 +21,13 @@ class SubforemanFactory extends Factory
      */
     public function definition()
     {
+        $arr = [1,2,3,4,5,6,7];
         return [
-            'name' => 'subforeman',
-            'email' => 'subforeman@planters.com',
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'afdelling_id' => 1,
-            'jobtype_id' => 1 //sprayig
+            'jobtype_id' => $arr[array_rand($arr, 1)], //sprayig
         ];
     }
 }

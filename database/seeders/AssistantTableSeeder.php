@@ -18,7 +18,6 @@ class AssistantTableSeeder extends Seeder
             'name' => 'assistant',
             'email' => 'assistant@planterdev.com',
             'password' => bcrypt('password'), // password
-            'role' => 1
         ]);
     }
 }

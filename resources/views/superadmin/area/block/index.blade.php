@@ -13,7 +13,7 @@ Daftar Block
 @section('content')
 <div class="row">
     <div class="col-md-8">
-        <div class="card">
+        <div class="card table-responsive">
             <table id="myTable" class="table table-hover table-borderless">
                 <thead class="text-muted">
                     <tr>
@@ -59,15 +59,13 @@ Daftar Block
                                             @method('PUT')
                                             <div class="form-group">
                                                 <label for="block">block</label>
-                                                <input type="text" name="block" id="block" class="form-control"
+                                                <input type="text" name="block" id="update-block{{$key}}" class="form-control"
                                                     value="{{ $block->code }}">
                                             </div>
                                             <div class="form-group">
                                                 <label for="afdelling">Afdelling</label>
-                                                <select name="afdelling_id" id="afdelling" class="form-control">
-                                                    @foreach($afdellings as $af)
-                                                    <option <?php if($block->afdelling_id == $af->id) echo "selected" ?> value="{{$af->id}}">{{ $af->name }}</option>
-                                                    @endforeach
+                                                <select name="afdelling_id" id="update-afdelling{{$key}}" class="form-control">
+                                                    
                                                 </select>
                                             </div>
                                     </div>
@@ -128,16 +126,23 @@ Daftar Block
                 <form action="{{ route('superadmin.block.store') }}" method="post">
                     @csrf
                     <div class="form-group">
-                        <label for="block">Block</label>
-                        <input type="text" name="block" id="block" class="form-control">
-                    </div>
+                          <label for="farm">Farm</label>
+                          <select name="farm" id="farm_id" class="form-control">
+                                <option>Pilih Kebun</option>
+                              @foreach ($farms as $f)
+                                <option value="{{ $f->id }}">{{ $f->name }}</option>
+                              @endforeach
+                          </select>
+                      </div>
+                      <div class="form-group">
+                          <label for="afdelling">Afdelling</label>
+                          <select name="afdelling_id" id="store_afdelling" class="form-control">
+                              
+                          </select>
+                      </div>
                     <div class="form-group">
-                        <label for="afdelling">Afdelling</label>
-                        <select name="afdelling_id" id="afdelling" class="form-control">
-                            @foreach($afdellings as $af)
-                            <option value="{{$af->id}}">{{ $af->name }}</option>
-                            @endforeach
-                        </select>
+                        <label for="block">Block</label>
+                        <input type="text" name="block" class="form-control">
                     </div>
                     <button type="submit" class="btn btn-sm rounded-pill btn-outline-primary pl-3 pr-3">Add</button>
                 </form>
@@ -148,7 +153,20 @@ Daftar Block
 @endsection
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-
+$(document).ready(function () {
+    $(document).on('change', '#farm_id', function() {
+        $('#store_afdelling').children().remove()
+        axios.get(`/afdelling/list/${$('#farm_id').val()}`)
+        .then(function(response) {
+            response.data.afdellings.forEach(function (e) {
+                $('#store_afdelling').append(`
+                    <option value="${e.id}">${e.name}</option>
+                `)
+            })          
+        })
+    })
+});
 </script>
 @endsection

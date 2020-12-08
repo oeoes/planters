@@ -141,7 +141,7 @@
                           </select>
                       </div>
                       <div class="form-group">
-                          <label for="afdelling">afdelling</label>
+                          <label for="afdelling">Afdelling</label>
                           <input type="text" name="afdelling" id="afdelling" class="form-control">
                       </div>
                       <div class="form-group">

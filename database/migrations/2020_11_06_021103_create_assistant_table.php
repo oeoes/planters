@@ -18,8 +18,7 @@ class CreateAssistantTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('role');
-            $table->char('super')->nullable();
+            $table->foreignId('afdelling_id')->constrained('afdellings');
             $table->rememberToken();
             $table->timestamps();
         });

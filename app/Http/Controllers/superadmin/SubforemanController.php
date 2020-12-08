@@ -41,6 +41,9 @@ class SubforemanController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $data = new Subforeman();
+        
+
         return back()->withSuccess('Sub foreman created!');
     }
 

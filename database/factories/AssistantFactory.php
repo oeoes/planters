@@ -22,11 +22,12 @@ class AssistantFactory extends Factory
      */
     public function definition()
     {
+        $ran = array(1,2,3,4);
         return [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'role' => 1
+            'afdelling_id' => $ran[array_rand($ran, 1)]
         ];
     }
 }

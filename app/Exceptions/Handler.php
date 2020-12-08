@@ -9,6 +9,7 @@ use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Auth;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -52,13 +53,16 @@ class Handler extends ExceptionHandler
             return res(false, 404, $exception->getMessage());
             
         } else {
-            if(auth()->guard('assistant')->check())
+            // if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
+            //     return redirect('/login');
+                
+            if(Auth::guard('assistant')->check()) {}
                 return parent::render($request, $exception);
 
-            if(auth()->guard('farmmanager')->check())
+            if(Auth::guard('farmmanager')->check())
                 return parent::render($request, $exception);
 
-            if(auth()->guard('superadmin')->check())
+            if(Auth::guard('superadmin')->check())
                 return parent::render($request, $exception);
             
             return redirect('/login');

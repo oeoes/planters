@@ -20,6 +20,7 @@ class Assistant extends Authenticatable
         'name',
         'email',
         'password',
+        'afdelling_id',
     ];
 
     /**

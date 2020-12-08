@@ -68,6 +68,7 @@ class BlockController extends Controller
             'available_coverage'  => $request->total_coverage,
             'model' => model($request->jobtype_id),
             'fill'  => fill($request->jobtype_id),
+            'fill_id' => fill_id($request->jobtype_id),
             'completed' => 0,
         ]);
 
@@ -130,28 +131,17 @@ class BlockController extends Controller
 
     public function det_active_block_references($block_ref_id) {
 
-        $single_ref = BlockReference::find($block_ref_id);
+        $single_ref = BlockReference::where('id', $block_ref_id)->where('completed', 0)->first();
         $today = date('Y-m-d');
-        //search today where rkh didnot completed
-        $data = $single_ref->model::where('date', $today)->where('block_ref_id', $block_ref_id)->where('completed', 0)->first();
 
+        //search today where rkh didnot completed
+        $data = $single_ref->model::where('date', $today)
+                                    ->where('block_ref_id', $block_ref_id)
+                                    ->where('completed', 0)
+                                    ->first();
+
+        // kalo ada data hari ini
         if ($data) {
-            if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-                $ingredients_amount = $data->ingredients_amount;
-                $ingredients_type = $data->ingredients_type;
-                $akp = null;
-                $bjr = null;
-            } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
-                $ingredients_amount = null;
-                $ingredients_type = null;
-                $akp = null;
-                $bjr = null;
-            } else if (in_array($single_ref->jobtype_id, [7])) {
-                $ingredients_amount = null;
-                $ingredients_type = null;
-                $akp = $data->akp;
-                $bjr = $data->bjr;
-            }
 
             $foreman = [
                 'date' => date('Y-m-d', strtotime($data->date)),
@@ -159,15 +149,15 @@ class BlockController extends Controller
                 'block_code' => block($single_ref->block_id),
                 'job_type'   => $single_ref->jobtype_id,
                 'target_coverage'    => $data->target_coverage,
-                'akp' => $akp,
-                'bjr' => $bjr,
-                'taksasi' => $data->taksasi,
-                'basis' => $data->basis,
-                'ingredients_type'   => $ingredients_type,
-                'ingredients_amount' => $ingredients_amount,
+                'akp'        => !$data->akp     ? null : $data->akp,
+                'bjr'        => !$data->bjr     ? null : $data->bjr,
+                'taksasi'    => !$data->taksasi ? null : $data->taksasi,
+                'basis'      => !$data->basis   ? null : $data->basis,
+                'ingredients_type'   => !$data->ingredients_type   ? null : $data->ingredients_type,
+                'ingredients_amount' => !$data->ingredients_amount ? null : $data->ingredients_amount,
                 'foreman_note' => $data->foreman_note,
-                'hk_used'   => $data->hk_used,
-                'completed' => 0,
+                'hk_used'      => $data->hk_used,
+                'completed'    => $data->completed,
             ];
 
             switch ($single_ref->jobtype_id) {
@@ -182,36 +172,13 @@ class BlockController extends Controller
 
             if ($fillout) {
 
-                if (in_array($single_ref->jobtype_id, [1, 2, 6])) {
-                    $ingredients_amount = $fillout->fingredients_amount;
-                    $ingredients_type   = $fillout->ingredients_type;
-                    $akp = null;
-                    $bjr = null;
-                    $hk_names = $fillout->hk_name;
-                    $final_harvesting = null;
-                } else if (in_array($single_ref->jobtype_id, [3, 4, 5])) {
-                    $ingredients_amount = null;
-                    $ingredients_type = null;
-                    $akp = null;
-                    $bjr = null;
-                    $hk_names = $fillout->hk_name;
-                    $final_harvesting = null;
-                } else if (in_array($single_ref->jobtype_id, [7])) {
-                    $ingredients_amount = null;
-                    $ingredients_type = null;
-                    $akp = $fillout->akp;
-                    $bjr = $fillout->bjr;
-                    $harvest_id = $data->id;
-                    $employee_harvestings = EmployeeHarvesting::where('harvest_id', $harvest_id)->get();
-                    $hk_listed = $employee_harvestings;
+                if ($single_ref->jobtype_id == 7) {
+                    $employee_harvestings = EmployeeHarvesting::where('harvest_id', $data->id)->get();
                     $hk_listed_arr = [];
-                    $final_harvesting = 0;
-                    foreach ($hk_listed as $hk) {
+                    foreach ($employee_harvestings as $hk) {
                         $hk_listed_arr [] = [
                             'name' => $hk['name'],
-                            'total_harvesting' => $hk['total_harvesting']
-                        ];
-                        $final_harvesting += $hk['total_harvesting'];
+                            'total_harvesting' => $hk['total_harvesting']];
                     }
                 }
 
@@ -219,14 +186,17 @@ class BlockController extends Controller
                     "begin" => $fillout->begin,
                     "ended" => $fillout->ended,
                     "target_coverage"    => $fillout->ftarget_coverage,
-                    "ingredients_type"   => $ingredients_type,
-                    "ingredients_amount" => $ingredients_amount,
-                    "image" => $fillout->image,
-                    "subforeman_note" => $fillout->subforeman_note,
+                    "ingredients_type"   => !$fillout->ingredients_type ? null : $fillout->ingredients_type,
+                    "ingredients_amount" => !$fillout->fingredients_amount ? null : $fillout->fingredients_amount,
+                    "image"              => $fillout->image,
+                    "subforeman_note"    => $fillout->subforeman_note,
+                    "completed"          => $fillout->completed,
+                    "hk_name"            => !$fillout->hk_name ? null : $fillout->hk_name,
+                    "hk_listed"          => isset($hk_listed_arr) ? $hk_listed_arr : null,
+                    "total_harvesting" => !$fillout->total_harvesting ? null : $fillout->total_harvesting,
+                    "final_harvesting" => !$fillout->final_harvesting ? null : $fillout->final_harvesting,
+                    // "bjr" => !$fillout->bjr ? null : $fillout->bjr,
                     "completed" => $fillout->completed,
-                    "hk_name" => isset($hk_names) ? $hk_names : null,
-                    "hk_listed" => isset($hk_listed_arr) ? $hk_listed_arr : null,
-                    "final_harvesting" => $final_harvesting,
                 ];
 
             } else {
@@ -240,24 +210,46 @@ class BlockController extends Controller
 
             return res(true, 200, 'Detail RKH', $data); 
 
+        // kalo gada data hari ini
         } else {
 
-            if ($single_ref->jobtype_id == 7) {
+            // kalo ada data untuk date diatas today
+            $data_next = $single_ref->model::where('date', '>', $today)->where('block_ref_id', $block_ref_id)->first();
+            if ($data_next) {
+                return res(true, 200, 'Your rkh is active for tomorrow', ['create' => 1]);
+            } elseif (! $data_next) {
+                // kalo gada data rkh untuk besok
+
+                // if ($single_ref->jobtype_id == 7) {
+                //     $data = [
+                //         'block_code' => block($single_ref->block_id),
+                //         'job_type' => $single_ref->jobtype_id,
+                //         'available_coverage' => $single_ref->available_coverage,
+                //         'population_coverage' => $single_ref->population_coverage,
+                //         'create' => 0,
+                //     ];
+                // } else {
+                //     $data = [
+                //         'block_code' => block($single_ref->block_id),
+                //         'job_type' => $single_ref->jobtype_id,
+                //         'available_coverage' => $single_ref->available_coverage,
+                //         'create' => 0,
+                //     ];
+                // }
+
                 $data = [
                     'block_code' => block($single_ref->block_id),
                     'job_type' => $single_ref->jobtype_id,
                     'available_coverage' => $single_ref->available_coverage,
-                    'population_coverage' => $single_ref->population_coverage,
+                    'population_coverage' => !$single_ref->population_coverage ? null : $single_ref->population_coverage,
+                    'create' => 0,
                 ];
-            } else {
-                $data = [
-                    'block_code' => block($single_ref->block_id),
-                    'job_type' => $single_ref->jobtype_id,
-                    'available_coverage' => $single_ref->available_coverage
-                ];
+
+                return res(true, 200, "Empty RKH for tomorrow, please create RKH First", $data);
+
             }
 
-            return res(true, 200, 'There is no schedule today, create another RKH for tomorrow', $data);
+
 
         }
 
