@@ -155,110 +155,31 @@
         </div>
         <!-- /.card -->
 
-        <!-- <div class="card">
+        <div class="card">
           <div class="card-header border-0">
-            <h3 class="card-title">Products</h3>
+            <h3 class="card-title">Afdelling</h3>
             <div class="card-tools">
-              <a href="#" class="btn btn-tool btn-sm">
-                <i class="fas fa-download"></i>
-              </a>
-              <a href="#" class="btn btn-tool btn-sm">
-                <i class="fas fa-bars"></i>
-              </a>
+              <div class="d-inline-flex p-2">
+                <select id="afdellingset" class="form-control form-control-sm rounded-pill pr-4 pl-4">
+                    <option value="#">Pilih afdelling</option>
+                    @php
+                        $afdellings = App\Models\Afdelling::select('id', 'name')->get();
+                    @endphp
+                    @foreach ($afdellings as $afd)
+                        <option value="{{ $afd->id }}">{{ $afd->name }}</option>
+                    @endforeach
+                  </select>
+              </div>
+              <div class="d-inline-flex p-2">
+                <select id="blockset" class="form-control form-control-sm rounded-pill pr-4 pl-4">
+                </select>
+              </div>
             </div>
           </div>
-          <div class="card-body table-responsive p-0">
-            <table class="table table-striped table-valign-middle">
-              <thead>
-              <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Sales</th>
-                <th>More</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <td>
-                  <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                  Some Product
-                </td>
-                <td>$13 USD</td>
-                <td>
-                  <small class="text-success mr-1">
-                    <i class="fas fa-arrow-up"></i>
-                    12%
-                  </small>
-                  12,000 Sold
-                </td>
-                <td>
-                  <a href="#" class="text-muted">
-                    <i class="fas fa-search"></i>
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                  Another Product
-                </td>
-                <td>$29 USD</td>
-                <td>
-                  <small class="text-warning mr-1">
-                    <i class="fas fa-arrow-down"></i>
-                    0.5%
-                  </small>
-                  123,234 Sold
-                </td>
-                <td>
-                  <a href="#" class="text-muted">
-                    <i class="fas fa-search"></i>
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                  Amazing Product
-                </td>
-                <td>$1,230 USD</td>
-                <td>
-                  <small class="text-danger mr-1">
-                    <i class="fas fa-arrow-down"></i>
-                    3%
-                  </small>
-                  198 Sold
-                </td>
-                <td>
-                  <a href="#" class="text-muted">
-                    <i class="fas fa-search"></i>
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <img src="dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                  Perfect Item
-                  <span class="badge bg-danger">NEW</span>
-                </td>
-                <td>$199 USD</td>
-                <td>
-                  <small class="text-success mr-1">
-                    <i class="fas fa-arrow-up"></i>
-                    63%
-                  </small>
-                  87 Sold
-                </td>
-                <td>
-                  <a href="#" class="text-muted">
-                    <i class="fas fa-search"></i>
-                  </a>
-                </td>
-              </tr>
-              </tbody>
-            </table>
+          <div class="card-body table-responsive">
+            <canvas id="bar" width="400" height="400"></canvas>
           </div>
-        </div> -->
+        </div>
         <!-- /.card -->
       </div>
       
@@ -447,5 +368,65 @@
             }
         }
     });
+     
+    $(document).ready(function() {
+      $("#afdellingset").change(function() {
+        let afdelling_id = this.value;
+        $.ajax({
+          type: "GET",
+          url: '/pyear/list/' + afdelling_id,
+          dataType: 'JSON', 
+          // data: {
+          //     "_token": "{{ csrf_token() }}"
+          // },
+          success: function(data) {
+
+            label = [];
+            current = [];
+            total = [];
+          
+            console.log(current, data, [10, 20, 40]);
+
+            var data = {
+              labels: label,
+              datasets: [{
+                label: "Current coverage",
+                backgroundColor: "blue",
+                data: [10, 20, 40]
+              }, {
+                label: "Total coverage",
+                backgroundColor: "red",
+                data: [50, 60, 80]
+              },
+              ]
+            };
+
+            loadBarChart(data)
+          },
+          error: function (request, status, error) {
+            console.log(request.responseText);
+          }
+        });
+      });
+    });
+
+    var ctx2 = document.getElementById("bar").getContext("2d");
+    function loadBarChart(data) {
+        var myBarChart = new Chart(ctx2, {
+          type: 'bar',
+          data: data,
+          options: {
+            barValueSpacing: 20,
+            scales: {
+              yAxes: [{
+                ticks: {
+                  min: 0,
+                }
+              }]
+            }
+          }
+        });
+    }
+
     </script>
 @endsection

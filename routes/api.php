@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\v1\AfdellingController;
 use App\Http\Controllers\Api\v1\BlockController;
 use App\Http\Controllers\Api\v1\DwpmaintainController;
 use App\Http\Controllers\Api\v1\DwpharvestingController;
-use App\Models\Block;
+use App\Http\Controllers\Api\v1\GradingHarvestingController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
@@ -40,6 +40,14 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::get('detail-rkh-completed/{block_ref_id}/{date}', [DwpmaintainController::class, 'detail_rkh_completed']);
 
         Route::get('set-complete-rkh/{block_ref_id}', [DwpmaintainController::class, 'set_complete_rkh']);
+
+        // Grading harvesting
+        Route::group(['prefix' => 'grading-harvesting'], function () {
+            Route::get('samples/{afdelling_id}', [GradingHarvestingController::class, 'list_samples']);
+            Route::get('sample/detail/{block_reference_id}', [GradingHarvestingController::class, 'detail_sample']);
+            Route::post('store', [GradingHarvestingController::class, 'store_grading_harvesting']);
+            Route::get('list', [GradingHarvestingController::class, 'list_grading_harvesting']);
+        });
     
     });
 

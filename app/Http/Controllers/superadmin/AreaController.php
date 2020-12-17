@@ -229,4 +229,24 @@ class AreaController extends Controller
         return response()->json(['afdellings' => Afdelling::where('farm_id', $farm_id)->get()]);
     }
 
+    public function get_pyear_of_afdelling($afdelling_id) {
+        $blocks = Block::where('afdelling_id', $afdelling_id)->select('id')->get();
+        $block_references = BlockReference::whereIn('block_id', $blocks)->where('planting_year', 2020)->get();
+        $label  = [];
+        $current = [];
+        $total   = [];
+
+        foreach ($block_references->toArray() as $value) {
+            $current [] = [ $value['available_coverage'] ];
+            $total   [] = [ $value['total_coverage'] ];
+            $label   [] = [ block($value['block_id']) ];
+        }
+
+        return response()->json([
+            'label'   => $label,
+            'current' => $current,
+            'total'   => $total
+        ]);
+    }
+
 }

@@ -16,13 +16,16 @@ class FarmTableSeeder extends Seeder
     {
         $farms = [
             [
-                'name' => 'farm1'
+                'name' => 'farm1',
+                'company_id' => 1,
             ],
             [
-                'name' => 'farm2'
+                'company_id' => 1,
+                'name' => 'farm2',
             ],
             [
-                'name' => 'farm3'
+                'company_id' => 1,
+                'name' => 'farm3',
             ]
         ];
         DB::table('farms')->insert($farms);

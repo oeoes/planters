@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\AfdellingReference;
+use App\Models\Block;
 use App\Models\BlockReference;
 use App\Models\Foreman;
 use App\Models\Harvesting\EmployeeHarvesting;
@@ -21,6 +22,7 @@ use App\Models\Maintain\GawanganType;
 use App\Models\Maintain\PruningType;
 use App\Models\Maintain\SprayingType;
 use App\Models\Maintain\PestControl;
+use App\Models\SampleGradingHarvesting;
 use App\Models\Subforeman;
 use DateTime;
 use Illuminate\Http\Request;
@@ -792,7 +794,19 @@ class DwpmaintainController extends Controller
             // Subforeman::where('id', $data->subforeman_id)->update(['active' => 0]);
 
             if ($ref->available_coverage == 0) {
-                $ref->increment('completed');
+                $set_completed = $ref->update(['completed' => 1]);
+                if ($set_completed) {
+                    if ($ref->jobtype_id == 7) {
+                        $next_ten_days = date('Y-m-d', strtotime('+10 day', strtotime($ref->updated_at)));
+                        SampleGradingHarvesting::create([
+                            'afdelling_id' => Block::find($ref->block_id)->first()->afdelling_id,
+                            'block_reference_id' => $block_ref_id,
+                            'block_id' => $ref->block_id,
+                            'planting_year' => $ref->planting_year,
+                            'expired_at' => $next_ten_days
+                        ]);
+                    }
+                }
                     return res(true, 200, 'Block spreading completed, view this block on history menu');
             }
 

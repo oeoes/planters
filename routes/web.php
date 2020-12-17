@@ -326,6 +326,9 @@ Route::get('/clear', function() { return session()->flush();});
  // get list afdelling based on farm id
 Route::get('/afdelling/list/{farm_id}', [SU_AreaController::class, 'get_afdelling_of_farm']);
 
+ // get list block based on afdelling
+ Route::get('/pyear/list/{afdelling_id}', [SU_AreaController::class, 'get_pyear_of_afdelling']);
+
 
 // auth routes
 // Auth::routes();
