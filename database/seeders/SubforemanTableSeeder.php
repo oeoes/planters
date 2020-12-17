@@ -45,7 +45,7 @@ class SubforemanTableSeeder extends Seeder
                 'email' => $faker->unique()->safeEmail,
                 'password' => Hash::make('password'), // password
                 'afdelling_id' => 1,
-                'jobtype_id' => $jobtype //sprayig
+                'jobtype_id' => 7 //sprayig
             ]);
         }
     }

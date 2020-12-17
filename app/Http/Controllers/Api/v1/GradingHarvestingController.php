@@ -13,19 +13,27 @@ use Illuminate\Http\Request;
 class GradingHarvestingController extends Controller
 {
     public function list_samples($afdelling_id) {
-        $sample_grading_harvestings = SampleGradingHarvesting::where('afdelling_id', $afdelling_id)->where('expired_at', '>=', date('Y-m-d'))->get();
+        $sample_grading_harvestings = SampleGradingHarvesting::where('afdelling_id', $afdelling_id)->orderByDesc('created_at')->get();
+        if (! $sample_grading_harvestings)  return res(false,  404, 'List not found');
+
         $data = [];
+        $today = date('Y-m-d');
         foreach ($sample_grading_harvestings as $key => $value) {
+            (date('Y-m-d', strtotime($value['expired_at'])) >= $today) ?  $create = 1 : $create = 0;
             $data [] = [
-                'sample_grading_id' => $value['id'],
+                // 'sample_grading_id' => $value['id'],
+                'block_reference_id' => $value['block_reference_id'],
                 'planting_year' => $value['planting_year'],
-                'block_id' => block($value['block_id']),
+                'block_code' => block($value['block_id']),
+                'create' => $create,
             ];
         }
         return res(true, 200, 'List samples' ,$data);
     }
 
     public function detail_sample($block_reference_id) {
+
+        // This is detail simple, url in between to create grade harvesting
         $harvesting = HarvestingType::where('block_ref_id', $block_reference_id)->first();
         $harvesting_date = $harvesting->date;
         $harvesting_subforeman = $harvesting->subforeman_id;
@@ -42,7 +50,7 @@ class GradingHarvestingController extends Controller
         $data = [
             'date' => $harvesting_date,
             'subforeman_name' => subforeman($harvesting_subforeman)->name,
-            'planting_year' => $harvesting->planting_year,
+            'planting_year' => $block_reference->planting_year,
             'block_code' => block($block_reference->block_id),
             'hk_listed' => $hk_list,
         ];
@@ -52,22 +60,66 @@ class GradingHarvestingController extends Controller
 
     public function store_grading_harvesting(Request $request) {
         GradingHarvesting::create($request->all());
-        return res(true, 200, 'Grading harvest task created');
+        return res(true, 200, 'Sample Grading Harvest Created');
     }
 
     public function list_grading_harvesting($afdelling_id) {
-        $grading_harvestings = GradingHarvesting::where('afdelling_id', $afdelling_id)->orderByDesc('created_at')->get();
-        $data = [];
+        $grading_harvestings = GradingHarvesting::where('afdelling_id', $afdelling_id)->get();
+
+        if (! $grading_harvestings)  return res(false,  404, 'List not found');
+
+        $grading_list = [];
+        $sample = 1;
         foreach ($grading_harvestings as $key => $value) {
-            $block_reference = BlockReference::find($value['block_reference_id']);
-            $block_id = $block_reference->block_id;
-            $planting_year = $block_reference->planting_year;
-            $data = [
-                'planting_year' => $planting_year,
-                'block_code'    => block($block_id),
-                'hk_name'       => $value['hk_name']
+            $grading_list [] = [
+                // 'sample' => 'Sample '.$sample,
+                'grading_harvesting_id' => $value['id']
+            ];
+            $sample++;
+        }
+        return res(true, 200, 'List grading harvesting', $grading_list);    
+    }
+
+    public function detail_grading_harvesting($block_reference_id, $grading_harvesting_id) {
+        $harvesting = HarvestingType::where('block_ref_id', $block_reference_id)->first();
+        $harvesting_date = $harvesting->date;
+        $harvesting_subforeman = $harvesting->subforeman_id;
+        $harvesting_employees = EmployeeHarvesting::where('harvest_id', $harvesting->id)->get();
+        $block_reference = BlockReference::find($block_reference_id);
+        $hk_list = [];
+        foreach ($harvesting_employees as $key => $value) {
+            $hk_list [] = [
+                'name' => $value['name'],
+                'total_harvesting' => $value['total_harvesting']
             ];
         }
-        return res(true, 200, 'List grading harvesting', $data);
+
+        $detail_harvesting = [
+            'date' => $harvesting_date,
+            'subforeman_name' => subforeman($harvesting_subforeman)->name,
+            'planting_year' => $block_reference->planting_year,
+            'block_code' => block($block_reference->block_id),
+            'hk_listed' => $hk_list,
+        ];
+
+        $grading_harvesting = GradingHarvesting::find($grading_harvesting_id);
+        $detail_grading_harvesting = [
+            'date' => $grading_harvesting->date,
+            'harvesting_bunch' => $grading_harvesting->harvesting_bunch,
+            'unharvesting_bunch' => $grading_harvesting->unhanversting_bunch,
+            'bunch_leaves' => $grading_harvesting->bunch_leaves,
+            'in_circle' => $grading_harvesting->in_circle,
+            'out_circle' => $grading_harvesting->out_circle,
+            'on_palm' => $grading_harvesting->on_palm,
+            'harvesting_path' => $grading_harvesting->harvesting_path,
+            'note' => $grading_harvesting->note
+        ];
+
+        $data = [
+            'detail_harvesting' => $detail_harvesting,
+            'detail_grading_harvesting' => $detail_grading_harvesting
+        ];
+
+        return res(true, 200, 'Detail grading harvesting', $data);
     }
 }

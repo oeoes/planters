@@ -17,7 +17,6 @@ class CreateGradingHarvestingTable extends Migration
             $table->id();
             $table->foreignId(('sample_grading_id'))->constrained('sample_grading_harvestings')->cascadeOnDelete();
             $table->foreignId('afdelling_id')->constrained('afdellings');
-            $table->foreignId('block_reference_id')->constrained('block_references');
             $table->date('date');
             $table->string('hk_name');
             $table->integer('harvesting_bunch');
