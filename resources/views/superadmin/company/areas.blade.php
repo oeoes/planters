@@ -27,10 +27,13 @@
                     <div class="card-header"> Afdelling</div>
                     <div class="card-body">
                         <span> <i class="fa fa-filter" aria-hidden="true"></i> Berdasarkan kebun:
-                            {{ App\Models\Farm::where('id', session('farm_id'))->first()->name }}</span>
+                            <span class="badge badge-primary">
+                                {{ App\Models\Farm::where('id', session('farm_id'))->first()->name }}</span>
+                        </span>
                         <div class="list-group">
                             @foreach (session('afdellings') as $afd)
-                                <a href="#" class="list-group-item list-group-item-action">{{ $afd->name }}</a>
+                                <a href="{{ route('superadmin.company.area.blocks', $afd->id) }}"
+                                    class="list-group-item list-group-item-action">{{ $afd->name }}</a>
                             @endforeach
                         </div>
                     </div>
@@ -42,9 +45,15 @@
                 <div class="card">
                     <div class="card-header"> Block</div>
                     <div class="card-body">
+                        <span> <i class="fa fa-filter" aria-hidden="true"></i> Berdasarkan afdelling:
+                            <span class="badge badge-primary">
+                                {{ App\Models\Afdelling::where('id', session('afdelling_id'))->first()->name }}
+                            </span>
+                        </span>
                         <div class="list-group">
-                            @foreach ($farms as $farm)
-                                <a href="#" class="list-group-item list-group-item-action">{{ $farm->name }}</a>
+                            @foreach (session('blocks') as $block)
+                                <a href="#" class="list-group-item list-group-item-action">{{ $block->code }} -
+                                    {{ $block->name }}</a>
                             @endforeach
                         </div>
                     </div>

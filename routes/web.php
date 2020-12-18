@@ -88,6 +88,7 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
         Route::get('/', [SU_CompanyController::class, 'index'])->name('superadmin.company');
         Route::get('/areas/{company_id}', [SU_CompanyController::class, 'areas'])->name('superadmin.company.area');
         Route::get('/areas/farm/{farm_id}/afdelling', [SU_CompanyController::class, 'afdellings'])->name('superadmin.company.area.afdellings');
+        Route::get('/areas/afdelling/{afdelling_id}/block', [SU_CompanyController::class, 'blocks'])->name('superadmin.company.area.blocks');
     });
 
     Route::group(['prefix' => 'subforeman'], function () {

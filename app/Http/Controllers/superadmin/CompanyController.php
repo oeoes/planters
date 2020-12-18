@@ -4,6 +4,7 @@ namespace App\Http\Controllers\superadmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Afdelling;
+use App\Models\Block;
 use App\Models\Company;
 use App\Models\Farm;
 use Illuminate\Http\Request;
@@ -31,6 +32,15 @@ class CompanyController extends Controller
         // dd($afdellings);
         session()->put('afdellings', $afdellings);
         session()->put('farm_id', $farm_id);
+        session()->forget('afdelling_id');
+        session()->forget('blocks');
+        return back();
+    }
+
+    public function blocks ($afdelling_id) {
+        $blocks = Block::where('afdelling_id', $afdelling_id)->get();
+        session()->put('blocks', $blocks);
+        session()->put('afdelling_id', $afdelling_id);
         return back();
     }
 }
