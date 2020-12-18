@@ -42,7 +42,7 @@ class ManagerController extends Controller
         FarmManager::create([
             'name' => $request->name,
             'email' => $request->email,
-            'afdelling_id' => $request->afdelling_id,
+            'farm_id' => $request->farm_id,
             'password' => bcrypt($request->password),
         ]);
         return back();

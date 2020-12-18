@@ -13,5 +13,9 @@ class FarmManager extends Authenticatable
 
     protected $table = 'farm_managers';
     protected $guarded = [];
+
+    public function farm () {
+        return $this->belongsTo(Farm::class);
+    }
     
 }

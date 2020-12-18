@@ -41,4 +41,8 @@ class Assistant extends Authenticatable
     protected $casts = [
         // 'email_verified_at' => 'datetime',
     ];
+
+    public function afdelling () {
+        return $this->belongsTo(Afdelling::class);
+    }
 }

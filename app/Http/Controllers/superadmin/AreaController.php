@@ -50,7 +50,8 @@ class AreaController extends Controller
 
     public function farm_store(Request $request) {
         Farm::create([
-            'name' => $request->farm
+            'name' => $request->farm,
+            'company_id' => $request->company_id,
         ]);
         return back()->withSuccess('Farm created');
     }
@@ -59,12 +60,16 @@ class AreaController extends Controller
         $farm->update([
             'name' => $request->farm
         ]);
-        return back();
+        return back()->withSuccess('Farm updated');
     }
 
     public function farm_delete (Farm $farm) {
-        $farm->delete();
-        return back();
+        try {
+            $farm->delete();
+        } catch (\Throwable $th) {
+            return back()->withError('Cannot delete farm');
+        }
+        return back()->withSuccess('Farm deleted');
     }
 
     public function afdelling() {
@@ -94,12 +99,16 @@ class AreaController extends Controller
             'farm_id' => $request->farm_id,
             'hk_total' => $request->hk_total,
         ]);
-        return back();
+        return back()->withSuccess('Afdelling updated');
     }
 
     public function afdelling_delete (Afdelling $afdelling) {
-        $afdelling->delete();
-        return back();
+        try {
+            $afdelling->delete();
+        } catch (\Throwable $th) {
+            return back()->withError('Cannot delete afdelling');
+        }
+        return back()->withSuccess('Afdelling deleted');
     }
 
     public function block() {
@@ -129,12 +138,16 @@ class AreaController extends Controller
             'code' => $request->block,
             'afdelling_id' => $request->afdelling_id
         ]);
-        return back();
+        return back()->withSuccess('block updated');
     }
 
     public function block_delete (Block $block) {
-        $block->delete();
-        return back();
+        try {
+            $block->delete();
+        } catch (\Throwable $th) {
+            return back()->withError('cannot delete block');
+        }
+        return back()->withSuccess('block deleted');
     }
 
     public function block_reference() {

@@ -10,4 +10,12 @@ class Farm extends Model
     use HasFactory;
     protected $guarded = [];
 
+    public function manager () {
+        return $this->hasOne(FarmManager::class);
+    }
+
+    public function company () {
+        return $this->belongsTo(Company::class);
+    }
+
 }

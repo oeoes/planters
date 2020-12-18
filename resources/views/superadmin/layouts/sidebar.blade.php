@@ -18,7 +18,7 @@
                   <li class="nav-header ml-1">Rencana Kerja Harian</li>
                   <li class="nav-item has-threeview">
                       <a href="#" class="nav-link">
-                          <i class="nav-icon fas fa-tasks"></i>
+                          <i class="nav-icon fas fa-seedling"></i>
                           <p>RKH Rawat <i class="right fas fa-angle-left"></i></p>
                       </a>
                       <ul class="nav nav-treeview">
@@ -62,52 +62,20 @@
                   </li>
                   <li class="nav-item">
                       <a href="{{ route('superadmin.harvesting.index') }}" class="nav-link">
-                          <i class="nav-icon fas fa-tasks"></i>
+                          <i class="nav-icon fas fa-tractor"></i>
                           <p>RKH Panen</p>
                       </a>
                   </li>
 
-                  <li class="nav-header ml-1">Company Area</li>
+                  <li class="nav-header ml-1">Area</li>
                   <li class="nav-item">
                       <a href="{{ route('superadmin.company') }}" class="nav-link">
-                          <i class="nav-icon fas fa-tree"></i>
-                          <p>Company</p>
-                      </a>
-                  </li>
-                  <li class="nav-item">
-                      <a href="{{ route('superadmin.farm') }}" class="nav-link">
-                          <i class="nav-icon fas fa-tree"></i>
-                          <p>Kebun</p>
-                      </a>
-                  </li>
-                  <li class="nav-item">
-                      <a href="{{ route('superadmin.afdelling') }}" class="nav-link">
-                          <i class="nav-icon fas fa-tractor"></i>
-                          <p>Afdelling</p>
-                      </a>
-                  </li>
-                  <li class="nav-item">
-                      <a href="{{ route('superadmin.block') }}" class="nav-link">
-                          <i class="nav-icon fas fa-th-large"></i>
-                          <p>Block</p>
+                          <i class="nav-icon fas fa-building"></i>
+                          <p>Manajemen Area</p>
                       </a>
                   </li>
 
                   <li class="nav-header ml-1">User</li>
-
-                  <li class="nav-item">
-                      <a href="{{ route('superadmin.user.manager.index') }}" class="nav-link">
-                          <i class="nav-icon fas fa-user-tie"></i>
-                          <p>Manager</p>
-                      </a>
-                  </li>
-
-                  <li class="nav-item">
-                      <a href="{{ route('superadmin.user.assistant.index') }}" class="nav-link">
-                          <i class="nav-icon fas fa-user-tie"></i>
-                          <p>Assistant</p>
-                      </a>
-                  </li>
 
                   <li class="nav-item">
                       <a href="{{ route('superadmin.foreman.index') }}" class="nav-link">
@@ -120,13 +88,6 @@
                       <a href="{{ route('superadmin.subforeman.index') }}" class="nav-link">
                           <i class="nav-icon fas fa-users-cog"></i>
                           <p>Mandor Bidang</p>
-                      </a>
-                  </li>
-
-                  <li class="nav-item">
-                      <a href="{{ route('superadmin.job_type') }}" class="nav-link">
-                          <i class="nav-icon fas fa-user-cog"></i>
-                          <p>Job Type</p>
                       </a>
                   </li>
 

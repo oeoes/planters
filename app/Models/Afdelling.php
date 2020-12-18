@@ -11,4 +11,8 @@ class Afdelling extends Model
 
     protected $table = 'afdellings';
     protected $guarded = [];
+
+    public function assistant () {
+        return $this->hasOne(Assistant::class);
+    }
 }
