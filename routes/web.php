@@ -18,6 +18,7 @@ use App\Http\Controllers\superadmin\ForemanController    as SU_ForemanController
 use App\Http\Controllers\superadmin\SubforemanController as SU_SubforemanController;
 use App\Http\Controllers\superadmin\ManagerController    as SU_ManagerController;
 use App\Http\Controllers\superadmin\AssistantController  as SU_AssistantController;
+use App\Http\Controllers\superadmin\CompanyController    as SU_CompanyController;
 
 // FARMMANAGER
 use App\Http\Controllers\manager\DashboardController as FM_DashboardController;
@@ -81,6 +82,12 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
             Route::put('/{block_reference}', [SU_AreaController::class, 'block_reference_update'])->name('superadmin.block_reference.update');
             Route::delete('/{block_reference}', [SU_AreaController::class, 'block_reference_delete'])->name('superadmin.block_reference.delete');
         });
+    });
+
+    Route::group(['prefix' => 'company'], function () {
+        Route::get('/', [SU_CompanyController::class, 'index'])->name('superadmin.company');
+        Route::get('/areas/{company_id}', [SU_CompanyController::class, 'areas'])->name('superadmin.company.area');
+        Route::get('/areas/farm/{farm_id}/afdelling', [SU_CompanyController::class, 'afdellings'])->name('superadmin.company.area.afdellings');
     });
 
     Route::group(['prefix' => 'subforeman'], function () {

@@ -21,14 +21,14 @@ class GradingHarvestingController extends Controller
         foreach ($sample_grading_harvestings as $key => $value) {
             (date('Y-m-d', strtotime($value['expired_at'])) >= $today) ?  $create = 1 : $create = 0;
             $data [] = [
-                // 'sample_grading_id' => $value['id'],
+                'sample_grading_id' => $value['id'],
                 'block_reference_id' => $value['block_reference_id'],
                 'planting_year' => $value['planting_year'],
                 'block_code' => block($value['block_id']),
                 'create' => $create,
             ];
         }
-        return res(true, 200, 'List samples' ,$data);
+        return res(true, 200, 'List samples' ,[ 'detail_harvesting' => $data]);
     }
 
     public function detail_sample($block_reference_id) {
@@ -48,6 +48,7 @@ class GradingHarvestingController extends Controller
         }
 
         $data = [
+            'block_reference_id' => $block_reference_id,
             'date' => $harvesting_date,
             'subforeman_name' => subforeman($harvesting_subforeman)->name,
             'planting_year' => $block_reference->planting_year,
@@ -59,8 +60,11 @@ class GradingHarvestingController extends Controller
     }
 
     public function store_grading_harvesting(Request $request) {
-        GradingHarvesting::create($request->all());
-        return res(true, 200, 'Sample Grading Harvest Created');
+        $grading_harvesting = GradingHarvesting::create($request->all());
+        $data = [
+            'grading_harvesting_id' => $grading_harvesting->id
+        ];
+        return res(true, 200, 'Sample Grading Harvest Created', $data);
     }
 
     public function list_grading_harvesting($afdelling_id) {
@@ -112,6 +116,7 @@ class GradingHarvestingController extends Controller
             'out_circle' => $grading_harvesting->out_circle,
             'on_palm' => $grading_harvesting->on_palm,
             'harvesting_path' => $grading_harvesting->harvesting_path,
+            'hk_name' => $grading_harvesting->hk_name,
             'note' => $grading_harvesting->note
         ];
 
