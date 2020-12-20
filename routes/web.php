@@ -92,6 +92,16 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
         Route::get('/{company_id}/farms', [SU_CompanyController::class, 'farm'])->name('superadmin.company.farm');
         Route::get('/farm/{farm_id}/afdellings', [SU_CompanyController::class, 'afdellings'])->name('superadmin.company.farm.afdellings');
         Route::get('/farm/afdelling/{afdelling_id}/blocks', [SU_CompanyController::class, 'blocks'])->name('superadmin.company.farm.afdelling.blocks');
+
+        // operating maintenance
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance', [SU_CompanyController::class, 'operating_maintenance'])->name('superadmin.company.farm.afdelling.operating_maintenance');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/spraying', [SU_CompanyController::class, 'operating_maintenance_spraying'])->name('superadmin.company.farm.afdelling.operating_maintenance_spraying');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/fertilizer', [SU_CompanyController::class, 'operating_maintenance_fertilizer'])->name('superadmin.company.farm.afdelling.operating_maintenance_fertilizer');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/circle', [SU_CompanyController::class, 'operating_maintenance_circle'])->name('superadmin.company.farm.afdelling.operating_maintenance_circle');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/pruning', [SU_CompanyController::class, 'operating_maintenance_pruning'])->name('superadmin.company.farm.afdelling.operating_maintenance_pruning');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/gawangan', [SU_CompanyController::class, 'operating_maintenance_gawangan'])->name('superadmin.company.farm.afdelling.operating_maintenance_gawangan');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/pcontrol', [SU_CompanyController::class, 'operating_maintenance_pcontrol'])->name('superadmin.company.farm.afdelling.operating_maintenance_pcontrol');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/harvesting', [SU_CompanyController::class, 'operating_maintenance_harvesting'])->name('superadmin.company.farm.afdelling.operating_maintenance_harvesting');
     });
 
     Route::group(['prefix' => 'subforeman'], function () {

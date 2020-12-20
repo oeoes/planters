@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\DB;
 
 class TypejobController extends Controller
 {
-         // SPRAYING
-         public function spraying () {
+        // SPRAYING
+        public function spraying () {
             $sprayings = SprayingType::all();
             return view('superadmin.type.spraying.index')->with([
                 'sprayings' => $sprayings

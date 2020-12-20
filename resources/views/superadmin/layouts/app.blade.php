@@ -34,6 +34,71 @@
             padding: 10px;
         }
 
+        .btn-hov {
+            /*  */
+        }
+
+        .card-om {
+            cursor: pointer;
+        }
+
+        @keyframes zoom_card {
+            from{
+                transform: scale(1)
+            } to {
+                transform: scale(.9)
+            }
+        }
+
+        .card-om:hover{
+            animation: zoom_card .4s ease-in-out;
+            animation-fill-mode: forwards;
+        }
+
+        .bg-spraying {
+            color: #fff;
+            background-color: #17a2b8;
+        }
+
+        .bg-fertilizer {
+            color: #fff;
+            background-color: #4caf50;
+        }
+
+        .bg-circle {
+            color: #fff;
+            background-color: #8BC34A;
+        }
+
+        .bg-pruning {
+            color: #fff;
+            background-color: #3f51b5;
+        }
+
+        .bg-gawangan {
+            color: #fff;
+            background-color: #009688;
+        }
+
+        .bg-pcontrol {
+            color: #fff;
+            background-color: #E91E63;
+        }
+
+        .bg-harvesting {
+            color: #fff;
+            background-color: #ff5722;
+        }
+
+        .btn-hov-txt {
+            display: none;
+            transition: display 3s ease-in
+        }
+
+        .btn-hov:hover .btn-hov-txt {
+            display: inline
+        }
+
         .crudd__btn_cont {
             position: absolute;
             bottom: 0;

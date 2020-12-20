@@ -94,11 +94,11 @@
     @endsection
 
     @section('content')
-    <div class="row">
+    <div class="row mt-4">
         @if(count($farms))
         @foreach ($farms as $key => $farm)
         <div class="col-md-3">
-            <div id="wadah" class="card card-outline card-primary">
+            <div id="wadah" class="card card-outline card-success">
                 <div class="crudd__btn_cont">
                     <div class="d-flex justify-content-center mt-2">
                         <button data-toggle="modal" data-target="#edit-farm{{ $key }}" class="btn btn-sm btn-outline-primary rounded-pill pl-3 pr-3 mr-1"><i class="fa fa-pen"></i></button>

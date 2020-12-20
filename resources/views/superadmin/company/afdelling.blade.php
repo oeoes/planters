@@ -105,20 +105,22 @@
     @endsection
 
     @section('content')
-    <div class="row">
+    <div class="row mt-4">
         @if(count($afdellings))
         @foreach ($afdellings as $key => $afdelling)
         <div class="col-md-3">
-            <div id="wadah" class="card card-outline card-primary">
+            <div id="wadah" class="card card-outline card-info">
                 <div class="crudd__btn_cont">
                     <div class="d-flex justify-content-center mt-2">
                         <button data-toggle="modal" data-target="#edit-afdelling{{ $key }}" class="btn btn-sm btn-outline-primary rounded-pill pl-3 pr-3 mr-1"><i class="fa fa-pen"></i></button>
-                        <button data-toggle="modal" data-target="#delete-afdelling{{ $key }}" class="btn btn-sm btn-outline-danger rounded-pill pl-3 pr-3"><i class="fa fa-trash"></i></button>
+                        <button data-toggle="modal" data-target="#delete-afdelling{{ $key }}" class="btn btn-sm btn-outline-danger rounded-pill pl-3 pr-3 mr-1"><i class="fa fa-trash"></i></button>
+                        <a href="{{ route('superadmin.company.farm.afdelling.operating_maintenance', $afdelling->id) }}" class="btn btn-sm btn-outline-success rounded-pill pl-3 pr-3" title="Operating Maintenance"><i class="fas fa-seedling"></i></a>
                     </div>
                 </div>
                 <a href="{{ route('superadmin.company.farm.afdelling.blocks', $afdelling->id) }}">
                     <div class="card-body text-dark">
-                        {{ ucwords($afdelling->name) }}
+                        <div class="card-title">{{ ucwords($afdelling->name) }}</div>
+
                     </div>
                     <div class="card-footer text-muted">
                         @if($afdelling->assistant)

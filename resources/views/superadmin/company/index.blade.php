@@ -50,7 +50,7 @@
     @endsection
 
     @section('content')
-    <div class="row">
+    <div class="row mt-4">
         @if(count($companies))
         @foreach ($companies as $key => $company)
         <div class="col-md-3">
@@ -63,10 +63,20 @@
                 </div>
                 <a href="{{ route('superadmin.company.farm', $company->id) }}">
                     <div class="card-body text-dark">
-                        {{ $company->company_name }}
+                        <div class="row no-gutters">
+                            <div class="col-9">{{ $company->company_name }}</div>
+                            <div class="col-3 d-flex flex-row-reverse">
+                                <div class="card rounded-pill bg-info" style="width: 50px; height: 50px"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-footer text-muted">
-                        (Pemilik PT)
+
+                        @if($company->owner)
+                        <span class="badge badge-sm badge-light">company owner</span> {{ ucwords($company->owner) }}
+                        @else
+                        <div class="text-center">Belum ditentukan</div>
+                        @endif
                     </div>
                 </a>
             </div>

@@ -28,7 +28,7 @@ class GradingHarvestingController extends Controller
                 'create' => $create,
             ];
         }
-        return res(true, 200, 'List samples' ,[ 'detail_harvesting' => $data]);
+        return res(true, 200, 'List samples' , $data);
     }
 
     public function detail_sample($block_reference_id) {
@@ -56,7 +56,7 @@ class GradingHarvestingController extends Controller
             'hk_listed' => $hk_list,
         ];
 
-        return res(true, 200, 'Detail sample', $data);
+        return res(true, 200, 'Detail sample', ['detail_harvesting' => $data ]);
     }
 
     public function store_grading_harvesting(Request $request) {
@@ -110,7 +110,7 @@ class GradingHarvestingController extends Controller
         $detail_grading_harvesting = [
             'date' => $grading_harvesting->date,
             'harvesting_bunch' => $grading_harvesting->harvesting_bunch,
-            'unharvesting_bunch' => $grading_harvesting->unhanversting_bunch,
+            'unharvesting_bunch' => $grading_harvesting->unharvesting_bunch,
             'bunch_leaves' => $grading_harvesting->bunch_leaves,
             'in_circle' => $grading_harvesting->in_circle,
             'out_circle' => $grading_harvesting->out_circle,

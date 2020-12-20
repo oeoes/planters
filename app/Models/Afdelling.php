@@ -15,4 +15,12 @@ class Afdelling extends Model
     public function assistant () {
         return $this->hasOne(Assistant::class);
     }
+
+    public function foreman () {
+        return $this->hasMany(Foreman::class);
+    }
+
+    public function subforeman () {
+        return $this->hasMany(Subforeman::class);
+    }
 }

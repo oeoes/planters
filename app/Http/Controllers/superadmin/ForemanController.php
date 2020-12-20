@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Foreman;
 use App\Models\Afdelling;
+use Hash;
 
 class ForemanController extends Controller
 {
@@ -31,7 +32,7 @@ class ForemanController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return back()->withSuccess('Foreman 1 created!');
+        return back()->withSuccess('Mandor 1 created!');
     }
 
     public function update (Request $request, Foreman $foreman) {
@@ -41,11 +42,16 @@ class ForemanController extends Controller
             'afdelling_id' => $request->afdelling_id,
             'password' => Hash::make($request->password),
         ]);
-        return back();
+        return back()->withSuccess('Mandor 1 updated!');
     }
 
     public function delete (Foreman $foreman) {
-        $foreman->delete();
-        return back();
+        try {
+            $foreman->delete();
+        } catch (\Throwable $th) {
+            return back()->withError('Cannot delete Mandor 1!');
+        }
+
+        return back()->withSuccess('Mandor 1 deleted!');
     }
 }

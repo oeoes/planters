@@ -7,15 +7,16 @@
       <div class="sidebar">
 
           <nav class="mt-2">
-              <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                  data-accordion="false">
+              <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                  <li class="nav-header">Main</li>
                   <li class="nav-item">
                       <a href="{{ route('superadmin.dashboard') }}" class="nav-link">
                           <i class="nav-icon fas fa-tachometer-alt"></i>
                           <p>Dashboard</p>
                       </a>
                   </li>
-                  <li class="nav-header ml-1">Rencana Kerja Harian</li>
+                  <!-- <li class="nav-header ml-1">Rencana Kerja Harian</li>
                   <li class="nav-item has-threeview">
                       <a href="#" class="nav-link">
                           <i class="nav-icon fas fa-seedling"></i>
@@ -65,9 +66,8 @@
                           <i class="nav-icon fas fa-tractor"></i>
                           <p>RKH Panen</p>
                       </a>
-                  </li>
-
-                  <li class="nav-header ml-1">Area</li>
+                  </li> -->
+                  
                   <li class="nav-item">
                       <a href="{{ route('superadmin.company') }}" class="nav-link">
                           <i class="nav-icon fas fa-building"></i>
@@ -75,7 +75,7 @@
                       </a>
                   </li>
 
-                  <li class="nav-header ml-1">User</li>
+                  <!-- <li class="nav-header ml-1">User</li>
 
                   <li class="nav-item">
                       <a href="{{ route('superadmin.foreman.index') }}" class="nav-link">
@@ -89,7 +89,7 @@
                           <i class="nav-icon fas fa-users-cog"></i>
                           <p>Mandor Bidang</p>
                       </a>
-                  </li>
+                  </li> -->
 
                   <li></li>
                   <li></li>

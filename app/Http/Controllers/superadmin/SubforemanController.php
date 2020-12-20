@@ -55,11 +55,16 @@ class SubforemanController extends Controller
             'jobtype_id' => $request->jobtype_id,
             'password' => Hash::make($request->password),
         ]);
-        return back();
+        return back()->withSuccess('Sub foreman updated!');
     }
 
     public function delete (SubForeman $subforeman) {
-        $subforeman->delete();
-        return back();
+        try {
+            $subforeman->delete();
+        } catch (\Throwable $th) {
+            return back()->withError('Cannot delete subforeman!');
+        }
+        
+        return back()->withSuccess('Sub foreman deleted!');
     }
 }

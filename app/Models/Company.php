@@ -15,4 +15,8 @@ class Company extends Model
     public function farm () {
         return $this->hasOne(Farm::class);
     }
+
+    public function owner () {
+        return $this->hasOne(Agency::class);
+    }
 }
