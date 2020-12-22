@@ -2,23 +2,19 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-        <!-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+      <!-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
             style="opacity: .8"> -->
-            IPB
-      <span class="brand-text font-weight-light ml-2">PLANTERS Dashboard</span>
+      IPB
+      <span class="brand-text font-weight-light ml-2">Dashboard</span>
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
-      {{-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="info">
-          <a href="#" class="d-block">Welcome</a>
-        </div>
-      </div> --}}
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-header ml-1">Asisten Kebun</li>
           <li class="nav-item">
             <a href="{{ route('assistant.dashboard') }}" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -26,8 +22,6 @@
             </a>
           </li>
 
-          <li class="nav-header ml-1">Area</li>
-          
           <!-- <li class="nav-item">
             <a href="{{ route('assistant.farm') }}" class="nav-link">
               <i class="nav-icon fas fa-tree"></i>
@@ -35,33 +29,12 @@
             </a>
           </li> -->
           <li class="nav-item">
-            <a href="{{ route('assistant.afdelling') }}" class="nav-link">
-              <i class="nav-icon fas fa-tractor"></i>
-              <p>Afdelling</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ route('assistant.block') }}" class="nav-link">
-              <i class="nav-icon fas fa-th-large"></i>
-              <p>Block</p>
+            <a href="{{ route('assistant.afdelling.blocks') }}" class="nav-link">
+              <i class="nav-icon fas fa-tractor active"></i>
+              <p>Manajemen Afdelling</p>
             </a>
           </li>
 
-          <li class="nav-header ml-1">User</li>
-          <li class="nav-item">
-            <a href="{{ route('assistant.foreman.index') }}" class="nav-link">
-              <i class="nav-icon fas fa-user-tie"></i>
-              <p>Mandor</p>
-            </a>
-          </li>
-
-            <li class="nav-item">
-            <a href="{{ route('assistant.subforeman.index') }}" class="nav-link">
-              <i class="nav-icon fas fa-users-cog"></i>
-              <p>Mandor Bidang</p>
-            </a>
-          </li>
-          
           <li></li>
           <li></li>
           <li></li>

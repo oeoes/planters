@@ -1,10 +1,7 @@
 @extends('superadmin.layouts.app')
 
-@section('title', 'Super Admin - Dashboard')
-
-@section('content-title')
-  Overview
-@endsection
+@section('title', 'Dashboard')
+@section('page-title', 'Overview')
 
 @section('content')
 

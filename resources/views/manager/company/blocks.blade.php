@@ -1,4 +1,4 @@
-@extends('superadmin.layouts.app')
+@extends('manager.layouts.app')
 
 @section('title', 'Daftar Block')
 @section('page-title', 'Daftar Block')
@@ -6,9 +6,8 @@
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('superadmin.company') }}">Daftar Perusahaan</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('superadmin.company.farm', $company->id) }}">{{ ucwords($company->company_name) }}</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('superadmin.company.farm.afdellings', $farm->id) }}">{{ ucwords($farm->name) }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><strong>{{ $company->company_name }}</strong></li>
+        <li class="breadcrumb-item"><a href="{{ route('manager.farm.afdellings', $farm->id) }}">{{ ucwords($farm->name) }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ ucwords($afdelling->name) }}</li>
     </ol>
 </nav>
@@ -35,7 +34,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.user.assistant.store') }}">
+                    <form method="post" action="{{ route('manager.user.assistant.store') }}">
                         @csrf
                         <div class="form-group">
                             <label for="name">Farm</label>
@@ -85,7 +84,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.block.store') }}">
+                    <form method="post" action="{{ route('manager.block.store') }}">
                         @csrf
                         <div class="form-group">
                             <label for="name">Farm</label>
@@ -124,7 +123,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.foreman.store') }}">
+                    <form method="post" action="{{ route('manager.foreman.store') }}">
                         @csrf
                         <div class="form-group">
                             <label for="foreman">Nama</label>
@@ -165,7 +164,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.subforeman.store') }}">
+                    <form method="post" action="{{ route('manager.subforeman.store') }}">
                         @csrf
                         <div class="form-group">
                             <label for="foreman">Nama</label>
@@ -203,174 +202,174 @@
             </div>
         </div>
     </div>
-    @endsection
+</div>
+@endsection
 
-    @section('content')
-    <div class="row mt-4">
-        @if(count($blocks))
-        <div class="col-md-9">
-            <div class="row">
-                @foreach ($blocks as $key => $block)
-                <div class="col-md-4">
-                    <div id="wadah" class="card card-outline card-secondary">
-                        <div class="crudd__btn_cont">
-                            <div class="d-flex justify-content-center mt-2">
-                                <button data-toggle="modal" data-target="#edit-block{{ $key }}" class="btn btn-sm btn-outline-primary rounded-pill pl-3 pr-3 mr-1"><i class="fa fa-pen"></i></button>
-                                <button data-toggle="modal" data-target="#delete-block{{ $key }}" class="btn btn-sm btn-outline-danger rounded-pill pl-3 pr-3"><i class="fa fa-trash"></i></button>
-                            </div>
-                        </div>
-                        <a>
-                            <div class="card-body text-dark">
-                                Block {{ ucwords($block->code) }}
-                            </div>
-                            <div class="card-footer text-muted">
-                                (some information)
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Modal edit block -->
-                <div class="modal fade" id="edit-block{{ $key }}" tabindex="-1" aria-labelledby="edit-blockLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="edit-blockLabel">Perbarui data Block</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form method="post" action="{{ route('superadmin.block.update', $block->id) }}">
-                                    @method('PUT')
-                                    @csrf
-
-                                    <div class="form-group">
-                                        <label for="name">Farm</label>
-                                        <input class="form-control rounded-pill outline-danger" value="{{ ucwords($farm->name) }}" readonly>
-                                        <input type="hidden" name="farm_id" class="form-control" value="{{ $farm->id }}">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="name">Afdelling</label>
-                                        <input class="form-control rounded-pill outline-danger" value="{{ ucwords($afdelling->name) }}" readonly>
-                                        <input type="hidden" name="afdelling_id" class="form-control" value="{{ $afdelling->id }}">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="name">Kode block</label>
-                                        <input name="block" type="name" class="form-control rounded-pill outline-danger" value="{{ $block->code }}" required>
-                                    </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Tutup</button>
-                                <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Perbarui</button>
-                                </form>
-                            </div>
+@section('content')
+<div class="row mt-4">
+    @if(count($blocks))
+    <div class="col-md-9">
+        <div class="row">
+            @foreach ($blocks as $key => $block)
+            <div class="col-md-4">
+                <div id="wadah" class="card card-outline card-secondary">
+                    <div class="crudd__btn_cont">
+                        <div class="d-flex justify-content-center mt-2">
+                            <button data-toggle="modal" data-target="#edit-block{{ $key }}" class="btn btn-sm btn-outline-primary rounded-pill pl-3 pr-3 mr-1"><i class="fa fa-pen"></i></button>
+                            <button data-toggle="modal" data-target="#delete-block{{ $key }}" class="btn btn-sm btn-outline-danger rounded-pill pl-3 pr-3"><i class="fa fa-trash"></i></button>
                         </div>
                     </div>
-                </div>
-
-                <!-- Modal delete block -->
-                <div class="modal fade" id="delete-block{{ $key }}" tabindex="-1" aria-labelledby="delete-blockLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="delete-blockLabel">Hapus data Block</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form method="post" action="{{ route('superadmin.block.delete', $block->id) }}">
-                                    @method('DELETE')
-                                    @csrf
-                                    Yakin untuk menghapus Block?
-
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill pr-4 pl-4">Ya</button>
-                                </form>
-                            </div>
+                    <a>
+                        <div class="card-body text-dark">
+                            Block {{ ucwords($block->code) }}
                         </div>
-                    </div>
+                        <div class="card-footer text-muted">
+                            (some information)
+                        </div>
+                    </a>
                 </div>
-                @endforeach
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-header">
-                    Data Mandor pada Afdelling
+
+            <!-- Modal edit block -->
+            <div class="modal fade" id="edit-block{{ $key }}" tabindex="-1" aria-labelledby="edit-blockLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="edit-blockLabel">Perbarui data Block</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{{ route('manager.block.update', $block->id) }}">
+                                @method('PUT')
+                                @csrf
+
+                                <div class="form-group">
+                                    <label for="name">Farm</label>
+                                    <input class="form-control rounded-pill outline-danger" value="{{ ucwords($farm->name) }}" readonly>
+                                    <input type="hidden" name="farm_id" class="form-control" value="{{ $farm->id }}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">Afdelling</label>
+                                    <input class="form-control rounded-pill outline-danger" value="{{ ucwords($afdelling->name) }}" readonly>
+                                    <input type="hidden" name="afdelling_id" class="form-control" value="{{ $afdelling->id }}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">Kode block</label>
+                                    <input name="block" type="name" class="form-control rounded-pill outline-danger" value="{{ $block->code }}" required>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Tutup</button>
+                            <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Perbarui</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div><span class="badge badge-sm badge-light">Mandor utama</span></div>
-                    @if(count($foremans))
-                    <ol style="list-style-type: circle">
-                        @foreach ($foremans as $key => $foreman)
-                        <li>{{ $foreman->name }}</li>
+            </div>
+
+            <!-- Modal delete block -->
+            <div class="modal fade" id="delete-block{{ $key }}" tabindex="-1" aria-labelledby="delete-blockLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="delete-blockLabel">Hapus data Block</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{{ route('manager.block.delete', $block->id) }}">
+                                @method('DELETE')
+                                @csrf
+                                Yakin untuk menghapus Block?
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill pr-4 pl-4">Ya</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                Data Mandor pada Afdelling
+            </div>
+            <div class="card-body">
+                <div><span class="badge badge-sm badge-light">Mandor utama</span></div>
+                @if(count($foremans))
+                <ol style="list-style-type: circle">
+                    @foreach ($foremans as $key => $foreman)
+                    <li>{{ $foreman->name }}</li>
+                    @endforeach
+                </ol>
+                @else
+                <small class="text-muted">Mandor tidak tersedia.</small>
+                @endif
+
+                <div><span class="badge badge-sm badge-light">Mandor Bidang</span></div>
+                <ol style="list-style-type: circle">
+                    <li id="spraying-parent"><a href="">Spraying ({{ count($sprayings) }})</a></li>
+                    <ol id="spraying-children" style="list-style-type: decimal">
+                        @foreach($sprayings as $key => $sp)
+                        <li>{{ $sp->name }}</li>
                         @endforeach
                     </ol>
-                    @else
-                    <small class="text-muted">Mandor tidak tersedia.</small>
-                    @endif
-
-                    <div><span class="badge badge-sm badge-light">Mandor Bidang</span></div>
-                    <ol style="list-style-type: circle">
-                        <li id="spraying-parent"><a href="">Spraying ({{ count($sprayings) }})</a></li>
-                        <ol id="spraying-children" style="list-style-type: decimal">
-                            @foreach($sprayings as $key => $sp)
-                            <li>{{ $sp->name }}</li>
-                            @endforeach
-                        </ol>
-                        <li id="fertilizer-parent"><a href="">Fertilizer ({{ count($fertilizers) }})</a></li>
-                        <ol id="fertilizer-children" style="list-style-type: decimal">
-                            @foreach($fertilizers as $fz)
-                            <li>{{ $fz->name }}</li>
-                            @endforeach
-                        </ol>
-                        <li id="circle-parent"><a href="">Manual Circle ({{ count($circles) }})</a></li>
-                        <ol id="circle-children" style="list-style-type: decimal">
-                            @foreach($circles as $cs)
-                            <li>{{ $cs->name }}</li>
-                            @endforeach
-                        </ol>
-                        <li id="pruning-parent"><a href="">Manual Pruning ({{ count($prunings) }})</a></li>
-                        <ol id="pruning-children" style="list-style-type: decimal">
-                            @foreach($prunings as $pr)
-                            <li>{{ $pr->name }}</li>
-                            @endforeach
-                        </ol>
-                        <li id="gawangan-parent"><a href="">Manual Gawangan ({{ count($gawangans) }})</a></li>
-                        <ol id="gawangan-children" style="list-style-type: decimal">
-                            @foreach($gawangans as $gw)
-                            <li>{{ $gw->name }}</li>
-                            @endforeach
-                        </ol>
-                        <li id="pcontrol-parent"><a href="">Pest Control ({{ count($pcontrols) }})</a></li>
-                        <ol id="pcontrol-children" style="list-style-type: decimal">
-                            @foreach($pcontrols as $key => $subforeman)
-                            <li>{{ $subforeman->name }}</li>
-                            @endforeach
-                        </ol>
-                        <li id="harvesting-parent"><a href="">Harvesting ({{ count($harvestings) }})</a></li>
-                        <ol id="harvesting-children" style="list-style-type: decimal">
-                            @foreach($harvestings as $hv)
-                            <li>{{ $hv->name }}</li>
-                            @endforeach
-                        </ol>
+                    <li id="fertilizer-parent"><a href="">Fertilizer ({{ count($fertilizers) }})</a></li>
+                    <ol id="fertilizer-children" style="list-style-type: decimal">
+                        @foreach($fertilizers as $fz)
+                        <li>{{ $fz->name }}</li>
+                        @endforeach
                     </ol>
-                </div>
+                    <li id="circle-parent"><a href="">Manual Circle ({{ count($circles) }})</a></li>
+                    <ol id="circle-children" style="list-style-type: decimal">
+                        @foreach($circles as $cs)
+                        <li>{{ $cs->name }}</li>
+                        @endforeach
+                    </ol>
+                    <li id="pruning-parent"><a href="">Manual Pruning ({{ count($prunings) }})</a></li>
+                    <ol id="pruning-children" style="list-style-type: decimal">
+                        @foreach($prunings as $pr)
+                        <li>{{ $pr->name }}</li>
+                        @endforeach
+                    </ol>
+                    <li id="gawangan-parent"><a href="">Manual Gawangan ({{ count($gawangans) }})</a></li>
+                    <ol id="gawangan-children" style="list-style-type: decimal">
+                        @foreach($gawangans as $gw)
+                        <li>{{ $gw->name }}</li>
+                        @endforeach
+                    </ol>
+                    <li id="pcontrol-parent"><a href="">Pest Control ({{ count($pcontrols) }})</a></li>
+                    <ol id="pcontrol-children" style="list-style-type: decimal">
+                        @foreach($pcontrols as $key => $subforeman)
+                        <li>{{ $subforeman->name }}</li>
+                        @endforeach
+                    </ol>
+                    <li id="harvesting-parent"><a href="">Harvesting ({{ count($harvestings) }})</a></li>
+                    <ol id="harvesting-children" style="list-style-type: decimal">
+                        @foreach($harvestings as $hv)
+                        <li>{{ $hv->name }}</li>
+                        @endforeach
+                    </ol>
+                </ol>
             </div>
         </div>
-
-        @else
-        <div class="col-md-4 offset-md-4 mt-5">
-            <div class="text-muted text-center h6 mt-5">Block Tidak Tersedia.</div>
-        </div>
-        @endif
     </div>
+
+    @else
+    <div class="col-md-4 offset-md-4 mt-5">
+        <div class="text-muted text-center h6 mt-5">Block Tidak Tersedia.</div>
+    </div>
+    @endif
 </div>
 @endsection
 

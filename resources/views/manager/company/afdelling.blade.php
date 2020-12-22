@@ -1,4 +1,4 @@
-@extends('superadmin.layouts.app')
+@extends('manager.layouts.app')
 
 @section('title', 'Daftar Afdelling')
 @section('page-title', 'Daftar Afdelling')
@@ -6,8 +6,7 @@
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('superadmin.company') }}">Daftar Perusahaan</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('superadmin.company.farm', $company->id) }}">{{ $company->company_name }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><strong>{{ $company->company_name }}</strong></li>
         <li class="breadcrumb-item active" aria-current="page">{{ ucwords($farm->name) }}</li>
     </ol>
 </nav>
@@ -32,7 +31,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.user.manager.store') }}">
+                    <form method="post" action="{{ route('manager.user.manager.store') }}">
                         @csrf
                         <div class="form-group">
                             <label for="name">Farm</label>
@@ -76,7 +75,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.afdelling.store') }}">
+                    <form method="post" action="{{ route('manager.afdelling.store') }}">
                         @csrf
                         <div class="form-group">
                             <label for="name">Farm</label>
@@ -115,10 +114,10 @@
                 <div class="d-flex justify-content-center mt-2">
                     <button data-toggle="modal" data-target="#edit-afdelling{{ $key }}" class="btn btn-sm btn-outline-primary rounded-pill pl-3 pr-3 mr-1"><i class="fa fa-pen"></i></button>
                     <button data-toggle="modal" data-target="#delete-afdelling{{ $key }}" class="btn btn-sm btn-outline-danger rounded-pill pl-3 pr-3 mr-1"><i class="fa fa-trash"></i></button>
-                    <a href="{{ route('superadmin.company.farm.afdelling.operating_maintenance', $afdelling->id) }}" class="btn btn-sm btn-outline-success rounded-pill pl-3 pr-3" title="Operating Maintenance"><i class="fas fa-seedling"></i></a>
+                    <a href="{{ route('manager.farm.afdelling.operating_maintenance', $afdelling->id) }}" class="btn btn-sm btn-outline-success rounded-pill pl-3 pr-3" title="Operating Maintenance"><i class="fas fa-seedling"></i></a>
                 </div>
             </div>
-            <a href="{{ route('superadmin.company.farm.afdelling.blocks', $afdelling->id) }}">
+            <a href="{{ route('manager.farm.afdelling.blocks', $afdelling->id) }}">
                 <div class="card-body text-dark">
                     <div class="card-title">{{ ucwords($afdelling->name) }}</div>
 
@@ -145,7 +144,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.afdelling.update', $afdelling->id) }}">
+                    <form method="post" action="{{ route('manager.afdelling.update', $afdelling->id) }}">
                         @method('PUT')
                         @csrf
 
@@ -185,7 +184,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.afdelling.delete', $afdelling->id) }}">
+                    <form method="post" action="{{ route('manager.afdelling.delete', $afdelling->id) }}">
                         @method('DELETE')
                         @csrf
                         Yakin untuk menghapus Afdelling?

@@ -1,4 +1,4 @@
-@extends('superadmin.layouts.app')
+@extends('assistant.layouts.app')
 
 @section('title', 'Daftar Block')
 @section('page-title', 'Daftar Block')
@@ -6,9 +6,8 @@
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('superadmin.company') }}">Daftar Perusahaan</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('superadmin.company.farm', $company->id) }}">{{ ucwords($company->company_name) }}</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('superadmin.company.farm.afdellings', $farm->id) }}">{{ ucwords($farm->name) }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><strong>{{ $company->company_name }}</strong></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ ucwords($farm->name) }}</li>
         <li class="breadcrumb-item active" aria-current="page">{{ ucwords($afdelling->name) }}</li>
     </ol>
 </nav>
@@ -35,7 +34,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.user.assistant.store') }}">
+                    <form method="post" action="{{ route('assistant.user.assistant.store') }}">
                         @csrf
                         <div class="form-group">
                             <label for="name">Farm</label>
@@ -85,7 +84,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.block.store') }}">
+                    <form method="post" action="{{ route('assistant.block.store') }}">
                         @csrf
                         <div class="form-group">
                             <label for="name">Farm</label>
@@ -124,7 +123,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.foreman.store') }}">
+                    <form method="post" action="{{ route('assistant.foreman.store') }}">
                         @csrf
                         <div class="form-group">
                             <label for="foreman">Nama</label>
@@ -165,7 +164,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.subforeman.store') }}">
+                    <form method="post" action="{{ route('assistant.subforeman.store') }}">
                         @csrf
                         <div class="form-group">
                             <label for="foreman">Nama</label>
@@ -203,7 +202,8 @@
             </div>
         </div>
     </div>
-    @endsection
+</div>
+@endsection
 
     @section('content')
     <div class="row mt-4">
@@ -241,7 +241,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" action="{{ route('superadmin.block.update', $block->id) }}">
+                                <form method="post" action="{{ route('assistant.block.update', $block->id) }}">
                                     @method('PUT')
                                     @csrf
 
@@ -282,7 +282,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" action="{{ route('superadmin.block.delete', $block->id) }}">
+                                <form method="post" action="{{ route('assistant.block.delete', $block->id) }}">
                                     @method('DELETE')
                                     @csrf
                                     Yakin untuk menghapus Block?
@@ -371,82 +371,81 @@
         </div>
         @endif
     </div>
-</div>
-@endsection
+    @endsection
 
-@section('js')
-<script>
-    ScrollReveal().reveal('.active', {
-        delay: 250
-    });
+    @section('js')
+    <script>
+        ScrollReveal().reveal('.active', {
+            delay: 250
+        });
 
-    ScrollReveal().reveal('.card', {
-        delay: 500
-    });
+        ScrollReveal().reveal('.card', {
+            delay: 500
+        });
 
-    $(document).ready(function() {
-        $('#spraying-children').css({
-            'display': 'none',
+        $(document).ready(function() {
+            $('#spraying-children').css({
+                'display': 'none',
+            })
+
+            $('#spraying-parent').click(function(e) {
+                e.preventDefault()
+                $('#spraying-children').toggle()
+            })
+
+            $('#fertilizer-children').css({
+                'display': 'none',
+            })
+
+            $('#fertilizer-parent').click(function(e) {
+                e.preventDefault()
+                $('#fertilizer-children').toggle()
+            })
+
+            $('#circle-children').css({
+                'display': 'none',
+            })
+
+            $('#circle-parent').click(function(e) {
+                e.preventDefault()
+                $('#circle-children').toggle()
+            })
+
+            $('#pruning-children').css({
+                'display': 'none',
+            })
+
+            $('#pruning-parent').click(function(e) {
+                e.preventDefault()
+                $('#pruning-children').toggle()
+            })
+
+            $('#gawangan-children').css({
+                'display': 'none',
+            })
+
+            $('#gawangan-parent').click(function(e) {
+                e.preventDefault()
+                $('#gawangan-children').toggle()
+            })
+
+            $('#pcontrol-children').css({
+                'display': 'none',
+            })
+
+            $('#pcontrol-parent').click(function(e) {
+                e.preventDefault()
+                $('#pcontrol-children').toggle()
+            })
+
+            $('#harvesting-children').css({
+                'display': 'none',
+            })
+
+            $('#harvesting-parent').click(function(e) {
+                e.preventDefault()
+                $('#harvesting-children').toggle()
+            })
         })
-
-        $('#spraying-parent').click(function(e) {
-            e.preventDefault()
-            $('#spraying-children').toggle()
-        })
-
-        $('#fertilizer-children').css({
-            'display': 'none',
-        })
-
-        $('#fertilizer-parent').click(function(e) {
-            e.preventDefault()
-            $('#fertilizer-children').toggle()
-        })
-
-        $('#circle-children').css({
-            'display': 'none',
-        })
-
-        $('#circle-parent').click(function(e) {
-            e.preventDefault()
-            $('#circle-children').toggle()
-        })
-
-        $('#pruning-children').css({
-            'display': 'none',
-        })
-
-        $('#pruning-parent').click(function(e) {
-            e.preventDefault()
-            $('#pruning-children').toggle()
-        })
-
-        $('#gawangan-children').css({
-            'display': 'none',
-        })
-
-        $('#gawangan-parent').click(function(e) {
-            e.preventDefault()
-            $('#gawangan-children').toggle()
-        })
-
-        $('#pcontrol-children').css({
-            'display': 'none',
-        })
-
-        $('#pcontrol-parent').click(function(e) {
-            e.preventDefault()
-            $('#pcontrol-children').toggle()
-        })
-
-        $('#harvesting-children').css({
-            'display': 'none',
-        })
-
-        $('#harvesting-parent').click(function(e) {
-            e.preventDefault()
-            $('#harvesting-children').toggle()
-        })
-    })
-</script>
-@endsection
+    </script>
+    @endsection

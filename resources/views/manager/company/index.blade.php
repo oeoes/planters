@@ -1,4 +1,4 @@
-@extends('superadmin.layouts.app')
+@extends('manager.layouts.app')
 
 @section('title', 'Daftar Perusahaan')
 
@@ -27,7 +27,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.company.store') }}">
+                    <form method="post" action="{{ route('manager.company.store') }}">
                         @csrf
                         <div class="form-group">
                             <label for="name">Nama Perusahaan</label>
@@ -61,7 +61,7 @@
                         <button data-toggle="modal" data-target="#delete-company{{ $key }}" class="btn btn-sm btn-outline-danger rounded-pill pl-3 pr-3"><i class="fa fa-trash"></i></button>
                     </div>
                 </div>
-                <a href="{{ route('superadmin.company.farm', $company->id) }}">
+                <a href="{{ route('manager.company.farm', $company->id) }}">
                     <div class="card-body text-dark">
                         <div class="row no-gutters">
                             <div class="col-9">{{ $company->company_name }}</div>
@@ -93,7 +93,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="{{ route('superadmin.company.update', $company->id) }}">
+                        <form method="post" action="{{ route('manager.company.update', $company->id) }}">
                             @method('PUT')
                             @csrf
 
@@ -127,7 +127,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="{{ route('superadmin.company.delete', $company->id) }}">
+                        <form method="post" action="{{ route('manager.company.delete', $company->id) }}">
                             @method('DELETE')
                             @csrf
                             Yakin untuk menghapus PT?
@@ -148,13 +148,12 @@
         </div>
         @endif
     </div>
-</div>
-@endsection
+    @endsection
 
-@section('js')
-<script>
-    ScrollReveal().reveal('.card', {
-        delay: 500
-    });
-</script>
-@endsection
+    @section('js')
+    <script>
+        ScrollReveal().reveal('.card', {
+            delay: 500
+        });
+    </script>
+    @endsection

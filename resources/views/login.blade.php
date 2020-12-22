@@ -123,11 +123,11 @@
                     }).then(function (response) {
                         switch (response.data.role) {
                             case 'assistant':
-                                location.href = '{{ route("assistant.dashboard") }}'
+                                location.href = '{{ route("assistant.afdelling.blocks") }}'
                                 break;
 
                             case 'farmmanager':
-                                location.href = '{{ route("manager.dashboard") }}'
+                                location.href = '{{ route("manager.farm.afdellings") }}'
                                 break;
 
                             case 'superadmin':

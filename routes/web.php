@@ -9,6 +9,7 @@ use App\Http\Controllers\assistant\DashboardController as AS_DashboardController
 use App\Http\Controllers\assistant\AreaController as AS_AreaController;
 use App\Http\Controllers\assistant\ForemanController    as AS_ForemanController;
 use App\Http\Controllers\assistant\SubforemanController    as AS_SubforemanController;
+use App\Http\Controllers\assistant\CompanyController    as AS_CompanyController;
 
 // SUPERADMIN
 use App\Http\Controllers\superadmin\DashboardController  as SU_DashboardController;
@@ -25,6 +26,9 @@ use App\Http\Controllers\manager\DashboardController as FM_DashboardController;
 use App\Http\Controllers\manager\AreaController as FM_AreaController;
 use App\Http\Controllers\manager\ForemanController    as FM_ForemanController;
 use App\Http\Controllers\manager\SubforemanController    as FM_SubforemanController;
+use App\Http\Controllers\manager\CompanyController    as FM_CompanyController;
+use App\Http\Controllers\manager\AssistantController  as FM_AssistantController;
+use App\Http\Controllers\manager\TypejobController    as FM_TypejobController;
 
 
 Route::get('/test', function() {return view('root.app'); });
@@ -237,6 +241,72 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth:farmmanager']], func
         });
     });
 
+    Route::group(['prefix' => 'company'], function () {
+        Route::get('/farm/afdellings', [FM_CompanyController::class, 'afdellings'])->name('manager.farm.afdellings');
+        Route::get('/farm/afdelling/{afdelling_id}/blocks', [FM_CompanyController::class, 'blocks'])->name('manager.farm.afdelling.blocks');
+
+        // operating maintenance
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance', [FM_CompanyController::class, 'operating_maintenance'])->name('manager.farm.afdelling.operating_maintenance');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/spraying', [FM_CompanyController::class, 'operating_maintenance_spraying'])->name('manager.farm.afdelling.operating_maintenance_spraying');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/fertilizer', [FM_CompanyController::class, 'operating_maintenance_fertilizer'])->name('manager.farm.afdelling.operating_maintenance_fertilizer');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/circle', [FM_CompanyController::class, 'operating_maintenance_circle'])->name('manager.farm.afdelling.operating_maintenance_circle');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/pruning', [FM_CompanyController::class, 'operating_maintenance_pruning'])->name('manager.farm.afdelling.operating_maintenance_pruning');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/gawangan', [FM_CompanyController::class, 'operating_maintenance_gawangan'])->name('manager.farm.afdelling.operating_maintenance_gawangan');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/pcontrol', [FM_CompanyController::class, 'operating_maintenance_pcontrol'])->name('manager.farm.afdelling.operating_maintenance_pcontrol');
+        Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/harvesting', [FM_CompanyController::class, 'operating_maintenance_harvesting'])->name('manager.farm.afdelling.operating_maintenance_harvesting');
+    });
+
+    Route::group(['prefix' => 'type'], function () {
+        Route::group(['prefix' => 'spraying'], function () {
+            Route::get('/', [FM_TypejobController::class, 'spraying'])->name('manager.spraying.index');
+            Route::get('/detail/{blok_ref_id}/{spraying_id}', [FM_TypejobController::class, 'spraying_detail'])->name('manager.spraying.detail');
+            Route::get('/history', [FM_TypejobController::class, 'spraying_history'])->name('manager.spraying.history');
+            Route::get('/history/{block_ref_id}', [FM_TypejobController::class, 'spraying_history_detail'])->name('manager.spraying.history.detail');
+        });
+
+        Route::group(['prefix' => 'fertilizer'], function () {
+            Route::get('/', [FM_TypejobController::class, 'fertilizer'])->name('manager.fertilizer.index');
+            Route::get('/detail/{blok_ref_id}/{fertilizer_id}', [FM_TypejobController::class, 'fertilizer_detail'])->name('manager.fertilizer.detail');
+            Route::get('/history', [FM_TypejobController::class, 'fertilizer_history'])->name('manager.fertilizer.history');
+            Route::get('/history/{block_ref_id}', [FM_TypejobController::class, 'fertilizer_history_detail'])->name('manager.fertilizer.history.detail');
+        });
+
+        Route::group(['prefix' => 'circle'], function () {
+            Route::get('/', [FM_TypejobController::class, 'circle'])->name('manager.circle.index');
+            Route::get('/detail/{blok_ref_id}/{circle_id}', [FM_TypejobController::class, 'circle_detail'])->name('manager.circle.detail');
+            Route::get('/history', [FM_TypejobController::class, 'circle_history'])->name('manager.circle.history');
+            Route::get('/history/{block_ref_id}', [FM_TypejobController::class, 'circle_history_detail'])->name('manager.circle.history.detail');
+        });
+
+        Route::group(['prefix' => 'pruning'], function () {
+            Route::get('/', [FM_TypejobController::class, 'pruning'])->name('manager.pruning.index');
+            Route::get('/detail/{blok_ref_id}/{pruning_id}', [FM_TypejobController::class, 'pruning_detail'])->name('manager.pruning.detail');
+            Route::get('/history', [FM_TypejobController::class, 'pruning_history'])->name('manager.pruning.history');
+            Route::get('/history/{block_ref_id}', [FM_TypejobController::class, 'pruning_history_detail'])->name('manager.pruning.history.detail');
+        });
+
+        Route::group(['prefix' => 'gawangan'], function () {
+            Route::get('/', [FM_TypejobController::class, 'gawangan'])->name('manager.gawangan.index');
+            Route::get('/detail/{blok_ref_id}/{gawangan_id}', [FM_TypejobController::class, 'gawangan_detail'])->name('manager.gawangan.detail');
+            Route::get('/history', [FM_TypejobController::class, 'gawangan_history'])->name('manager.gawangan.history');
+            Route::get('/history/{block_ref_id}', [FM_TypejobController::class, 'gawangan_history_detail'])->name('manager.gawangan.history.detail');
+        });
+
+        Route::group(['prefix' => 'pcontrol'], function () {
+            Route::get('/', [FM_TypejobController::class, 'pestcontrol'])->name('manager.pestcontrol.index');
+            Route::get('/detail/{blok_ref_id}/{pcontrol_id}', [FM_TypejobController::class, 'pestcontrol_detail'])->name('manager.pestcontrol.detail');
+            Route::get('/history', [FM_TypejobController::class, 'pestcontrol_history'])->name('manager.pcontrol.history');
+            Route::get('/history/{block_ref_id}', [FM_TypejobController::class, 'pestcontrol_history_detail'])->name('manager.pcontrol.history.detail');
+        });
+
+        Route::group(['prefix' => 'harvesting'], function () {
+            Route::get('/', [FM_TypejobController::class, 'harvesting'])->name('manager.harvesting.index');
+            Route::get('/detail/{blok_ref_id}/{harvesting_id}', [FM_TypejobController::class, 'harvesting_detail'])->name('manager.harvesting.detail');
+            Route::get('/history', [FM_TypejobController::class, 'harvesting_history'])->name('manager.harvesting.history');
+            Route::get('/history/{block_ref_id}', [FM_TypejobController::class, 'harvesting_history_detail'])->name('manager.harvesting.history.detail');
+        });
+    });
+
     Route::group(['prefix' => 'subforeman'], function () {
         Route::get('/', [FM_SubforemanController::class, 'index'])->name('manager.subforeman.index');
         Route::post('/store', [FM_SubforemanController::class, 'store'])->name('manager.subforeman.store');
@@ -249,6 +319,11 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth:farmmanager']], func
         Route::post('/store', [FM_ForemanController::class, 'store'])->name('manager.foreman.store'); 
         Route::put('/update/{foreman}', [FM_ForemanController::class, 'update'])->name('manager.foreman.update'); 
         Route::delete('/delete/{foreman}', [FM_ForemanController::class, 'delete'])->name('manager.foreman.delete'); 
+    });
+
+    Route::group(['prefix' => 'assistant'], function () {
+        Route::get('/', [FM_AssistantController::class, 'index'])->name('manager.user.assistant.index');
+        Route::post('/store', [FM_AssistantController::class, 'store'])->name('manager.user.assistant.store');
     });
 });
 
@@ -264,6 +339,10 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
 
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', [AS_DashboardController::class, 'index'])->name('assistant.dashboard');    
+    });
+
+    Route::group(['prefix' => 'company'], function () {
+        Route::get('/farm/afdelling/blocks', [AS_CompanyController::class, 'blocks'])->name('assistant.afdelling.blocks');
     });
 
     Route::group(['prefix' => 'area'], function () {

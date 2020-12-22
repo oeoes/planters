@@ -100,12 +100,16 @@ class AreaController extends Controller
             'farm_id' => $request->farm_id,
             'hk_total' => $request->hk_total,
         ]);
-        return back();
+        return back()->withSuccess('Afdelling updated');
     }
 
     public function afdelling_delete (Afdelling $afdelling) {
-        $afdelling->delete();
-        return back();
+        try {
+            $afdelling->delete();
+            return back()->withSuccess('Afdelling deleted');
+        } catch (\Throwable $th) {
+            return back()->withError('Cannot delete afdelling.');
+        }
     }
 
     public function block() {
