@@ -373,9 +373,6 @@
           type: "GET",
           url: '/pyear/list/' + afdelling_id,
           dataType: 'JSON', 
-          // data: {
-          //     "_token": "{{ csrf_token() }}"
-          // },
           success: function(data) {
 
             label = [];
@@ -398,7 +395,7 @@
               ]
             };
 
-            loadBarChart(data)
+            loadBarChart()
           },
           error: function (request, status, error) {
             console.log(request.responseText);
@@ -408,10 +405,22 @@
     });
 
     var ctx2 = document.getElementById("bar").getContext("2d");
-    function loadBarChart(data) {
+    function loadBarChart() {
         var myBarChart = new Chart(ctx2, {
           type: 'bar',
-          data: data,
+          data: {
+              labels: ['afdelling1', 'afdelling2', 'afdelling3'],
+              datasets: [{
+                label: "Current coverage",
+                backgroundColor: "blue",
+                data: [10, 20, 40]
+              }, {
+                label: "Total coverage",
+                backgroundColor: "red",
+                data: [50, 60, 80]
+              },
+              ]
+            },
           options: {
             barValueSpacing: 20,
             scales: {

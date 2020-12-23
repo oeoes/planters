@@ -19,6 +19,7 @@ class CreateBlockReferenceTable extends Migration
             $table->foreignId('foreman_id')->constrained('foremans');
             $table->foreignId('jobtype_id')->constrained('job_types');
             $table->char('planting_year')->nullable();
+            $table->integer('iterate');
             $table->double('total_coverage', 8, 2);
             $table->double('available_coverage', 8, 2);
             $table->double('population_coverage', 8, 2); // SPH

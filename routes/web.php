@@ -10,7 +10,7 @@ use App\Http\Controllers\assistant\AreaController as AS_AreaController;
 use App\Http\Controllers\assistant\ForemanController    as AS_ForemanController;
 use App\Http\Controllers\assistant\SubforemanController    as AS_SubforemanController;
 use App\Http\Controllers\assistant\CompanyController    as AS_CompanyController;
-
+use App\Http\Controllers\assistant\StaticActivityController;
 // SUPERADMIN
 use App\Http\Controllers\superadmin\DashboardController  as SU_DashboardController;
 use App\Http\Controllers\superadmin\TypejobController    as SU_TypejobController;
@@ -343,6 +343,11 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
 
     Route::group(['prefix' => 'company'], function () {
         Route::get('/farm/afdelling/blocks', [AS_CompanyController::class, 'blocks'])->name('assistant.afdelling.blocks');
+    });
+
+    Route::group(['prefix' => 'activities'], function () {
+        Route::get('/', [StaticActivityController::class, 'index'])->name('assistant.activities');
+        Route::post('/', [StaticActivityController::class, 'store'])->name('assistant.activities');
     });
 
     Route::group(['prefix' => 'area'], function () {

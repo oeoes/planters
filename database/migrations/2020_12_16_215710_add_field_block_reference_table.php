@@ -14,7 +14,7 @@ class AddFieldBlockReferenceTable extends Migration
     public function up()
     {
         Schema::table('block_references', function (Blueprint $table) {
-            // $table->foreignId('block_static_reference_id')->constrained('block_static_references')->nullable();
+            $table->foreignId('block_static_reference_id')->constrained('block_static_references')->nullable();
         });
     }
 

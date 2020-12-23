@@ -7,6 +7,7 @@ use App\Models\Afdelling;
 use App\Models\AfdellingReference;
 use App\Models\Block;
 use App\Models\BlockReference;
+use App\Models\BlockStaticReference;
 use App\Models\Harvesting\EmployeeHarvesting;
 use App\Models\Harvesting\FillHarvesting;
 use App\Models\Maintain\CircleType;
@@ -29,50 +30,43 @@ use Validator;
 class BlockController extends Controller
 {
     public function store_block_references(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'block_id' => 'required',
-            'foreman_id' => 'required',
-            'jobtype_id' => 'required',
-            'planting_year' => 'required',
-            'population_coverage' => 'required',
-            'total_coverage' => 'required',
-        ]);
 
         if ($request->foreman_id != fme()->id)
             return res(false, 404, 'Foreman not authenticated');
-
-        if ($validator->fails())
-            return res(false, 404, $validator->errors());
 
         $valid_block = Block::where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->where('id', $request->block_id)->first();
         if (! $valid_block) 
             return res(false, 404, 'Block not allowed');
 
-        $block_references = BlockReference::where('block_id', $request->block_id)->where('planting_year', $request->planting_year)->first();
-        if ($block_references ) {
-            if (in_array($request->jobtype_id, [1, 2, 3, 4, 5, 6])) {
-                return res(false, 400, 'Reference of block already created', [ 'block_reference_id' => $block_references->id]);
-            }
-        }
-            
-        $population_perblock = $request->total_coverage * $request->population_coverage;
-
-        BlockReference::create([
-            'block_id'   => $request->block_id,
-            'foreman_id' => fme()->id,
-            'jobtype_id' => $request->jobtype_id,
-            'planting_year' => $request->planting_year,
-            'population_coverage' => $request->population_coverage,
-            'population_perblock' => $population_perblock,
-            'total_coverage'      => $request->total_coverage,
-            'available_coverage'  => $request->total_coverage,
-            'model' => model($request->jobtype_id),
-            'fill'  => fill($request->jobtype_id),
-            'fill_id' => fill_id($request->jobtype_id),
-            'completed' => 0,
-        ]);
+        // $block_references = BlockReference::where('block_id', $request->block_id)->where('planting_year', $request->planting_year)->first();
+        // if ($block_references ) {
+        //     if (in_array($request->jobtype_id, [1, 2, 3, 4, 5, 6])) {
+        //         return res(false, 400, 'Reference of block already created', [ 'block_reference_id' => $block_references->id]);
+        //     }
+        // }
+            $block_static = BlockStaticReference::where('block_id', $request->block_id)->first();
+        if ($block_static->count() > 0) {
+            $block_reference = BlockReference::where('block_id', $request->block_id)->get();
+            BlockReference::create([
+                'block_static_reference_id' => $block_static->id,
+                'block_id'   => $request->block_id,
+                'foreman_id' => fme()->id,
+                'jobtype_id' => $request->jobtype_id,
+                'iterate'       => $block_reference->count() + 1,
+                'planting_year' => $block_static->planting_year,
+                'population_coverage' => $block_static->population_coverage,
+                'population_perblock' => $block_static->population_perblock,
+                'total_coverage'      => $block_static->total_coverage,
+                'available_coverage'  => $block_static->total_coverage,
+                'model' => model($request->jobtype_id),
+                'fill'  => fill($request->jobtype_id),
+                'fill_id' => fill_id($request->jobtype_id),
+                'completed' => 0,
+            ]);
 
         return res(true, 200, 'Reference of block created');
+        } 
+        return res(false, 404, 'Block static not found');
     }
 
     public function blocks($afdelling_id) {
@@ -87,6 +81,7 @@ class BlockController extends Controller
         }
         return res(true, 200, 'Blocks listed', $data);
     }
+    
 
     // all blocks
     public function completed_block_references() {
@@ -110,11 +105,14 @@ class BlockController extends Controller
     }
 
     // active block references
-    public function active_block_references() {
-        $refs = BlockReference::where('foreman_id', fme()->id)->where('completed', 0)->get();
-        if ($refs->isEmpty()) {
-            return res(true, 200, 'Empty block references');
+    public function active_block_references($task_mode) {
+        if ($task_mode == 1) {
+            $refs = BlockReference::where('foreman_id', fme()->id)->where('completed', 0)->whereIn('jobtype_id', [1,2,3,4,5,6])->get();
+        } else {
+            $refs = BlockReference::where('foreman_id', fme()->id)->where('completed', 0)->where('jobtype_id', 7)->get();
         }
+        
+        if ($refs->isEmpty()) return res(true, 200, 'Empty block references');
             
         $active = [];
         foreach ($refs as $value) {
@@ -237,5 +235,9 @@ class BlockController extends Controller
         }
 
     }   
+
+    public function store_block_static_reference() {
+        
+    }
 
 }

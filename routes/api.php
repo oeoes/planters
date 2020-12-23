@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\v1\BlockController;
 use App\Http\Controllers\Api\v1\DwpmaintainController;
 use App\Http\Controllers\Api\v1\DwpharvestingController;
 use App\Http\Controllers\Api\v1\GradingHarvestingController;
+use App\Http\Controllers\Api\v1\BlockStaticController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
@@ -30,7 +31,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::get('blocks/{afdelling_id}', [BlockController::class, 'blocks']);
         Route::post('store-block-references', [BlockController::class, 'store_block_references']);
         Route::get('completed-block-references', [BlockController::class, 'completed_block_references']);
-        Route::get('active-block-references', [BlockController::class, 'active_block_references']);
+        Route::get('active-block-references/{task_mode}', [BlockController::class, 'active_block_references']);
 
         Route::get('det-active-block-references/{block_ref_id}', [BlockController::class, 'det_active_block_references']);
 
@@ -40,6 +41,9 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::get('detail-rkh-completed/{block_ref_id}/{date}', [DwpmaintainController::class, 'detail_rkh_completed']);
 
         Route::get('set-complete-rkh/{block_ref_id}', [DwpmaintainController::class, 'set_complete_rkh']);
+
+        // Block static
+        Route::get('block-static-list/{afdelling_id}', [BlockStaticController::class, 'list']);
 
         // Grading harvesting
         Route::group(['prefix' => 'grading-harvesting'], function () {
