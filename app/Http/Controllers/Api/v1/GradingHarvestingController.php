@@ -31,6 +31,7 @@ class GradingHarvestingController extends Controller
         return res(true, 200, 'List samples' , $data);
     }
 
+    // ingin membuat pemutuan panen
     public function detail_sample($block_reference_id) {
 
         // This is detail simple, url in between to create grade harvesting
@@ -67,19 +68,17 @@ class GradingHarvestingController extends Controller
         return res(true, 200, 'Sample Grading Harvest Created', $data);
     }
 
-    public function list_grading_harvesting($afdelling_id) {
-        $grading_harvestings = GradingHarvesting::where('afdelling_id', $afdelling_id)->get();
+    public function list_grading_harvesting($sample_grading_id) {
+        $grading_harvestings = GradingHarvesting::where('sample_grading_id', $sample_grading_id)->get();
 
         if (! $grading_harvestings)  return res(false,  404, 'List not found');
 
         $grading_list = [];
-        $sample = 1;
         foreach ($grading_harvestings as $key => $value) {
             $grading_list [] = [
                 // 'sample' => 'Sample '.$sample,
                 'grading_harvesting_id' => $value['id']
             ];
-            $sample++;
         }
         return res(true, 200, 'List grading harvesting', $grading_list);    
     }

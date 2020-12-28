@@ -645,7 +645,7 @@ class DwpmaintainController extends Controller
                 $blocks [] = [
                     'block_id' => $value['block_id'],
                     'block_code' => block($value['block_id']),
-                    'selected_year' => $year
+                    'planting_year' => $year
                 ];
             }
 

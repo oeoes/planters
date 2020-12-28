@@ -48,9 +48,13 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         // Grading harvesting
         Route::group(['prefix' => 'grading-harvesting'], function () {
             Route::get('samples/{afdelling_id}/list', [GradingHarvestingController::class, 'list_samples']);
+            // kasih data2 pas mau buat grading harvesting
             Route::get('sample/{block_reference_id}/create', [GradingHarvestingController::class, 'detail_sample']);
+            // store gading harvesting
             Route::post('store', [GradingHarvestingController::class, 'store_grading_harvesting']);
             Route::get('grade/{afdelling_id}/list', [GradingHarvestingController::class, 'list_grading_harvesting']);
+
+            //detail grading harvesting
             Route::get('grade/{block_reference_id}/detail/{grading_harvesting_id}', [GradingHarvestingController::class, 'detail_grading_harvesting']);
         });
     
