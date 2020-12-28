@@ -52,7 +52,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
             Route::get('sample/{block_reference_id}/create', [GradingHarvestingController::class, 'detail_sample']);
             // store gading harvesting
             Route::post('store', [GradingHarvestingController::class, 'store_grading_harvesting']);
-            Route::get('grade/{afdelling_id}/list', [GradingHarvestingController::class, 'list_grading_harvesting']);
+            Route::get('grade/{sample_grading_id}/list', [GradingHarvestingController::class, 'list_grading_harvesting']);
 
             //detail grading harvesting
             Route::get('grade/{block_reference_id}/detail/{grading_harvesting_id}', [GradingHarvestingController::class, 'detail_grading_harvesting']);
