@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class BlockStaticController extends Controller
 {
   public function list($afdelling_id) {
-      $block_static = BlockStaticReference::where('afdelling_id', $afdelling_id)->get();
+      $block_static = BlockStaticReference::where('afdelling_id', $afdelling_id)->orderByDesc('created_at')->get();
       if ($block_static) {
         $data = [] ;
         foreach ($block_static as $key => $value) {
