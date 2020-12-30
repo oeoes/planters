@@ -30,10 +30,11 @@
                                 <th>Umur</th>
                                 <th>Jumlah pokok</th>
                                 <th>SPH</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($block_static as $static)
+                            @foreach ($block_static as $key => $static)
                                 <tr>
                                     <td>{{ block($static->block_id) }}</td>
                                     <td>{{ $static->planting_year }}</td>
@@ -41,12 +42,71 @@
                                     <td>{{ date('Y') - $static->planting_year }}</td>
                                     <td>{{ $static->population_perblock }}</td>
                                     <td>{{ $static->population_coverage }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                            data-target="#modalEdit{{ $key }}">
+                                            Edit
+                                        </button>
+                                    </td>
                                 </tr>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalEdit{{ $key }}" tabindex="-1"
+                                    aria-labelledby="editModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editModalLabel">Modal title</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="{{ route('assistant.activites.edit') }}" method="post"
+                                                id="edtFrm">
+                                                @csrf
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="block">Blok</label>
+                                                        <input type="hidden" name="block_id"
+                                                            value="{{ $static->block_id }}">
+                                                        <input type="text" name="block" id="block" class="form-control"
+                                                            readonly value="{{ block($static->block_id) }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="pyear">Tahun tanam</label>
+                                                        <input type="text" name="pyear" id="pyear" class="form-control"
+                                                            value="{{ $static->planting_year }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="totcov">Luas area</label>
+                                                        <input type="text" name="mtcov" id="mtcov" class="form-control"
+                                                            value="{{ $static->total_coverage }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="mpcov">SPH</label>
+                                                        <input type="text" name="mpcov" id="mpcov" class="form-control"
+                                                            value="{{ $static->population_coverage }}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="pblock">Jumlah pokok</label>
+                                                        <input type="text" name="mpblock" id="mpblock" class="form-control"
+                                                            value="{{ $static->population_perblock }}" readonly>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button type="submit" form="edtFrm" class="btn btn-primary">Update</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @endforeach
                         </tbody>
-                        <tfoot>
+                        <tfoot class="bg-dark">
                             <tr>
-                                <td colspan="2">Total Ha:</td>
+                                <td colspan="2" style="text-align:right">Total Ha:</td>
                                 <td>{{ $total_coverage }}</td>
                                 <td>{{ $total_ages }}</td>
                                 <td>{{ $total_pblock }}</td>
@@ -117,6 +177,20 @@
 
 @section('js')
     <script>
+        mtcov = document.querySelector("#mtcov");
+        mpcov = document.querySelector("#mpcov");
+        mpblock = document.querySelector("#mpblock");
+
+        mtcov.addEventListener('keyup', function() {
+            mpblock.value = this.value * mpcov.value;
+        });
+        mpcov.addEventListener('keyup', function() {
+            mpblock.value = this.value * mtcov.value;
+        });
+
+    </script>
+
+    <script>
         tcov = document.querySelector("#tcov");
         pcov = document.querySelector("#pcov");
         pblock = document.querySelector("#pblock");
@@ -134,10 +208,10 @@
         var myChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: {!! $years !!},
+                labels: {!!$years!!},
                 datasets: [{
-                    data: {!! $coverages !!},
-                    backgroundColor: {!! $colors !!},
+                    data: {!!$coverages!!},
+                    backgroundColor: {!!$colors!!},
                     borderColor: "black",
                     borderWidth: 2
                 }]

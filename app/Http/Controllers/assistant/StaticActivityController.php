@@ -63,4 +63,15 @@ class StaticActivityController extends Controller
         ]);
         return back()->withSuccess('Aktivitas area tertentu dibuat!');
     }
+
+    public function edit(Request $request) {
+        $block_static = BlockStaticReference::where('block_id', $request->block_id)->first();
+        $block_static->update([
+            'planting_year' => $request->pyear,
+            'total_coverage' => $request->mtcov,
+            'population_perblock' => $request->mpblock,
+            'population_coverage' => $request->mpcov,
+        ]);
+        return back()->withSuccess('Task rkh telah selesai');
+    }
 }
