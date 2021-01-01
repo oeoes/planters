@@ -31,8 +31,9 @@ class BlockController extends Controller
 {
     public function store_block_references(Request $request) {
 
-        if ($request->foreman_id != fme()->id)
-            return res(false, 404, 'Foreman not authenticated');
+        // return (fme()->id);
+        // if ($request->foreman_id != fme()->id)
+        //     return res(false, 404, 'Foreman not authenticated');
 
         $valid_block = Block::where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->where('id', $request->block_id)->first();
         if (! $valid_block) 

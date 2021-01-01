@@ -40,6 +40,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::get('year/{year}/blocks/{block_id}', [DwpmaintainController::class, 'dates']);
         Route::get('detail-rkh-completed/{block_ref_id}/{date}', [DwpmaintainController::class, 'detail_rkh_completed']);
 
+        // set rkh telah selesai
         Route::get('set-complete-rkh/{block_ref_id}', [DwpmaintainController::class, 'set_complete_rkh']);
 
         // Block static
@@ -47,11 +48,16 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
         // Grading harvesting
         Route::group(['prefix' => 'grading-harvesting'], function () {
+            // sample pemutuan, proses sehabis di komplitkannya panen
             Route::get('samples/{afdelling_id}/list', [GradingHarvestingController::class, 'list_samples']);
+
             // kasih data2 pas mau buat grading harvesting
             Route::get('sample/{block_reference_id}/create', [GradingHarvestingController::class, 'detail_sample']);
+
             // store gading harvesting
             Route::post('store', [GradingHarvestingController::class, 'store_grading_harvesting']);
+
+            // bibit percobaan setelah mendapatkan pemutuan
             Route::get('grade/{sample_grading_id}/list', [GradingHarvestingController::class, 'list_grading_harvesting']);
 
             //detail grading harvesting

@@ -783,31 +783,40 @@ class DwpmaintainController extends Controller
     }
 
     public function set_complete_rkh($block_ref_id) {
+        // return $block_ref_id;
         $ref = BlockReference::where('id', $block_ref_id)->first();
-        if (! $ref)  return res(false, 404, 'Block reference not found');
+        if (! $ref)  
+        return res(false, 404, 'Block reference not found');
 
         $data = $ref->model::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->first();
         if ($data) {
 
+            // set rkh yg hari ini di komplit kan
             $data->increment('completed');
 
-            // Subforeman::where('id', $data->subforeman_id)->update(['active' => 0]);
+            if ($ref->jobtype_id == 7) {
+                $ref->update(['completed' => 1]);
+                $next_ten_days = date('Y-m-d', strtotime('+10 day', strtotime($ref->updated_at)));
+                SampleGradingHarvesting::create([
 
-            if ($ref->available_coverage == 0) {
-                $set_completed = $ref->update(['completed' => 1]);
-                if ($set_completed) {
-                    if ($ref->jobtype_id == 7) {
-                        $next_ten_days = date('Y-m-d', strtotime('+10 day', strtotime($ref->updated_at)));
-                        SampleGradingHarvesting::create([
-                            'afdelling_id' => Block::find($ref->block_id)->first()->afdelling_id,
-                            'block_reference_id' => $block_ref_id,
-                            'block_id' => $ref->block_id,
-                            'planting_year' => $ref->planting_year,
-                            'expired_at' => $next_ten_days
-                        ]);
-                    }
-                }
+                    'afdelling_id' => Block::find($ref->block_id)->first()->afdelling_id,
+                    'block_reference_id' => $block_ref_id,
+                    'block_id' => $ref->block_id,
+                    'planting_year' => $ref->planting_year,
+                    'expired_at' => $next_ten_days,
+                    'date' => $data->date,
+
+                ]);
+                
                     return res(true, 200, 'Block spreading completed, view this block on history menu');
+
+            } 
+            
+            if($ref->available_coverage == 0) {
+
+                    $ref->update(['completed' => 1]);
+                    return res(true, 200, 'Block spreading completed, view this block on history menu');
+
             }
 
             return res(true, 200, 'Daily work plan completed');

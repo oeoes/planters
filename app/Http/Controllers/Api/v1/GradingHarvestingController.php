@@ -9,6 +9,8 @@ use App\Models\Harvesting\EmployeeHarvesting;
 use App\Models\Harvesting\HarvestingType;
 use App\Models\SampleGradingHarvesting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
 
 class GradingHarvestingController extends Controller
 {
@@ -26,6 +28,7 @@ class GradingHarvestingController extends Controller
                 'planting_year' => $value['planting_year'],
                 'block_code' => block($value['block_id']),
                 'create' => $create,
+                'date' => $value["date"],
             ];
         }
         return res(true, 200, 'List samples' , $data);
@@ -61,6 +64,18 @@ class GradingHarvestingController extends Controller
     }
 
     public function store_grading_harvesting(Request $request) {
+        
+        if ($request->hasFile('image')) {
+            $request->validate([ 'image' => 'image:jpeg,png,jpg|max:2048' ]);
+            $image = $request->file('image');
+            $image_folder = 'detail_grading_harvesting';
+            $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
+            $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
+            $image = asset('/storage/' . $image_url);
+        } else {
+            $image = null;
+        }
+        $request['image'] = $image;
         $grading_harvesting = GradingHarvesting::create($request->all());
         $data = [
             'grading_harvesting_id' => $grading_harvesting->id
