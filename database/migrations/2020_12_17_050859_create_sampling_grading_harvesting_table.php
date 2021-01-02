@@ -21,6 +21,7 @@ class CreateSamplingGradingHarvestingTable extends Migration
             $table->foreignId('block_id')->constrained('blocks');
             $table->char('planting_year')->nullable();
             $table->string('hk_name');
+            $table->date('date');
             $table->timestamps();
         });
     }

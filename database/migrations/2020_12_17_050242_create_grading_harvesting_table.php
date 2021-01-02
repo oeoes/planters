@@ -27,6 +27,7 @@ class CreateGradingHarvestingTable extends Migration
             $table->integer('on_palm');
             $table->integer('harvesting_path');
             $table->text('note')->nullable();
+            $table->string('image');
             $table->timestamps();
         });
     }
