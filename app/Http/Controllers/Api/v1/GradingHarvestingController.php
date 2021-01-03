@@ -75,8 +75,24 @@ class GradingHarvestingController extends Controller
         } else {
             $image = null;
         }
-        $request['image'] = $image;
-        $grading_harvesting = GradingHarvesting::create($request->all());
+
+        $grading_harvesting = GradingHarvesting::create([
+            'sample_grading_id' => $request->sample_grading_id,
+            'afdelling_id' => $request->afdelling_id,
+            'date' => $request->date,
+            'hk_name' => $request->hk_name,
+            'harvesting_bunch' => $request->harvesting_bunch,
+            'unharvesting_bunch' => $request->unharvesting_bunch,
+            'bunch_leaves' => $request->bunch_leaves,
+            'in_circle' => $request->in_circle,
+            'out_circle' => $request->out_circle,
+            'on_palm' => $request->on_palm,
+            'harvesting_path' => $request->harvesting_path,
+            'note' => $request->note,
+            'image' => $image,
+        ]);
+        // $request['image'] = $image;
+        // $grading_harvesting = GradingHarvesting::create($request->all());
         $data = [
             'grading_harvesting_id' => $grading_harvesting->id
         ];
@@ -92,7 +108,10 @@ class GradingHarvestingController extends Controller
         foreach ($grading_harvestings as $key => $value) {
             $grading_list [] = [
                 // 'sample' => 'Sample '.$sample,
-                'grading_harvesting_id' => $value['id']
+                'grading_harvesting_id' => $value['id'],
+                'detail_grading_harvesting' => [
+                    'hk_name' => $value['hk_name']
+                ]
             ];
         }
         return res(true, 200, 'List grading harvesting', $grading_list);    
@@ -131,7 +150,8 @@ class GradingHarvestingController extends Controller
             'on_palm' => $grading_harvesting->on_palm,
             'harvesting_path' => $grading_harvesting->harvesting_path,
             'hk_name' => $grading_harvesting->hk_name,
-            'note' => $grading_harvesting->note
+            'note' => $grading_harvesting->note,
+            'image' => $grading_harvesting->image,
         ];
 
         $data = [

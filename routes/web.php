@@ -417,6 +417,7 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
 
     Route::group(['prefix' => 'shelf'], function () {
         Route::get('/', [AS_HancakController::class, 'index'])->name('assistant.hancak.index');
+        Route::get('/list/{sample_grading_id}/{hvs_date}', [AS_HancakController::class, 'list'])->name('assistant.hancak.checking');
     });
 
 });
