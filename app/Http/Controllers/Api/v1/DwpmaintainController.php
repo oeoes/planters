@@ -790,6 +790,9 @@ class DwpmaintainController extends Controller
 
         $data = $ref->model::where('block_ref_id', $block_ref_id)->where('date', date('Y-m-d'))->first();
         if ($data) {
+            $subforeman = $ref->model::where('block_ref_id', $block_ref_id)->first();
+            $subforeman_id = $subforeman->subforeman_id;
+            Subforeman::find($subforeman_id)->update(['active' => 0]);
 
             // set rkh yg hari ini di komplit kan
             $data->increment('completed');
@@ -812,7 +815,7 @@ class DwpmaintainController extends Controller
 
             } 
             
-            if($ref->available_coverage == 0) {
+            if($ref->jobtype_id != 7 && $ref->available_coverage == 0) {
 
                     $ref->update(['completed' => 1]);
                     return res(true, 200, 'Block spreading completed, view this block on history menu');

@@ -5,12 +5,14 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 
 // ASSISTANT
-use App\Http\Controllers\assistant\DashboardController as AS_DashboardController;
-use App\Http\Controllers\assistant\AreaController as AS_AreaController;
-use App\Http\Controllers\assistant\ForemanController    as AS_ForemanController;
+use App\Http\Controllers\assistant\DashboardController     as AS_DashboardController;
+use App\Http\Controllers\assistant\AreaController          as AS_AreaController;
+use App\Http\Controllers\assistant\ForemanController       as AS_ForemanController;
 use App\Http\Controllers\assistant\SubforemanController    as AS_SubforemanController;
-use App\Http\Controllers\assistant\CompanyController    as AS_CompanyController;
+use App\Http\Controllers\assistant\CompanyController       as AS_CompanyController;
 use App\Http\Controllers\assistant\StaticActivityController;
+use App\Http\Controllers\assistant\AncakController         as AS_HancakController;
+
 // SUPERADMIN
 use App\Http\Controllers\superadmin\DashboardController  as SU_DashboardController;
 use App\Http\Controllers\superadmin\TypejobController    as SU_TypejobController;
@@ -22,10 +24,10 @@ use App\Http\Controllers\superadmin\AssistantController  as SU_AssistantControll
 use App\Http\Controllers\superadmin\CompanyController    as SU_CompanyController;
 
 // FARMMANAGER
-use App\Http\Controllers\manager\DashboardController as FM_DashboardController;
-use App\Http\Controllers\manager\AreaController as FM_AreaController;
+use App\Http\Controllers\manager\DashboardController  as FM_DashboardController;
+use App\Http\Controllers\manager\AreaController       as FM_AreaController;
 use App\Http\Controllers\manager\ForemanController    as FM_ForemanController;
-use App\Http\Controllers\manager\SubforemanController    as FM_SubforemanController;
+use App\Http\Controllers\manager\SubforemanController as FM_SubforemanController;
 use App\Http\Controllers\manager\CompanyController    as FM_CompanyController;
 use App\Http\Controllers\manager\AssistantController  as FM_AssistantController;
 use App\Http\Controllers\manager\TypejobController    as FM_TypejobController;
@@ -184,8 +186,6 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
         });
     });
 
-
-
 });
 
 /** Super Admin
@@ -198,6 +198,7 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
  */
 
 Route::group(['prefix' => 'manager', 'middleware' => ['auth:farmmanager']], function () {
+
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', [FM_DashboardController::class, 'index'])->name('manager.dashboard');    
     });
@@ -325,6 +326,7 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth:farmmanager']], func
         Route::get('/', [FM_AssistantController::class, 'index'])->name('manager.user.assistant.index');
         Route::post('/store', [FM_AssistantController::class, 'store'])->name('manager.user.assistant.store');
     });
+
 });
 
 /** Farm Manager
@@ -411,6 +413,10 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
         Route::get('/pruning', [MaintainController::class, 'pruning'])->name('assistant.maintain.pruning');
         Route::get('/gawangan', [MaintainController::class, 'gawangan'])->name('assistant.maintain.gawangan');
         Route::get('/pestcontrol', [MaintainController::class, 'pestcontrol'])->name('assistant.maintain.pestcontrol');
+    });
+
+    Route::group(['prefix' => 'shelf'], function () {
+        Route::get('/', [AS_HancakController::class, 'index'])->name('assistant.hancak.index');
     });
 
 });

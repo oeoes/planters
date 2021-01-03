@@ -43,6 +43,13 @@
                       </a>
                   </li>
 
+                  <li class="nav-item">
+                      <a href="{{ route('assistant.hancak.index') }}" class="nav-link">
+                          <i class="nav-icon fas fa-tractor active"></i>
+                          <p>Manajemen hancak</p>
+                      </a>
+                  </li>
+
                   <li></li>
                   <li></li>
                   <li></li>

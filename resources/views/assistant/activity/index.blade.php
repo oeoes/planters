@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
                     Daftar kelola aktivitas
@@ -21,7 +21,7 @@
                     </span>
                 </div>
                 <div class="card-body">
-                    <table class="table">
+                    <table class="table table-sm">
                         <thead class="bg-primary">
                             <tr>
                                 <th>Blok</th>
@@ -38,10 +38,10 @@
                                 <tr>
                                     <td>{{ block($static->block_id) }}</td>
                                     <td>{{ $static->planting_year }}</td>
-                                    <td>{{ $static->total_coverage }}</td>
+                                    <td>{{ $static->total_coverage }} Ha</td>
                                     <td>{{ date('Y') - $static->planting_year }}</td>
-                                    <td>{{ $static->population_perblock }}</td>
-                                    <td>{{ $static->population_coverage }}</td>
+                                    <td>{{ $static->population_perblock }} Ha</td>
+                                    <td>{{ $static->population_coverage }} Ha</td>
                                     <td>
                                         <button type="button" class="btn btn-default" data-toggle="modal"
                                             data-target="#modalEdit{{ $key }}">
@@ -75,17 +75,17 @@
                                                     <div class="form-group">
                                                         <label for="pyear">Tahun tanam</label>
                                                         <input type="text" name="pyear" id="pyear" class="form-control"
-                                                            value="{{ $static->planting_year }}">
+                                                            value="{{ $static->planting_year }}" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="totcov">Luas area</label>
                                                         <input type="text" name="mtcov" id="mtcov" class="form-control"
-                                                            value="{{ $static->total_coverage }}">
+                                                            value="{{ $static->total_coverage }}" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="mpcov">SPH</label>
                                                         <input type="text" name="mpcov" id="mpcov" class="form-control"
-                                                            value="{{ $static->population_coverage }}">
+                                                            value="{{ $static->population_coverage }}" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="pblock">Jumlah pokok</label>
@@ -111,13 +111,14 @@
                                 <td>{{ $total_ages }}</td>
                                 <td>{{ $total_pblock }}</td>
                                 <td>{{ $total_sph }}</td>
+                                <td></td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-header">Bagan</div>
                 <div class="card-body">
