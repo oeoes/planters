@@ -673,6 +673,27 @@ class DwpmaintainController extends Controller
         return res(true, 200, 'Date listed', $arrDates);
     }
 
+    public function list_rkh_completed($block_id) {
+        $block_references = BlockReference::where('block_id', $block_id)->where('completed', 1)->get();
+        $value = false;
+        if (! empty($block_references)) {
+            $value = true;
+            $data = [];
+            foreach ($block_references as $key => $ref) {
+                $activities = $ref['model']::where('block_ref_id', $ref['id'])->first();
+                $date = $activities->date;
+                $data [] = [
+                    'block_reference_id' => $ref['id'],
+                    'date' => $date,
+                    'job_type' => $ref['jobtype_id'],
+                ];
+            }
+        }
+        return ($value) ?
+            res(true, 200, 'List completed rkh', $data) : 
+            res(false, 404, 'List completed rkh', []);
+    }
+
     public function detail_rkh_completed($block_ref_id, $date) {
         $single_ref = BlockReference::find($block_ref_id);
         $data = $single_ref->model::where('block_ref_id', $block_ref_id)->where('date', $date)->first();

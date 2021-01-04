@@ -75,9 +75,9 @@ class BlockController extends Controller
         $data = [];
         foreach ($blocks as $key => $value) {
             $data [] = [
-                'id' => $value['id'],
-                'name' => $value['code'],
-                'afdelling_id' => $value['afdelling_id']
+                'block_id' => $value['id'],
+                'block_code' => $value['code'],
+                // 'afdelling_id' => $value['afdelling_id']
             ];
         }
         return res(true, 200, 'Blocks listed', $data);
