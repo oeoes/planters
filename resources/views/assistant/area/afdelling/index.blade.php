@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('assistant.layouts.app')
 
 @section('title', 'Daftar Afdelling')
 
@@ -48,7 +48,7 @@
                                           </button>
                                       </div>
                                       <div class="modal-body">
-                                          <form action="{{ route('afdelling.update', ['afdelling' => $afdelling->id]) }}"
+                                          <form action="{{ route('assistant.afdelling.update', ['afdelling' => $afdelling->id]) }}"
                                               method="post">
                                               @csrf
                                               @method('PUT')
@@ -141,7 +141,7 @@
                           </select>
                       </div>
                       <div class="form-group">
-                          <label for="afdelling">afdelling</label>
+                          <label for="afdelling">Afdelling</label>
                           <input type="text" name="afdelling" id="afdelling" class="form-control">
                       </div>
                       <div class="form-group">

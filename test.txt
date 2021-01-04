@@ -1,0 +1,37 @@
+{{host}}/api/v1/foreman/grading-harvesting/grade/{block_reference_id}/detail/{grading_harvesting_id}
+
+{
+    "status": true,
+    "code": 200,
+    "message": "Detail grading harvesting",
+    "data": {
+        "detail_harvesting": {
+            "date": "2020-12-17",
+            "subforeman_name": "Padma Usada",
+            "planting_year": null,
+            "block_code": "AA",
+            "hk_listed": [
+                {
+                    "name": "Alfin",
+                    "total_harvesting": 12
+                },
+                {
+                    "name": "diana",
+                    "total_harvesting": 40
+                }
+            ]
+        },
+        "detail_grading_harvesting": {
+            "date": "2020-12-17",
+            "harvesting_bunch": 12,
+            "unharvesting_bunch": null,
+            "bunch_leaves": 12,
+            "in_circle": 12,
+            "out_circle": 12,
+            "on_palm": 12,
+            "harvesting_path": 10,
+            "note": "test"
+        }
+    }
+}
+

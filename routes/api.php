@@ -7,7 +7,8 @@ use App\Http\Controllers\Api\v1\AfdellingController;
 use App\Http\Controllers\Api\v1\BlockController;
 use App\Http\Controllers\Api\v1\DwpmaintainController;
 use App\Http\Controllers\Api\v1\DwpharvestingController;
-use App\Models\Block;
+use App\Http\Controllers\Api\v1\GradingHarvestingController;
+use App\Http\Controllers\Api\v1\BlockStaticController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
@@ -30,7 +31,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::get('blocks/{afdelling_id}', [BlockController::class, 'blocks']);
         Route::post('store-block-references', [BlockController::class, 'store_block_references']);
         Route::get('completed-block-references', [BlockController::class, 'completed_block_references']);
-        Route::get('active-block-references', [BlockController::class, 'active_block_references']);
+        Route::get('active-block-references/{task_mode}', [BlockController::class, 'active_block_references']);
 
         Route::get('det-active-block-references/{block_ref_id}', [BlockController::class, 'det_active_block_references']);
 
@@ -39,7 +40,29 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
         Route::get('year/{year}/blocks/{block_id}', [DwpmaintainController::class, 'dates']);
         Route::get('detail-rkh-completed/{block_ref_id}/{date}', [DwpmaintainController::class, 'detail_rkh_completed']);
 
+        // set rkh telah selesai
         Route::get('set-complete-rkh/{block_ref_id}', [DwpmaintainController::class, 'set_complete_rkh']);
+
+        // Block static
+        Route::get('block-static-list/{afdelling_id}', [BlockStaticController::class, 'list']);
+
+        // Grading harvesting
+        Route::group(['prefix' => 'grading-harvesting'], function () {
+            // sample pemutuan, proses sehabis di komplitkannya panen
+            Route::get('samples/{afdelling_id}/list', [GradingHarvestingController::class, 'list_samples']);
+
+            // kasih data2 pas mau buat grading harvesting
+            Route::get('sample/{block_reference_id}/create', [GradingHarvestingController::class, 'detail_sample']);
+
+            // store gading harvesting
+            Route::post('store', [GradingHarvestingController::class, 'store_grading_harvesting']);
+
+            // bibit percobaan setelah mendapatkan pemutuan
+            Route::get('grade/{sample_grading_id}/list', [GradingHarvestingController::class, 'list_grading_harvesting']);
+
+            //detail grading harvesting
+            Route::get('grade/{block_reference_id}/detail/{grading_harvesting_id}', [GradingHarvestingController::class, 'detail_grading_harvesting']);
+        });
     
     });
 

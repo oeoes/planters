@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Config;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,10 +24,32 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // if(auth('foreman')->user()) {
+        //     \Config::set( 'auth.defaults.guard', 'foreman' );
+        // } else {
+        //     \Config::set( 'auth.defaults.guard', 'subforeman' );
+        // }
+
         if(auth('foreman')->user()) {
+
             \Config::set( 'auth.defaults.guard', 'foreman' );
-        } else {
+
+        } elseif(auth('subforeman')->user()) {
+
             \Config::set( 'auth.defaults.guard', 'subforeman' );
+
+        } elseif(auth('assistant')->user()) {
+
+            \Config::set( 'auth.defaults.guard', 'assistant' );
+
+        } elseif(auth('farmmanager')->user()) {
+
+            \Config::set( 'auth.defaults.guard', 'farmmanager' );
+
+        } elseif(auth('superadmin')->user()) {
+
+            \Config::set( 'auth.defaults.guard', 'superadmin' );
+
         }
     }
 }

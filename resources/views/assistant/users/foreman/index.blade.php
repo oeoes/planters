@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('assistant.layouts.app')
 
 @section('title', 'PLANTERS - Mandor')
 
@@ -65,16 +65,6 @@ Daftar Mandor
                                                     required value="{{ $foreman->email }}">
                                             </div>
                                             <div class="form-group">
-                                                <label for="afdelling_id">Afdelling</label>
-                                                <select name="afdelling_id" id="afdelling_id" class="form-control">
-                                                    @foreach($afdellings as $af)
-                                                    <option
-                                                        <?php if($af->id == $foreman->afdelling_id) echo "selected" ?>
-                                                        value="{{ $af->id }}">{{ $af->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
                                                 <label for="password">Password</label>
                                                 <input type="password" name="password" id="password"
                                                     class="form-control" required>
@@ -137,6 +127,17 @@ Daftar Mandor
                 <form action="{{ route('assistant.foreman.store') }}" method="post">
                     @csrf
                     <div class="form-group">
+                        <label for="afdelling_id">Kebun</label>
+                        <input type="text" class="form-control" value="{{ $farm_af->farm }}" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="afdelling_id">Afdelling</label>
+                        <input type="text" class="form-control" value="{{ $farm_af->afdelling }}" readonly>
+                        <input name="afdelling_id" type="hidden" class="form-control" value="{{ $farm_af->afdelling_id }}">
+                    </div>
+
+                    <div class="form-group">
                         <label for="foreman">Nama</label>
                         <input type="text" name="foreman" id="foreman" class="form-control" required>
                     </div>
@@ -145,14 +146,6 @@ Daftar Mandor
                         <input type="email" name="email" id="email" class="form-control" required>
                     </div>
 
-                    <div class="form-group">
-                        <label for="afdelling_id">Afdelling</label>
-                        <select name="afdelling_id" id="afdelling_id" class="form-control">
-                            @foreach($afdellings as $af)
-                            <option value="{{ $af->id }}">{{ $af->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" name="password" id="password" class="form-control" required>

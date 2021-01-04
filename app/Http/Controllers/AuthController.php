@@ -14,23 +14,25 @@ class AuthController extends Controller
 
     public function authenticate(Request $request ) {
         $credentials = ['email' => $request->email, 'password' => $request->password];
-        $a = Auth::guard('farmmanager')->attempt($credentials);
 
         if (Auth::guard('assistant')->attempt($credentials)) {
 
-            return redirect()->intended('/assistant/dashboard');
+            // return redirect('/assistant/dashboard/');
+            return response()->json(['status' => true, 'role' => 'assistant'], 200);
 
         } else if (Auth::guard('superadmin')->attempt($credentials)) {
-
-            return redirect()->intended('/superadmin/dashboard');
+            // dd('ok')            ;
+            // return redirect('/superadmin/dashboard/');
+            return response()->json(['status' => true, 'role' => 'superadmin'], 200);
 
         } else if (Auth::guard('farmmanager')->attempt($credentials)) {
 
-            return redirect()->route('manager.dashboard');
+            // return redirect('/manager/dashboard/');
+            return response()->json(['status' => true, 'role' => 'farmmanager'], 200);
 
         } else {
 
-            return back();
+            return response()->json(['status' => false, 'message' => 'Invalid Credentials'], 401);
 
         }
     }

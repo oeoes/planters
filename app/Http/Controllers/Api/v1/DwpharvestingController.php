@@ -94,12 +94,13 @@ class DwpharvestingController extends Controller
             $image_folder = 'harvesting';
             $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
             $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
-            $image_url = asset('/storage/' . $image_url);
+            $image = asset('/storage/' . $image_url);
         } else {
-            $image_url = null;
+            $image = null;
         }
 
         $employees = json_decode($request->hk_listed);
+        
         // return $employees;
         $total_harvesting = 0;
         foreach ($employees as $key => $value) {
@@ -116,9 +117,10 @@ class DwpharvestingController extends Controller
             'ftarget_coverage' => $request->ftarget_coverage,
             'bjr' => $request->bjr,
             'total_harvesting' => $total_harvesting,
-            'final_harvesting' => (float) $request->bjr * $total_harvesting,
-            'image' => $image_url,
+            'final_harvesting' => (float) $request->final_harvesting,
+            'image' => $image,
             'subforeman_note' => $request->subforeman_note,
+            'afdelling_id' => $request->afdelling_id,
             'begin' => $request->begin,
             'ended' => $request->ended,
         ]);
@@ -131,9 +133,6 @@ class DwpharvestingController extends Controller
         $used_coverage = $request->ftarget_coverage;
         $new_coverage = $current_coverage - $used_coverage;
         $tcov->update([ 'available_coverage' => $new_coverage ]);
-
-        if ($tcov->available_coverage == 0) 
-        $tcov->increment('completed'); 
         
         return res(true, 200, 'Harvesting report filled successfully');
     }

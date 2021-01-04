@@ -16,7 +16,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (Auth::guard('assistant')->check()) {
-            return redirect('/dashboard');
+            return redirect('/assistant/company/farm/afdelling/blocks');
         }
     }
 }

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('assistant.layouts.app')
 
 @section('title', 'Block list')
 
@@ -64,9 +64,7 @@ Daftar Block
                                             <div class="form-group">
                                                 <label for="afdelling">Afdelling</label>
                                                 <select name="afdelling_id" id="afdelling" class="form-control">
-                                                    @foreach($afdellings as $af)
-                                                    <option <?php if($block->afdelling_id == $af->id) echo "selected" ?> value="{{$af->id}}">{{ $af->name }}</option>
-                                                    @endforeach
+                                                    
                                                 </select>
                                             </div>
                                     </div>
@@ -127,16 +125,17 @@ Daftar Block
                 <form action="{{ route('assistant.block.store') }}" method="post">
                     @csrf
                     <div class="form-group">
-                        <label for="block">Block</label>
-                        <input type="text" name="block" id="block" class="form-control">
+                        <label for="farm">Farm</label>
+                        <input type="text" class="form-control" value="{{ $farm_af->farm }}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="afdelling">Afdelling</label>
-                        <select name="afdelling_id" id="afdelling" class="form-control">
-                            @foreach($afdellings as $af)
-                            <option value="{{$af->id}}">{{ $af->name }}</option>
-                            @endforeach
-                        </select>
+                        <input type="text" name="afdelling" class="form-control" value="{{ $farm_af->afdelling }}" readonly>
+                        <input type="hidden" name="afdelling_id" class="form-control" value="{{ $farm_af->afdelling_id }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="block">Block</label>
+                        <input type="text" name="block" id="block" class="form-control">
                     </div>
                     <button type="submit" class="btn btn-sm rounded-pill btn-outline-primary pl-3 pr-3">Add</button>
                 </form>
@@ -147,7 +146,20 @@ Daftar Block
 @endsection
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-
+    $(document).ready(function () {
+        $(document).on('change', '#farm_id', function () {
+            $('#store_afdelling').children().remove()
+            axios.get(`/afdelling/list/${$('#farm_id').val()}`)
+                .then(function (response) {
+                    response.data.afdellings.forEach(function (e) {
+                        $('#store_afdelling').append(`
+                    <option value="${e.id}">${e.name}</option>
+                `)
+                    })
+                })
+        })
+    });
 </script>
 @endsection

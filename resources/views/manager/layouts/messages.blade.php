@@ -1,37 +1,53 @@
 @if ($message = Session::get('success'))
-    <div class="alert alert-success alert-block">
-        <button type="button" class="close" data-dismiss="alert">×</button> 
-        <strong>{{ $message }}</strong>
-    </div>
+<script>
+    Toast.fire({
+        icon: 'success',
+        title: 'Success: {{ $message }}',
+        position: 'bottom-end',
+        timerProgressBar: true
+    })
+</script>
 @endif
 
 @if ($message = Session::get('error'))
-    <div class="alert alert-danger alert-block">
-        <button type="button" class="close" data-dismiss="alert">×</button> 
-        <strong>{{ $message }}</strong>
-    </div>
+<script>
+    Toast.fire({
+        icon: 'error',
+        title: 'Error: {{ $message }}',
+        position: 'bottom-end',
+        timerProgressBar: true
+    })
+</script>
 @endif
 
 @if ($message = Session::get('warning'))
-    <div class="alert alert-warning alert-block">
-        <button type="button" class="close" data-dismiss="alert">×</button> 
-        <strong>{{ $message }}</strong>
-    </div>
+<script>
+    Toast.fire({
+        icon: 'warning',
+        title: 'Warning: {{ $message }}',
+        position: 'bottom-end',
+        timerProgressBar: true
+    })
+</script>
 @endif
 
 @if ($message = Session::get('info'))
-    <div class="alert alert-info alert-block">
-        <button type="button" class="close" data-dismiss="alert">×</button> 
-        <strong>{{ $message }}</strong>
-    </div>
+<script>
+    Toast.fire({
+        icon: 'info',
+        title: 'Info: {{ $message }}',
+        position: 'bottom-end',
+        timerProgressBar: true
+    })
+</script>
 @endif
 
 @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
+<div class="alert alert-danger">
+    <ul>
         @foreach ($errors->all() as $error)
         <li>{{ $error }}</li>
         @endforeach
-        </ul>
-    </div>
+    </ul>
+</div>
 @endif
