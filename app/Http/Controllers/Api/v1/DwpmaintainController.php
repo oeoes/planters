@@ -674,7 +674,7 @@ class DwpmaintainController extends Controller
     }
 
     public function list_rkh_completed($block_id) {
-        $block_references = BlockReference::where('block_id', $block_id)->where('completed', 1)->get();
+        $block_references = BlockReference::where('block_id', $block_id)->where('completed', 1)->orderByDesc('created_at')->get();
         $value = false;
         if (! empty($block_references)) {
             $value = true;
