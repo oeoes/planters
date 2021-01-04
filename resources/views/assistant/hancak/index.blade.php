@@ -14,7 +14,7 @@
                 <thead class="bg-primary">
                     <tr>
                         <th>#</th>
-                        <th>Date</th>
+                        <th>Tgl panen</th>
                         <th>Tahun tanam</th>
                         <th>Blok</th>
                         <th>Mandor utama</th>

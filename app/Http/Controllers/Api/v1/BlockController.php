@@ -120,7 +120,7 @@ class BlockController extends Controller
             if ($value['completed'] == 0) {
                 $active [] = [
                     'block_reference_id' => $value['id'],
-                    'planting_year' => $value['planting_year'],
+                    'job_type' => $value['jobtype_id'],
                     'block_code' => block($value['block_id']),
                 ];
             }

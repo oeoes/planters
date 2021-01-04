@@ -12,6 +12,7 @@ use App\Http\Controllers\assistant\SubforemanController    as AS_SubforemanContr
 use App\Http\Controllers\assistant\CompanyController       as AS_CompanyController;
 use App\Http\Controllers\assistant\StaticActivityController;
 use App\Http\Controllers\assistant\AncakController         as AS_HancakController;
+use App\Http\Controllers\assistant\HarvestingController    as AS_HarvestingController;
 
 // SUPERADMIN
 use App\Http\Controllers\superadmin\DashboardController  as SU_DashboardController;
@@ -418,6 +419,10 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
     Route::group(['prefix' => 'shelf'], function () {
         Route::get('/', [AS_HancakController::class, 'index'])->name('assistant.hancak.index');
         Route::get('/list/{sample_grading_id}/{hvs_date}', [AS_HancakController::class, 'list'])->name('assistant.hancak.checking');
+    });
+
+    Route::group(['prefix' => 'harvesting'], function () {
+        Route::get('/', [AS_HarvestingController::class, 'index'])->name('assistant.harvesting.index');
     });
 
 });
