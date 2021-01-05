@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Block;
+use App\Models\BlockReference;
 use App\Models\Foreman;
 use App\Models\Subforeman;
 
@@ -18,6 +19,20 @@ function res($status, $code, $message, $data = null) {
         THIS CODE BELOW IS FOR SUPPORTING FUNCTION
     ------------------------------------
     */
+
+    // ngecek apakah di blok XX di blok referensi, ada aktivitas yg blm di set komplit
+    // kalo blm di set komplit, berarti foreman gabisa buat aktivitas lain
+    // misal blok XX masih incomplete dgn tipe job spraying
+    // maka foreman gabisa buat tipe job fertilizer di blok XX tsb. krn yg tipe spraing blm di set complete
+    function complete_activity ($blockReferenceId) {
+      $blockReferences = BlockReference::where('id', $blockReferenceId)->where('completed', 0)->count();
+      if ($blockReferences > 0) {
+        return res(false, 404, 'Failed to create, another work in this block still on progress');
+      } else {
+        return ;
+      }
+    }
+
 
     function foreman($id) {
       $fm = Foreman::find($id);
