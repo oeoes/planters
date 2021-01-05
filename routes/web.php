@@ -423,6 +423,7 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
 
     Route::group(['prefix' => 'harvesting'], function () {
         Route::get('/', [AS_HarvestingController::class, 'index'])->name('assistant.harvesting.index');
+        Route::get('/detail/{harvesting_id}', [AS_HarvestingController::class, 'detail'])->name('assistant.harvesting.detail');
     });
 
 });
