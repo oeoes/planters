@@ -31,21 +31,14 @@ class BlockController extends Controller
 {
     public function store_block_references(Request $request) {
 
-        // return (fme()->id);
-        // if ($request->foreman_id != fme()->id)
-        //     return res(false, 404, 'Foreman not authenticated');
-
         $valid_block = Block::where('afdelling_id', foreman($request->foreman_id)->afdelling_id)->where('id', $request->block_id)->first();
-        if (! $valid_block) 
-            return res(false, 404, 'Block not allowed');
+        if (! $valid_block)  return res(false, 404, 'Block not allowed');
 
-        // $block_references = BlockReference::where('block_id', $request->block_id)->where('planting_year', $request->planting_year)->first();
-        // if ($block_references ) {
-        //     if (in_array($request->jobtype_id, [1, 2, 3, 4, 5, 6])) {
-        //         return res(false, 400, 'Reference of block already created', [ 'block_reference_id' => $block_references->id]);
-        //     }
-        // }
-            $block_static = BlockStaticReference::where('block_id', $request->block_id)->first();
+        // ngecek apakah ada blok referensi yg bloknya XX itu ad ayg blm complete
+        $block_reference = BlockReference::where('block_id', $request->block_id)->where('completed', 0)->count();
+        if ($block_reference > 0)  return res(false, 404, 'Failed to create, another work in this block still on progress');
+
+        $block_static = BlockStaticReference::where('block_id', $request->block_id)->first();
         if ($block_static->count() > 0) {
             $block_reference = BlockReference::where('block_id', $request->block_id)->get();
             BlockReference::create([
@@ -75,9 +68,9 @@ class BlockController extends Controller
         $data = [];
         foreach ($blocks as $key => $value) {
             $data [] = [
-                'id' => $value['id'],
-                'name' => $value['code'],
-                'afdelling_id' => $value['afdelling_id']
+                'block_id' => $value['id'],
+                'block_code' => $value['code'],
+                // 'afdelling_id' => $value['afdelling_id']
             ];
         }
         return res(true, 200, 'Blocks listed', $data);
@@ -120,7 +113,7 @@ class BlockController extends Controller
             if ($value['completed'] == 0) {
                 $active [] = [
                     'block_reference_id' => $value['id'],
-                    'planting_year' => $value['planting_year'],
+                    'job_type' => $value['jobtype_id'],
                     'block_code' => block($value['block_id']),
                 ];
             }

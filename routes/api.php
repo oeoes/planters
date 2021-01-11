@@ -35,10 +35,13 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.auth']], function () {
 
         Route::get('det-active-block-references/{block_ref_id}', [BlockController::class, 'det_active_block_references']);
 
-        Route::get('years', [DwpmaintainController::class, 'years']);
-        Route::get('year/{year}/blocks', [DwpmaintainController::class, 'block']);
-        Route::get('year/{year}/blocks/{block_id}', [DwpmaintainController::class, 'dates']);
+        // Route::get('years', [DwpmaintainController::class, 'years']);
+        // Route::get('year/{year}/blocks', [DwpmaintainController::class, 'block']);
+        // Route::get('year/{year}/blocks/{block_id}', [DwpmaintainController::class, 'dates']);
+        Route::get('list-rkh-completed/{block_id}', [DwpmaintainController::class, 'list_rkh_completed']);
         Route::get('detail-rkh-completed/{block_ref_id}/{date}', [DwpmaintainController::class, 'detail_rkh_completed']);
+
+        // 
 
         // set rkh telah selesai
         Route::get('set-complete-rkh/{block_ref_id}', [DwpmaintainController::class, 'set_complete_rkh']);
