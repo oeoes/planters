@@ -162,43 +162,65 @@ window.onload = () => {
      * Chart start
      */
 
-    var ctx1 = document.getElementById('panen').getContext('2d');
-    var myChart = new Chart(ctx1, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sept', 'Okt', 'Nov', 'Des'],
-            datasets: [{
-                label: 'Hasil Panen',
-                data: [12, 19, 3, 5, 2, 3, 7, 9, 2, 3, 7, 8],
-                backgroundColor: 'rgba(3, 169, 244, .7)',
-                borderWidth: 1,
-                borderColor: 'rgba(3, 169, 244, 1)',
-                borderWidth: 1.5,
-                hoverBackgroundColor: 'rgba(3, 169, 244, .6)',
-            }, {
-                label: 'Taksasi',
-                data: [12, 20, 4, 8, 5, 5, 7, 10, 5, 5, 7, 8],
-                backgroundColor: 'rgba(63, 81, 181, .8)',
-                hoverBackgroundColor: 'rgba(63, 81, 181, .9)',
-                borderWidth: 2,
-                pointRadius: 5,
-                pointHoverRadius: 6,
-                pointStyle: 'rect',
-                fill: false,
-                type: 'line',
-                lineTension: 0
-            }, ]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                    }
-                }]
-            }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == xhttp.DONE) {   // xhttpRequest.DONE == 4
+           if (xhttp.status == 200) {
+               var taksasi_result = JSON.parse(xhttp.responseText)['taksasi_result'];
+               var harvesting_result = JSON.parse(xhttp.responseText)['harvesting_result']
+            loadpanen(taksasi_result, harvesting_result);
+           }
+           else if (xhttp.status == 400) {
+              console.log('There was an error 400');
+           }
+           else {
+               console.log('something else other than 200 was returned');
+           }
         }
-    });
+    }
+    xhttp.open("get", "/superadmin/dashboard/loadpanen", true);
+    xhttp.send();
+
+    function loadpanen(taksasi_result, harvesting_result) {
+        var ctx1 = document.getElementById('panen').getContext('2d');
+        var myChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sept', 'Okt', 'Nov', 'Des'],
+                datasets: [{
+                    label: 'Hasil Panen',
+                    data: taksasi_result,
+                    backgroundColor: 'rgba(3, 169, 244, .7)',
+                    borderWidth: 1,
+                    borderColor: 'rgba(3, 169, 244, 1)',
+                    borderWidth: 1.5,
+                    hoverBackgroundColor: 'rgba(3, 169, 244, .6)',
+                }, {
+                    label: 'Taksasi',
+                    data: harvesting_result,
+                    backgroundColor: 'rgba(63, 81, 181, .8)',
+                    hoverBackgroundColor: 'rgba(63, 81, 181, .9)',
+                    borderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 6,
+                    pointStyle: 'rect',
+                    fill: false,
+                    type: 'line',
+                    lineTension: 0
+                }, ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                        }
+                    }]
+                }
+            }
+        });
+    }
+
 
     var ctx = document.getElementById('kebun').getContext('2d');
     var myChart = new Chart(ctx, {
