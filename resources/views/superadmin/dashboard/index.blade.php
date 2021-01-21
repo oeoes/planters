@@ -17,34 +17,30 @@
       <div class="form-group">
         <label for="company">Perusahaan</label>
         <select id="company" class="form-control form-control-sm">
-          <option value="">PT Raja Angsa</option>
+          <option>Pilih perusahaan</option>
+          @foreach($companies as $company)
+          <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+          @endforeach
         </select>
       </div>
 
       <div class="form-group">
         <label for="farm">Kebun</label>
         <select id="farm" class="form-control form-control-sm">
-          <option value="">Cimory</option>
-          <option value="">Rawalumbu</option>
+          <option>Pilih kebun</option>
         </select>
       </div>
 
       <div class="form-group">
         <label for="afdelling">Afdelling</label>
         <select id="afdelling" class="form-control form-control-sm">
-          <option value="">Benhill</option>
-          <option value="">Rawabebek</option>
+          <option>Pilih afdelling</option>
         </select>
       </div>
 
       <div class="form-group">
         <label for="plant_year">Tahun Tanam</label>
-        <select id="plant_year" class="form-control form-control-sm">
-          <option value="">2015</option>
-          <option value="">2016</option>
-          <option value="">2017</option>
-          <option value="">2018</option>
-        </select>
+        <input type="text" class="form-control form-control-sm" placeholder="Tahun tanam">
       </div>
 
     </form>

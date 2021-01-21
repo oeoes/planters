@@ -13,6 +13,12 @@ window.onload = () => {
     const sortOverlay = document.querySelector('.sort__overlay');
     const sortContainer = document.querySelector('.sort__container');
 
+    // fields
+    const companyField = document.querySelector('#company');
+    const farmField = document.querySelector('#farm');
+    const afdellingField = document.querySelector('#afdelling');
+    const plantYearField = document.querySelector('#plant_year');
+
     btnSortOpen.addEventListener('mouseout', () => {
         if (btnSortOpen.classList.contains('animate__fadeInUp')) {
             btnSortOpen.classList.remove('animate__fadeInUp');
@@ -49,6 +55,11 @@ window.onload = () => {
 
         sortOverlay.style.display = 'none';
         btnSortOpen.style.display = 'flex';
+    });
+
+    // pilih perusahaan
+    companyField.addEventListener('change', () => {
+
     });
 
     /**
