@@ -49,7 +49,17 @@ Route::get ('/logout',[AuthController::class, 'logout'])
  */
 Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], function () {
     Route::group(['prefix' => 'dashboard'], function () {
-        Route::get('/', [SU_DashboardController::class, 'index'])->name('superadmin.dashboard');    
+        Route::get('/', [SU_DashboardController::class, 'index'])->name('superadmin.dashboard');   
+
+        Route::get('/farms/{company_id}', [SU_DashboardController::class, 'farms']);
+        Route::get('/afdellings/{farm_id}', [SU_DashboardController::class, 'afdellings']);
+        
+        Route::post('/filter', [SU_DashboardController::class, 'filter']);
+        Route::post('/filter/completeness/block', [SU_DashboardController::class, 'filter_completeness_block']);
+        Route::post('/filter/trend', [SU_DashboardController::class, 'filter_trend']);
+        // Route::get('/filter/{company}/{farm}/{afdelling}/{year}', [SU_DashboardController::class, 'filter']);
+
+        Route::get('/loadpanen', [SU_DashboardController::class, 'loadpanen']);
     });
 
     Route::group(['prefix' => 'area'], function () {
@@ -446,7 +456,7 @@ Route::get('/clear', function() { return session()->flush();});
 Route::get('/afdelling/list/{farm_id}', [SU_AreaController::class, 'get_afdelling_of_farm']);
 
  // get list block based on afdelling
- Route::get('/pyear/list/{afdelling_id}', [SU_AreaController::class, 'get_pyear_of_afdelling']);
+Route::get('/pyear/list/{afdelling_id}', [SU_AreaController::class, 'get_pyear_of_afdelling']);
 
 
 // auth routes

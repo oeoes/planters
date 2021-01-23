@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Super Admin - @yield('title')</title>
     <link rel="stylesheet" href="{{ asset('css/animate.css') }}">
     <link rel="stylesheet" href="{{ asset('template/plugins/fontawesome-free/css/all.min.css') }}">
@@ -34,13 +35,7 @@
 </head>
 
 <body class="hold-transition sidebar-mini">
-    <!-- preload start -->
-    <div class="preload-container">
-        <div class="preload-text">
-            Loading...
-        </div>
-    </div>
-    <!-- preload end -->
+@yield('preload')
 
     <div class="wrapper">
         @include('superadmin.layouts.navbar')
@@ -86,7 +81,7 @@
     <script src="{{ asset('js/knob.min.js') }}"></script>
     <script src="{{ asset('js/numscroller.js') }}"></script>
     <!-- dashboard js -->
-    <script src="{{ asset('js/dashboard.js') }}"></script>
+    @yield('dashboard-js')
 
     <script>
         $(document).ready(function() {

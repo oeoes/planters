@@ -3,6 +3,16 @@
 @section('title', 'Dashboard')
 @section('page-title', 'Overview')
 
+@section('preload')
+<!-- preload start -->
+<div class="preload-container">
+  <div class="preload-text">
+    Loading...
+  </div>
+</div>
+<!-- preload end -->
+@endsection
+
 @section('content')
 <!-- filter start -->
 <div class="sort__overlay"></div>
@@ -13,7 +23,7 @@
   </div>
 
   <div class="sort__body mt-3">
-    <form action="">
+    <form id="filter-form" action="">
       <div class="form-group">
         <label for="company">Perusahaan</label>
         <select id="company" class="form-control form-control-sm">
@@ -40,7 +50,7 @@
 
       <div class="form-group">
         <label for="plant_year">Tahun Tanam</label>
-        <input type="text" class="form-control form-control-sm" placeholder="Tahun tanam">
+        <input id="plant_year" type="number" class="form-control form-control-sm" placeholder="Tahun tanam">
       </div>
 
     </form>
@@ -48,7 +58,7 @@
 
   <div class="sort__footer">
     <div class="form-group">
-      <button class="btn btn-sm btn-outline-primary rounded-pill pl-4 pr-4">Filter</button>
+      <button id="filter" class="btn btn-sm btn-outline-primary rounded-pill pl-4 pr-4">Filter</button>
     </div>
   </div>
 </div>
@@ -71,22 +81,22 @@
                 <div class="row">
                   <div class="col-md-3">
                     <small class="text-muted">Perusahaan</small>
-                    <div class="mt-2 font-weight-500 text-primary">PT Tobacco Inc</div>
+                    <div id="gen-company" class="mt-2 font-weight-500 text-primary">-</div>
                   </div>
 
                   <div class="col-md-3">
                     <small class="text-muted">Kebun</small>
-                    <div class="mt-2 font-weight-500">Cimory</div>
+                    <div id="gen-farm" class="mt-2 font-weight-500">-</div>
                   </div>
 
                   <div class="col-md-3">
                     <small class="text-muted">Afdelling</small>
-                    <div class="mt-2 font-weight-500">Benhill</div>
+                    <div id="gen-afdelling" class="mt-2 font-weight-500">-</div>
                   </div>
 
                   <div class="col-md-3">
                     <small class="text-muted">Tahun Tanam</small>
-                    <div class="mt-2 font-weight-500">2015</div>
+                    <div id="gen-year" class="mt-2 font-weight-500">-</div>
                   </div>
                 </div>
               </div>
@@ -98,11 +108,11 @@
               <div class="inner">
                 <div class="d-flex justify-content-between">
                   <small>Agency</small>
-                  <small>Sarah</small>
+                  <small id="info-agency">-</small>
                 </div>
 
                 <div class="d-flex justify-content-center">
-                  <h3>15</h3>
+                  <h3 id="info-farm">0</h3>
                 </div>
                 <div class="d-flex justify-content-center">
                   <small>Kebun terkelola.</small>
@@ -117,11 +127,11 @@
               <div class="inner">
                 <div class="d-flex justify-content-between">
                   <small>Manager Kebun</small>
-                  <small>Robert Frany</small>
+                  <small id="info-manager">-</small>
                 </div>
 
                 <div class="d-flex justify-content-center">
-                  <h3>150</h3>
+                  <h3 id="info-afdelling">0</h3>
                 </div>
                 <div class="d-flex justify-content-center">
                   <small>Afdelling terkelola.</small>
@@ -136,11 +146,11 @@
               <div class="inner">
                 <div class="d-flex justify-content-between">
                   <small>Asisten Kebun</small>
-                  <small>Franky</small>
+                  <small id="info-assistant">-</small>
                 </div>
 
                 <div class="d-flex justify-content-center">
-                  <h3>230</h3>
+                  <h3 id="info-block">0</h3>
                 </div>
                 <div class="d-flex justify-content-center">
                   <small>Block terkelola.</small>
@@ -157,8 +167,8 @@
                   <small>Mandor</small>
                 </div>
                 <div class="d-flex justify-content-around">
-                  <h3>2</h3>
-                  <h3>15</h3>
+                  <h3 id="info-foreman">0</h3>
+                  <h3 id="info-subforeman">0</h3>
                 </div>
                 <div class="d-flex justify-content-around">
                   <small>Mandor utama</small>
@@ -180,12 +190,12 @@
               <div class="card-body">
                 <div class="text-muted">Ketuntasan Pekerjaan</div>
                 <div class="d-flex justify-content-around mt-4">
-                  <input type="text" class="knob" id="spraying" data-linecap="round" data-readonly="true" data-thickness=".2" value="60" data-width="70" data-height="75" data-fgColor="#17a2b8">
-                  <input type="text" class="knob" id="fertilizer" data-linecap="round" data-readonly="true" data-thickness=".2" value="77" data-width="70" data-height="75" data-fgColor="#4caf50">
-                  <input type="text" class="knob" id="circle" data-linecap="round" data-readonly="true" data-thickness=".2" value="34" data-width="70" data-height="75" data-fgColor="#8BC34A">
-                  <input type="text" class="knob" id="pruning" data-linecap="round" data-readonly="true" data-thickness=".2" value="87" data-width="70" data-height="75" data-fgColor="#3f51b5">
-                  <input type="text" class="knob" id="pcontrol" data-linecap="round" data-readonly="true" data-thickness=".2" value="66" data-width="70" data-height="75" data-fgColor="#E91E63">
-                  <input type="text" class="knob" id="gawangan" data-linecap="round" data-readonly="true" data-thickness=".2" value="88" data-width="70" data-height="75" data-fgColor="#009688">
+                  <input type="text" class="knob" id="spraying" data-linecap="round" data-readonly="true" data-thickness=".2" value="0" data-width="70" data-height="75" data-fgColor="#17a2b8">
+                  <input type="text" class="knob" id="fertilizer" data-linecap="round" data-readonly="true" data-thickness=".2" value="0" data-width="70" data-height="75" data-fgColor="#4caf50">
+                  <input type="text" class="knob" id="circle" data-linecap="round" data-readonly="true" data-thickness=".2" value="0" data-width="70" data-height="75" data-fgColor="#8BC34A">
+                  <input type="text" class="knob" id="pruning" data-linecap="round" data-readonly="true" data-thickness=".2" value="0" data-width="70" data-height="75" data-fgColor="#3f51b5">
+                  <input type="text" class="knob" id="pcontrol" data-linecap="round" data-readonly="true" data-thickness=".2" value="0" data-width="70" data-height="75" data-fgColor="#E91E63">
+                  <input type="text" class="knob" id="gawangan" data-linecap="round" data-readonly="true" data-thickness=".2" value="0" data-width="70" data-height="75" data-fgColor="#009688">
                 </div>
                 <div class="d-flex justify-content-around text-center mt-2">
                   <small>Spraying</small>
@@ -203,18 +213,23 @@
             <div class="card">
               <div class="card-body">
                 <div class="text-muted">Kegiatan Panen</div>
-                <div class="d-flex justify-content-around mt-4">
-                  <div class="h1"><span class="numscroller" data-min='1' data-max='30' data-delay='1' data-increment='2'>30</span>/<span class="text-muted">50</span> </div>
-                  <div class="h1"><span class="numscroller" data-min='1' data-max='250' data-delay='5' data-increment='5'>250</span> kg</div>
-                  <div class="h1"><span class="numscroller" data-min='1' data-max='100' data-delay='5' data-increment='5'>100</span>%</div>
-                  <!-- <input type="text" class="knob" id="ketuntasan-panen" data-linecap="round" data-readonly="true" data-thickness=".2" value="89" data-width="70" data-height="75" data-fgColor="#ff5722"> -->
-                  <div class="h1"><span class="numscroller" data-min='1' data-max='68' data-delay='5' data-increment='5'>68</span> jam</div>
-                </div>
-                <div class="d-flex justify-content-around">
-                  <small>Karyawan bekerja</small>
-                  <small>Produksi panen total</small>
-                  <small>Ketuntasan panen</small>
-                  <small>Rerata lama panen</small>
+                <div class="row no-gutters text-center">
+                  <div class="col-md-3">
+                    <div class="h1"><span id="hk-work" class="numscroller" data-min='0' data-max='0' data-delay='1' data-increment='2'>0</span> <small style="font-size: 16px">orang</small></div>
+                    <div><small>Karyawan bekerja</small></div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="h1"><span id="total-kg" class="numscroller" data-min='0' data-max='0' data-delay='5' data-increment='5'>0</span> <small style="font-size: 16px">kg</small></div>
+                    <div><small>Produksi panen total</small></div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="h1"><span id="harvesting" class="numscroller" data-min='0' data-max='0' data-delay='5' data-increment='5'>0</span><small style="font-size: 16px"> %</small></div>
+                    <div><small>Ketuntasan panen</small></div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="h1"><span id="avg-time" class="numscroller" data-min='0' data-max='0' data-delay='5' data-increment='5'>0</span> <small style="font-size: 16px">jam</small></div>
+                    <div><small>Rerata lama panen</small></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -226,30 +241,22 @@
         <div class="row">
           <div class="col-md-4">
             <div class="card">
-              <!-- <div class="card-header">
-                <div class="d-flex justify-content-between">
-                  <div>Panen</div>
-                  <div style="width: 30%">
-                    <select name="" id="" class="form-control form-control-sm rounded-pill">
-                      <option value="">Spraying</option>
-                      <option value="">Fertilizer</option>
-                      <option value="">Manual Circle</option>
-                    </select>
-                  </div>
-                </div>
-              </div> -->
+              <div class="card-header">
+                <div class="text-muted">Hasil Panen</div>
+              </div>
               <div class="card-body">
-                <div class="text-muted mb-3">Panen</div>
-                <canvas id="panen" height="190"></canvas>
+                <canvas id="panen" height="195"></canvas>
               </div>
             </div>
           </div>
 
           <div class="col-md-4">
             <div class="card">
+              <div class="card-header">
+                <div class="text-muted">Hasil Panen per Afdelling</div>
+              </div>
               <div class="card-body">
-                <div class="text-muted mb-3">Panen per Kebun</div>
-                <canvas id="kebun" height="190"></canvas>
+                <canvas id="kebun" height="195"></canvas>
               </div>
             </div>
           </div>
@@ -258,12 +265,16 @@
             <div class="card">
               <div class="card-header">
                 <div class="d-flex justify-content-between">
-                  <div>Panen</div>
+                  <div class="text-muted">Ketuntasan pekerjaan per Block</div>
                   <div style="width: 30%">
-                    <select name="" id="" class="form-control form-control-sm rounded-pill">
-                      <option value="">Spraying</option>
-                      <option value="">Fertilizer</option>
-                      <option value="">Manual Circle</option>
+                    <select name="" id="job-completeness-block" class="form-control form-control-sm rounded-pill">
+                      <option value="1">Spraying</option>
+                      <option value="2">Fertilizer</option>
+                      <option value="3">Manual Circle</option>
+                      <option value="4">Manual Pruning</option>
+                      <option value="5">Pest Control</option>
+                      <option value="6">Manual Gawangan</option>
+                      <option value="7">Harvesting</option>
                     </select>
                   </div>
                 </div>
@@ -282,15 +293,25 @@
                   <div style="width: 30%">
                     <div class="row">
                       <div class="col-6">
-                        <select name="" id="" class="form-control form-control-sm rounded-pill">
-                          <option value="">Spraying</option>
-                          <option value="">Manual Circle</option>
+                        <select name="" id="sort-trend-1" class="form-control form-control-sm rounded-pill">
+                          <option value="1">Spraying</option>
+                          <option value="2">Fertilizer</option>
+                          <option value="3">Manual Circle</option>
+                          <option value="4">Manual Pruning</option>
+                          <option value="5">Pest Control</option>
+                          <option value="6">Manual Gawangan</option>
+                          <option value="7">Harvesting</option>
                         </select>
                       </div>
                       <div class="col-6">
-                        <select name="" id="" class="form-control form-control-sm rounded-pill">
-                          <option value="">Fertilizer</option>
-                          <option value="">Manual Circle</option>
+                        <select name="" id="sort-trend-2" class="form-control form-control-sm rounded-pill">
+                          <option value="1">Spraying</option>
+                          <option value="2">Fertilizer</option>
+                          <option value="3">Manual Circle</option>
+                          <option value="4">Manual Pruning</option>
+                          <option value="5">Pest Control</option>
+                          <option value="6">Manual Gawangan</option>
+                          <option value="7">Harvesting</option>
                         </select>
                       </div>
                     </div>
@@ -309,4 +330,9 @@
     </div>
   </div>
 </div>
+@endsection
+
+@section('dashboard-js')
+<script src="{{ asset('js/axios.js') }}"></script>
+<script src="{{ asset('js/dashboard.js') }}"></script>
 @endsection
