@@ -359,8 +359,8 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
     });
 
     Route::group(['prefix' => 'activities'], function () {
-        Route::get('/', [StaticActivityController::class, 'index'])->name('assistant.activities');
-        Route::post('/', [StaticActivityController::class, 'store'])->name('assistant.activities');
+        Route::get('/', [StaticActivityController::class, 'index'])->name('assistant.activities.index');
+        Route::post('/', [StaticActivityController::class, 'store'])->name('assistant.activities.store');
         Route::post('/edit', [StaticActivityController::class, 'edit'])->name('assistant.activites.edit');
     });
 
