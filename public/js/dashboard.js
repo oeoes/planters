@@ -41,14 +41,6 @@ const farmField = document.querySelector('#farm');
 const afdellingField = document.querySelector('#afdelling');
 const plantYearField = document.querySelector('#plant_year');
 
-// knobs
-const sprayingKnob = document.querySelector('#spraying');
-const fertilizerKnob = document.querySelector('#fertilizer');
-const circleKnob = document.querySelector('#circle');
-const pruningKnob = document.querySelector('#pruning');
-const pcontrolKnob = document.querySelector('#pcontrol');
-const gawanganKnob = document.querySelector('#gawangan');
-
 // kegiatan panen
 const harvestingScroller = document.querySelector('#harvesting');
 
@@ -679,7 +671,6 @@ window.onload = function () {
         }
         axios.post(`/superadmin/dashboard/filter`, req).then(response => {
             const data = response.data.data;
-            console.log(data);
 
             companyText.innerText = data.general.company_name;
             farmText.innerText = data.general.farm;
@@ -707,6 +698,7 @@ window.onload = function () {
              * knobs
              */
             knobs(data.job_completeness);
+            console.log(data.job_completeness);
 
             // panen
             loadPanen(data.panen[0], data.panen[1]);
@@ -748,7 +740,6 @@ window.onload = function () {
             }
             axios.post(`/superadmin/dashboard/filter/completeness/block`, req).then(response => {
                 const data = response.data.data;
-                console.log(data);
 
                 // ketuntasan pekerjaan masing" block
                 loadJobCompletenessBlock(data.job_completeness_each_block[0], data.job_completeness_each_block[1], data.job_completeness_each_block[2])

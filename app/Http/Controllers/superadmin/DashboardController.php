@@ -159,19 +159,22 @@ class DashboardController extends Controller
 
     public static function job_completeness($jobtype, $year, $afdelling)
     {
-        $blockref = DB::table('block_static_references')
-            ->join('block_references', 'block_static_references.id', '=', 'block_references.block_static_reference_id')
-            ->select('block_references.id', 'block_references.fill_id', 'block_references.model', 'block_references.fill')
-            ->where(['block_references.jobtype_id' => $jobtype, 'block_static_references.planting_year' => $year])
-            ->first();
-
         $results = 0;
-        if ($blockref) {
-            $target = $blockref->model::where('block_ref_id', $blockref->id)->select('id', 'target_coverage')->get();
-            foreach ($target as $tar) {
-                $result = $blockref->fill::where([$blockref->fill_id => $tar->id, 'afdelling_id' => $afdelling])->select('ftarget_coverage')->first();
-                if ($result) {
-                    $results += $tar->target_coverage * 100 / $result->ftarget_coverage;
+
+        $block_id = [];
+        $blocks = Block::where('afdelling_id', $afdelling)->get();
+        foreach ($blocks as $value) {
+            // untuk mengambil semua block berdasarkan company
+            $block_id[] = $value->id;
+        }
+        $blockrefs = BlockReference::whereIn('block_id', $block_id)->where(['jobtype_id' => $jobtype, 'planting_year' => $year])->get();
+
+        foreach ($blockrefs as $ref) {
+            $model = $ref->model::where('block_ref_id', $ref->id)->select('id', 'target_coverage')->first();
+            if ($model) {
+                $fill = $ref->fill::where($ref->fill_id, $model->id)->select('ftarget_coverage')->first();
+                if ($fill) {
+                    $results += $model->target_coverage * 100 / $fill->ftarget_coverage;
                 }
             }
         }
