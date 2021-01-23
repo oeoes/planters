@@ -149,7 +149,7 @@ class DashboardController extends Controller
         $count_activities = [];
         for ($i = 1; $i <= 12; $i++) {
             $blockrefs = BlockReference::whereMonth('created_at', $i)->whereYear('created_at', date('Y'))
-                ->whereIn('block_id', $block_id)->where(['completed' => 1, 'planting_year' => $year, 'jobtype_id' => $jobtype])->get();
+                ->whereIn('block_id', $block_id)->where(['planting_year' => $year, 'jobtype_id' => $jobtype])->get();
             
             $count_activities[] = count($blockrefs);
         }
