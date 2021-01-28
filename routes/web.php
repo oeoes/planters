@@ -63,6 +63,11 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
     });
 
     Route::group(['prefix' => 'area'], function () {
+        // get coordinates
+        Route::group(['prefix' => 'coordinates'], function () {
+            Route::get('/{company}', [SU_AreaController::class, 'get_coordinates']);
+        });
+
         Route::group(['prefix' => 'job_type'], function () {
             Route::get('/', [SU_AreaController::class, 'job_type'])->name('superadmin.job_type');
             Route::post('/', [SU_AreaController::class, 'job_type_store'])->name('superadmin.job_type.store');

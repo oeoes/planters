@@ -17,6 +17,8 @@ class CreateBlockTable extends Migration
             $table->id();
             $table->string('code');
             $table->foreignId('afdelling_id')->constrained();
+            $table->decimal('lat', 10, 8);
+            $table->decimal('lng', 11, 8);
             $table->timestamps();
         });
     }

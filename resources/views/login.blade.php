@@ -100,9 +100,9 @@
     <script src="{{ asset('js/axios.js') }}"></script>
     <script>
         $(document).ready(function () {
-            $(document).on('submit', '#login-form', function (e) {
-                e.preventDefault()
-            })
+            // $(document).on('submit', '#login-form', function (e) {
+            //     e.preventDefault()
+            // })
             let state = true
             $(document).on('click', '#lock', function () {
                 $('#lock').toggleClass('fa-lock fa-unlock')

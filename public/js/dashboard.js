@@ -660,7 +660,9 @@ window.onload = function () {
     });
 
     // klik tombol filter
-    btnFilter.addEventListener('click', function () {
+    btnFilter.addEventListener('click', function (e) {
+        e.preventDefault();
+        
         preloadContainer.style.display = 'flex';
         this.innerText = 'Filtering...';
         const req = {

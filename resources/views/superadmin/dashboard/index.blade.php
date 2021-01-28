@@ -23,7 +23,7 @@
   </div>
 
   <div class="sort__body mt-3">
-    <form id="filter-form" action="">
+    <form action="">
       <div class="form-group">
         <label for="company">Perusahaan</label>
         <select id="company" class="form-control form-control-sm">
@@ -52,8 +52,6 @@
         <label for="plant_year">Tahun Tanam</label>
         <input id="plant_year" type="number" class="form-control form-control-sm" placeholder="Tahun tanam">
       </div>
-
-    </form>
   </div>
 
   <div class="sort__footer">
@@ -61,6 +59,7 @@
       <button id="filter" class="btn btn-sm btn-outline-primary rounded-pill pl-4 pr-4">Filter</button>
     </div>
   </div>
+  </form>
 </div>
 
 <div class="sort__btn animate__animated animate__jello">

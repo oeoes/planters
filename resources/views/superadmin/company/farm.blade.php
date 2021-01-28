@@ -3,6 +3,17 @@
 @section('title', 'Daftar Kebun')
 @section('page-title', 'Daftar Kebun')
 
+@section('css')
+<style>
+    #farm-map {
+        height: 500px;
+        width: 100%;
+    }
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+@endsection
+
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -95,103 +106,113 @@
 @endsection
 
 @section('content')
-<div class="row mt-4">
-    @if(count($farms))
-    @foreach ($farms as $key => $farm)
-    <div class="col-md-3">
-        <div id="wadah" class="card card-outline card-success">
-            <div class="crudd__btn_cont">
-                <div class="d-flex justify-content-center mt-2">
-                    <button data-toggle="modal" data-target="#edit-farm{{ $key }}" class="btn btn-sm btn-outline-primary rounded-pill pl-3 pr-3 mr-1"><i class="fa fa-pen"></i></button>
-                    <button data-toggle="modal" data-target="#delete-farm{{ $key }}" class="btn btn-sm btn-outline-danger rounded-pill pl-3 pr-3"><i class="fa fa-trash"></i></button>
+<div style="overflow-y: auto; height: 350px">
+    <div class="row mt-4">
+        @if(count($farms))
+        @foreach ($farms as $key => $farm)
+        <div class="col-md-3">
+            <div id="wadah" class="card card-outline card-success">
+                <div class="crudd__btn_cont">
+                    <div class="d-flex justify-content-center mt-2">
+                        <button data-toggle="modal" data-target="#edit-farm{{ $key }}" class="btn btn-sm btn-outline-primary rounded-pill pl-3 pr-3 mr-1"><i class="fa fa-pen"></i></button>
+                        <button data-toggle="modal" data-target="#delete-farm{{ $key }}" class="btn btn-sm btn-outline-danger rounded-pill pl-3 pr-3"><i class="fa fa-trash"></i></button>
+                    </div>
                 </div>
-            </div>
-            <a href="{{ route('superadmin.company.farm.afdellings', $farm->id) }}">
-                <div class="card-body text-dark">
-                    {{ ucwords($farm->name) }}
-                </div>
-                <div class="card-footer text-muted">
-                    @if($farm->manager)
-                    <span class="badge badge-sm badge-light">manager</span> {{ ucwords($farm->manager) }}
-                    @else
-                    <div class="text-center">Belum ditentukan</div>
-                    @endif
-                </div>
-            </a>
-        </div>
-    </div>
-
-    <!-- Modal edit farm -->
-    <div class="modal fade" id="edit-farm{{ $key }}" tabindex="-1" aria-labelledby="edit-farmLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="edit-farmLabel">Perbarui data Kebun</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.farm.update', $farm->id) }}">
-                        @method('PUT')
-                        @csrf
-
-                        <div class="form-group">
-                            <label for="name">Perusahaan</label>
-                            <input class="form-control rounded-pill outline-danger" value="{{ ucwords($company->company_name) }}" readonly>
-                            <input type="hidden" name="company_id" class="form-control" value="{{ ucwords($company->id) }}">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="name">Nama kebun</label>
-                            <input name="farm" type="name" class="form-control rounded-pill outline-danger" value="{{ $farm->name }}" required>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Perbarui</button>
-                    </form>
-                </div>
+                <a href="{{ route('superadmin.company.farm.afdellings', $farm->id) }}">
+                    <div class="card-body text-dark">
+                        {{ ucwords($farm->name) }}
+                    </div>
+                    <div class="card-footer text-muted">
+                        @if($farm->manager)
+                        <span class="badge badge-sm badge-light">manager</span> {{ ucwords($farm->manager) }}
+                        @else
+                        <div class="text-center">Belum ditentukan</div>
+                        @endif
+                    </div>
+                </a>
             </div>
         </div>
-    </div>
 
-    <!-- Modal delete farm -->
-    <div class="modal fade" id="delete-farm{{ $key }}" tabindex="-1" aria-labelledby="delete-farmLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="delete-farmLabel">Hapus data Kebun</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.farm.delete', $farm->id) }}">
-                        @method('DELETE')
-                        @csrf
-                        Yakin untuk menghapus Kebun?
+        <!-- Modal edit farm -->
+        <div class="modal fade" id="edit-farm{{ $key }}" tabindex="-1" aria-labelledby="edit-farmLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="edit-farmLabel">Perbarui data Kebun</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{{ route('superadmin.farm.update', $farm->id) }}">
+                            @method('PUT')
+                            @csrf
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill pr-4 pl-4">Ya</button>
-                    </form>
+                            <div class="form-group">
+                                <label for="name">Perusahaan</label>
+                                <input class="form-control rounded-pill outline-danger" value="{{ ucwords($company->company_name) }}" readonly>
+                                <input type="hidden" name="company_id" class="form-control" value="{{ ucwords($company->id) }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="name">Nama kebun</label>
+                                <input name="farm" type="name" class="form-control rounded-pill outline-danger" value="{{ $farm->name }}" required>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Perbarui</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Modal delete farm -->
+        <div class="modal fade" id="delete-farm{{ $key }}" tabindex="-1" aria-labelledby="delete-farmLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="delete-farmLabel">Hapus data Kebun</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{{ route('superadmin.farm.delete', $farm->id) }}">
+                            @method('DELETE')
+                            @csrf
+                            Yakin untuk menghapus Kebun?
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill pr-4 pl-4">Ya</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endforeach
+        @else
+        <div class="col-md-4 offset-md-4 mt-5">
+            <div class="text-muted text-center h6 mt-5">Kebun Tidak Tersedia.</div>
+        </div>
+        @endif
     </div>
-    @endforeach
-    @else
-    <div class="col-md-4 offset-md-4 mt-5">
-        <div class="text-muted text-center h6 mt-5">Kebun Tidak Tersedia.</div>
+</div>
+
+<div class="card shadow">
+    <div id="farm-map">
+
     </div>
-    @endif
 </div>
 @endsection
 
 @section('js')
 <script>
+    // set company id
+    var company_id = '{!! $company->id !!}'
     ScrollReveal().reveal('.active', {
         delay: 250
     });
@@ -200,4 +221,6 @@
         delay: 500
     });
 </script>
+<script src="{{ asset('js/axios.js') }}"></script>
+<script src="{{ asset('js/farm-map.js') }}"></script>
 @endsection

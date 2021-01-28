@@ -79,7 +79,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="add-blockLabel">Tambah data afdelling</h5>
+                    <h5 class="modal-title" id="add-blockLabel">Tambah data block</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -102,6 +102,16 @@
                         <div class="form-group">
                             <label for="name">Kode block</label>
                             <input name="block" type="name" class="form-control rounded-pill outline-danger" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name">Latitude</label>
+                            <input name="lat" type="name" class="form-control rounded-pill outline-danger" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name">Longitude</label>
+                            <input name="lng" type="name" class="form-control rounded-pill outline-danger" required>
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -260,6 +270,16 @@
                                     <div class="form-group">
                                         <label for="name">Kode block</label>
                                         <input name="block" type="name" class="form-control rounded-pill outline-danger" value="{{ $block->code }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Latitude</label>
+                                        <input name="lat" type="name" class="form-control rounded-pill outline-danger" value="{{ $block->lat }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Longitude</label>
+                                        <input name="lng" type="name" class="form-control rounded-pill outline-danger" value="{{ $block->lng }}" required>
                                     </div>
                             </div>
                             <div class="modal-footer">

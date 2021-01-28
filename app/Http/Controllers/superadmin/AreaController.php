@@ -128,7 +128,9 @@ class AreaController extends Controller
     public function block_store(Request $request) {
         Block::create([
             'code' => $request->block,
-            'afdelling_id' => $request->afdelling_id
+            'afdelling_id' => $request->afdelling_id,
+            'lat' => $request->lat,
+            'lng' => $request->lng
         ]);
         return back()->withSuccess('block created');
     }
@@ -136,7 +138,9 @@ class AreaController extends Controller
     public function block_update (Request $request, Block $block) {
         $block->update([
             'code' => $request->block,
-            'afdelling_id' => $request->afdelling_id
+            'afdelling_id' => $request->afdelling_id,
+            'lat' => $request->lat,
+            'lng' => $request->lng
         ]);
         return back()->withSuccess('block updated');
     }
@@ -259,6 +263,25 @@ class AreaController extends Controller
             'label'   => $label,
             'current' => $current,
             'total'   => $total
+        ]);
+    }
+
+    /**
+     * Map functions
+     */
+
+    public function get_coordinates($company)
+    {
+        $coordinates = DB::table('blocks')->join('afdellings', 'afdellings.id', '=', 'blocks.afdelling_id')
+        ->join('farms', 'farms.id', '=', 'afdellings.farm_id')
+        ->select('farms.name as farm', 'farms.id as farm_id', 'afdellings.name as afdelling', 'afdellings.id as afdelling_id', 'blocks.code', 'blocks.id as block_id', 'blocks.lat', 'blocks.lng')
+        ->where('farms.company_id', $company)
+        ->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'List of coordinates',
+            'data' => $coordinates
         ]);
     }
 
