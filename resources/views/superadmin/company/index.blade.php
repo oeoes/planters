@@ -71,7 +71,7 @@
                         <div class="row no-gutters">
                             <div class="col-9">{{ $company->company_name }}</div>
                             <div class="col-3 d-flex flex-row-reverse">
-                                <img class="rounded-circle" src="{{ asset('companies/logo') }}/{{ $company->image }}" width="100%" height="60px" alt="logo company">
+                                <img class="rounded-circle" src="{{ $company->image }}" width="100%" height="60px" alt="logo company">
                             </div>
                         </div>
                     </div>

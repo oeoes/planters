@@ -19,6 +19,8 @@ use App\Models\Maintain\SprayingType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
 
 class CompanyController extends Controller
 {
@@ -42,8 +44,11 @@ class CompanyController extends Controller
     }
 
     public function store (Request $request) {
-        $image = time().'.'.$request->image->extension();
-        $request->image->move(public_path('companies/logo/'), $image);
+        $image = $request->file('image');
+        $image_folder = 'companies';
+        $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
+        $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
+        $image = asset('/storage/' . $image_url);
         
         Company::create([
             'company_code' => $request->company_code,
@@ -55,10 +60,14 @@ class CompanyController extends Controller
 
     public function update (Request $request, Company $company) {
         if ($request->image) {
-            File::delete(public_path('companies/logo') . '/' . $company->image);
+            $path = explode('/', $company->image);
+            Storage::disk('public')->delete('companies/'. $path[count($path) - 1]);
 
-            $image = time().'.'.$request->image->extension();
-            $request->image->move(public_path('companies/logo/'), $image);
+            $image = $request->file('image');
+            $image_folder = 'companies';
+            $image_name = Uuid::uuid4() . '.' . $image->getClientOriginalExtension();
+            $image_url = Storage::disk('public')->put($image_folder, $request->file('image'));
+            $image = asset('/storage/' . $image_url);
 
             $company->update([
                 'company_code' => $request->company_code,
@@ -75,9 +84,11 @@ class CompanyController extends Controller
         return back()->withSuccess('PT updated');
     }
 
-    public function delete (Request $request, Company $company) {
+    public function delete (Company $company) {
         try {
-            File::delete(public_path('companies/logo') . '/' . $company->image);
+            $path = explode('/', $company->image);
+            Storage::disk('public')->delete('companies/' . $path[count($path) - 1]);
+            
             $company->delete();
         } catch (\Throwable $th) {
             return back()->withError('Cannot delete selected PT');
