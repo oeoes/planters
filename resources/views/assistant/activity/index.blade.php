@@ -139,7 +139,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('assistant.activities') }}" id="create_activity_area">
+                    <form method="POST" action="{{ route('assistant.activities.store') }}" id="create_activity_area">
                         @csrf
                         <div class="form-group">
                             <label for="block">Pilih blok</label>

@@ -115,7 +115,8 @@
                 }
             })
 
-            $(document).on('click', '#btn-login', function () {
+            $(document).on('click', '#btn-login', function (e) {
+                e.preventDefault();
                 $('#btn-login').text('Cheking..')
                 axios.post('/login', {
                         email: $('#email').val(),

@@ -37,7 +37,7 @@
                   </li>
 
                   <li class="nav-item">
-                      <a href="{{ route('assistant.activities') }}" class="nav-link">
+                      <a href="{{ route('assistant.activities.index') }}" class="nav-link">
                           <i class="nav-icon fas fa-tractor active"></i>
                           <p>Aktivitas Area</p>
                       </a>
