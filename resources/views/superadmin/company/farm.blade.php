@@ -42,8 +42,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="">
+                    <form method="post" action="{{ route('superadmin.company.store.agency') }}">
                         @csrf
+                        <!-- company id -->
+                        <input name="company_id" type="hidden" value="{{ $company->id }}">
 
                         <div class="form-group">
                             <label for="name">Nama</label>

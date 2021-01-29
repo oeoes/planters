@@ -27,16 +27,21 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('superadmin.company.store') }}">
+                    <form method="post" action="{{ route('superadmin.company.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="name">Nama Perusahaan</label>
-                            <input name="company_name" class="form-control rounded-pill outline-danger">
+                            <input name="company_name" class="form-control rounded-pill outline-danger" required>
                         </div>
 
                         <div class="form-group">
                             <label for="name">Kode Perusahaan</label>
                             <input name="company_code" class="form-control rounded-pill outline-danger">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="image">Logo Perusahaan</label>
+                            <input name="image" type="file" class="form-control rounded-pill outline-danger" required>
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -66,7 +71,7 @@
                         <div class="row no-gutters">
                             <div class="col-9">{{ $company->company_name }}</div>
                             <div class="col-3 d-flex flex-row-reverse">
-                                <div class="card rounded-pill bg-info" style="width: 50px; height: 50px"></div>
+                                <img class="rounded-circle" src="{{ asset('companies/logo') }}/{{ $company->image }}" width="100%" height="60px" alt="logo company">
                             </div>
                         </div>
                     </div>
@@ -93,18 +98,24 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="{{ route('superadmin.company.update', $company->id) }}">
+                        <form method="post" action="{{ route('superadmin.company.update', $company->id) }}" enctype="multipart/form-data">
                             @method('PUT')
                             @csrf
 
                             <div class="form-group">
                                 <label for="name">Nama Perusahaan</label>
-                                <input name="company_name" class="form-control rounded-pill outline-danger" value="{{ $company->company_name }}">
+                                <input name="company_name" class="form-control rounded-pill outline-danger" value="{{ $company->company_name }}" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="name">Kode Perusahaan</label>
                                 <input name="company_code" class="form-control rounded-pill outline-danger" value="{{ $company->company_code }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="image">Logo Perusahaan</label>
+                                <input name="image" type="file" class="form-control rounded-pill outline-danger">
+                                <small class="text-warning">Kosongkan bila tidak akan mengganti logo</small>
                             </div>
                     </div>
                     <div class="modal-footer">

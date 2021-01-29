@@ -115,6 +115,8 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
         Route::get('/farm/{farm_id}/afdellings', [SU_CompanyController::class, 'afdellings'])->name('superadmin.company.farm.afdellings');
         Route::get('/farm/afdelling/{afdelling_id}/blocks', [SU_CompanyController::class, 'blocks'])->name('superadmin.company.farm.afdelling.blocks');
 
+        Route::post('/store/agency', [SU_CompanyController::class, 'store_agency'])->name('superadmin.company.store.agency');
+
         // operating maintenance
         Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance', [SU_CompanyController::class, 'operating_maintenance'])->name('superadmin.company.farm.afdelling.operating_maintenance');
         Route::get('/farm/afdelling/{afdelling_id}/operating-maintenance/spraying', [SU_CompanyController::class, 'operating_maintenance_spraying'])->name('superadmin.company.farm.afdelling.operating_maintenance_spraying');

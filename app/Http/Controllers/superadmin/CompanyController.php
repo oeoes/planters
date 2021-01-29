@@ -4,6 +4,7 @@ namespace App\Http\Controllers\superadmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Afdelling;
+use App\Models\Agency;
 use App\Models\Block;
 use App\Models\Company;
 use App\Models\Farm;
@@ -17,36 +18,66 @@ use App\Models\Maintain\PruningType;
 use App\Models\Maintain\SprayingType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class CompanyController extends Controller
 {
     public function index () {
         $companies = DB::table('companies')->leftJoin('agencies', 'companies.id', '=', 'agencies.company_id')
-                    ->select('companies.id', 'companies.company_name', 'companies.company_code', 'agencies.name as owner')
+                    ->select('companies.*', 'agencies.name as owner')
                     ->get();
         return view('superadmin.company.index', [
             'companies' => $companies
         ]);
     }
 
+    public function store_agency (Request $request) {
+        Agency::create([
+            'name' => $request->name,
+            'company_id' => $request->company_id,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+        return back()->withSuccess('Agency added');
+    }
+
     public function store (Request $request) {
+        $image = time().'.'.$request->image->extension();
+        $request->image->move(public_path('companies/logo/'), $image);
+        
         Company::create([
             'company_code' => $request->company_code,
             'company_name' => $request->company_name,
+            'image' => $image,
         ]);
         return back()->withSuccess('PT created');
     }
 
     public function update (Request $request, Company $company) {
-        $company->update([
-            'company_code' => $request->company_code,
-            'company_name' => $request->company_name,
-        ]);
+        if ($request->image) {
+            File::delete(public_path('companies/logo') . '/' . $company->image);
+
+            $image = time().'.'.$request->image->extension();
+            $request->image->move(public_path('companies/logo/'), $image);
+
+            $company->update([
+                'company_code' => $request->company_code,
+                'company_name' => $request->company_name,
+                'image' => $image,
+            ]);
+        } else {
+            $company->update([
+                'company_code' => $request->company_code,
+                'company_name' => $request->company_name,
+            ]);
+        }
+        
         return back()->withSuccess('PT updated');
     }
 
     public function delete (Request $request, Company $company) {
         try {
+            File::delete(public_path('companies/logo') . '/' . $company->image);
             $company->delete();
         } catch (\Throwable $th) {
             return back()->withError('Cannot delete selected PT');
