@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Afdelling;
+use App\Models\Company;
+use App\Models\Farm;
+use App\Models\Foreman;
+use App\Models\Subforeman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,12 +35,25 @@ class AuthController extends Controller
 
     protected function respondWithToken($token, $guard)
     {   
+        $profile = self::profileData($guard, Auth::guard($guard)->user());
         $data = [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => Auth::guard($guard)->factory()->getTTL() * 60,
-            'account' => Auth::guard($guard)->user()
+            'account' => Auth::guard($guard)->user(),
+            'company' => $profile[0],
+            'farm' => $profile[1],
+            'afdelling' => $profile[2]
         ];
         return res(true, 200, 'Successfully log in', $data);
+    }
+
+    public static function profileData ($role, $user) {
+        $entity = $role === 'foreman' ? Foreman::find($user->id) : Subforeman::find($user->id);
+        $afdelling = Afdelling::find($entity->afdelling_id);
+        $farm = Farm::find($afdelling->farm_id);
+        $company = Company::find($farm->company_id);
+
+        return [$company->company_name, $farm->name, $afdelling->name];
     }
 }

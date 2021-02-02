@@ -209,10 +209,10 @@
         var myChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: {!!$years!!},
+                labels: '{!!$years!!}',
                 datasets: [{
-                    data: {!!$coverages!!},
-                    backgroundColor: {!!$colors!!},
+                    data: '{!!$coverages!!}',
+                    backgroundColor: '{!!$colors!!}',
                     borderColor: "black",
                     borderWidth: 2
                 }]
