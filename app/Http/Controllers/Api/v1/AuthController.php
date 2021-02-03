@@ -41,8 +41,8 @@ class AuthController extends Controller
             'token_type' => 'bearer',
             'expires_in' => Auth::guard($guard)->factory()->getTTL() * 60,
         ];
-        array_push($data, $profile);
-        
+        $data['account'] = $profile;
+
         return res(true, 200, 'Successfully log in', $data);
     }
 
