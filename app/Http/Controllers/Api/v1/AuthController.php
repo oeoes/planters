@@ -62,6 +62,10 @@ class AuthController extends Controller
             'farm' => $farm->name,
             'afdelling' => $afdelling->name
         ];
+        if($role === 'subforeman') {
+            $account['jobtype_id'] = $user->jobtype_id;
+            $account['active'] = $user->active;
+        }
 
         return $account;
     }
