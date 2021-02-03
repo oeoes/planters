@@ -40,11 +40,9 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => Auth::guard($guard)->factory()->getTTL() * 60,
-            'account' => Auth::guard($guard)->user(),
-            'company' => $profile[0],
-            'farm' => $profile[1],
-            'afdelling' => $profile[2]
         ];
+        array_push($data, $profile);
+        
         return res(true, 200, 'Successfully log in', $data);
     }
 
@@ -54,6 +52,17 @@ class AuthController extends Controller
         $farm = Farm::find($afdelling->farm_id);
         $company = Company::find($farm->company_id);
 
-        return [$company->company_name, $farm->name, $afdelling->name];
+        $account = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'afdelling_id' => $afdelling->afdelling_id,
+            'role' => $user->role,
+            'company' => $company->company_name,
+            'farm' => $farm->name,
+            'afdelling' => $afdelling->name
+        ];
+
+        return $account;
     }
 }
