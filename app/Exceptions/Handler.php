@@ -32,6 +32,10 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof \Illuminate\Http\Client\ConnectionException) {
+            return res(false, 502, 'Request timeout');
+        }
+        
         if ($request->wantsJson()) {   //add Accept: application/json in request
             try {
                 // $headers = apache_request_headers(); //get header
@@ -45,7 +49,10 @@ class Handler extends ExceptionHandler
                     return res(false, 400, 'Token expired');
                 }else if($e instanceof \Tymon\JWTAuth\Exceptions\TokenBlacklistedException) {
                     return res(false, 400, 'Token blacklisted');
-                } else {
+                } 
+                else if ($e instanceof \Illuminate\Http\Client\ConnectionException) {
+                    return res(false, 502, 'Request timeout.');
+                }else {
                     return res(false, 400, 'Token not found');
                 }
             }
