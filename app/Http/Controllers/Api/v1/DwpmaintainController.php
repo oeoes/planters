@@ -823,7 +823,7 @@ class DwpmaintainController extends Controller
                 $next_ten_days = date('Y-m-d', strtotime('+10 day', strtotime($ref->updated_at)));
                 SampleGradingHarvesting::create([
 
-                    'afdelling_id' => Block::find($ref->block_id)->first()->afdelling_id,
+                    'afdelling_id' => Block::find($ref->block_id)->afdelling_id,
                     'block_reference_id' => $block_ref_id,
                     'block_id' => $ref->block_id,
                     'planting_year' => $ref->planting_year,

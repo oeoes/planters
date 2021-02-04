@@ -15,7 +15,7 @@ use Ramsey\Uuid\Uuid;
 class GradingHarvestingController extends Controller
 {
     public function list_samples($afdelling_id) {
-        $sample_grading_harvestings = SampleGradingHarvesting::where('afdelling_id', $afdelling_id)->orderByDesc('created_at')->get();
+        return $sample_grading_harvestings = SampleGradingHarvesting::where('afdelling_id', $afdelling_id)->orderByDesc('created_at')->get();
         if (! $sample_grading_harvestings)  return res(false,  404, 'List not found');
 
         $data = [];
