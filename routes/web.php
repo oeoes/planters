@@ -468,3 +468,7 @@ Route::get('/pyear/list/{afdelling_id}', [SU_AreaController::class, 'get_pyear_o
 
 // auth routes
 // Auth::routes();
+
+Route::get('/debug-sentry', function () {
+    throw new Exception('My first Sentry error!');
+});

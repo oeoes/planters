@@ -51,9 +51,8 @@ class SubforemanController extends Controller
         $subforeman->update([
             'name' => $request->subforeman,
             'email' => $request->email,
-            'afdelling_id' => $request->afdelling_id,
             'jobtype_id' => $request->jobtype_id,
-            'password' => Hash::make($request->password),
+            'password' => $request->password ? Hash::make($request->password) : $subforeman->password,
         ]);
         return back()->withSuccess('Sub foreman updated!');
     }

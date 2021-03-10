@@ -130,7 +130,7 @@ class CompanyController extends Controller
         return DB::table('afdellings')
         ->join('subforemans', 'subforemans.afdelling_id', '=', 'afdellings.id')
         ->join('job_types', 'job_types.id', '=', 'subforemans.jobtype_id')
-        ->where('afdellings.id', $afdelling_id)->select('subforemans.name');
+        ->where('afdellings.id', $afdelling_id)->select('subforemans.name', 'subforemans.email', 'subforemans.id', 'subforemans.jobtype_id');
     }
 
     public function blocks(Afdelling $afdelling_id)
@@ -299,5 +299,7 @@ class CompanyController extends Controller
             'harvestings' => $harvestings,
         ]);
     }
+
+
     
 }

@@ -40,7 +40,7 @@ class ForemanController extends Controller
             'name' => $request->foreman,
             'email' => $request->email,
             'afdelling_id' => $request->afdelling_id,
-            'password' => Hash::make($request->password),
+            'password' => $request->password ? Hash::make($request->password) : $foreman->password,
         ]);
         return back()->withSuccess('Mandor 1 updated!');
     }

@@ -19,6 +19,10 @@ class Foreman extends Authenticatable implements JWTSubject
         return $this->getKey();
     }
 
+    public function getNameAttribute ($value) {
+        return ucwords($value);
+    }
+
     public function getJWTCustomClaims()
     {
         return [];

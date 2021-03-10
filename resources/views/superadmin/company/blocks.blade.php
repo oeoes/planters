@@ -66,7 +66,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Tutup</button>
-                    <button id="update-account" type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Tambah</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Tambah</button>
                     </form>
                 </div>
             </div>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Tutup</button>
-                    <button id="update-account" type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Tambah</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Tambah</button>
                     </form>
                 </div>
             </div>
@@ -138,11 +138,11 @@
                         @csrf
                         <div class="form-group">
                             <label for="foreman">Nama</label>
-                            <input type="text" name="foreman" id="foreman" class="form-control rounded-pill rounded-pill" required>
+                            <input type="text" name="foreman" class="form-control rounded-pill rounded-pill" required>
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" name="email" id="email" class="form-control rounded-pill" required>
+                            <input type="email" name="email" class="form-control rounded-pill" required>
                         </div>
 
                         <div class="form-group">
@@ -152,12 +152,12 @@
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" name="password" id="password" class="form-control rounded-pill" required>
+                            <input type="password" name="password" class="form-control rounded-pill" required>
                         </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Tutup</button>
-                    <button id="update-account" type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Tambah</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Tambah</button>
                     </form>
                 </div>
             </div>
@@ -179,11 +179,11 @@
                         @csrf
                         <div class="form-group">
                             <label for="foreman">Nama</label>
-                            <input type="text" name="subforeman" id="foreman" class="form-control rounded-pill rounded-pill" required>
+                            <input type="text" name="subforeman" class="form-control rounded-pill rounded-pill" required>
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" name="email" id="email" class="form-control rounded-pill" required>
+                            <input type="email" name="email" class="form-control rounded-pill" required>
                         </div>
 
                         <div class="form-group">
@@ -202,12 +202,12 @@
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" name="password" id="password" class="form-control rounded-pill" required>
+                            <input type="password" name="password" class="form-control rounded-pill" required>
                         </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Tutup</button>
-                    <button id="update-account" type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Tambah</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Tambah</button>
                     </form>
                 </div>
             </div>
@@ -326,58 +326,622 @@
                 </div>
                 <div class="card-body">
                     <div><span class="badge badge-sm badge-light">Mandor utama</span></div>
-                    @if(count($foremans))
                     <ol style="list-style-type: circle">
-                        @foreach ($foremans as $key => $foreman)
-                        <li>{{ $foreman->name }}</li>
-                        @endforeach
+                        @forelse ($foremans as $key => $foreman)
+                        <li>{{ $foreman->name }} <span class="badge badge-sm badge-primary" data-toggle="modal" data-target="#edit-foreman{{ $key }}"><i class="fa fa-pen"></i></span> <span class="badge badge-sm badge-danger" data-toggle="modal" data-target="#delete-foreman{{ $key }}"><i class="fa fa-trash"></i></span></li>
+
+                        <!-- Modal edit Foreman -->
+                        <div class="modal fade" id="edit-foreman{{ $key }}" tabindex="-1" aria-labelledby="edit-foremanLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="edit-foremanLabel">Edit Mandor 1</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="{{ route('superadmin.foreman.update', ['foreman' => $foreman->id]) }}">
+                                            @method('PUT')
+                                            @csrf
+                                            <div class="form-group">
+                                                <label for="foreman">Nama</label>
+                                                <input type="text" name="foreman" class="form-control rounded-pill rounded-pill" required value="{{ $foreman->name }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <input type="email" name="email" class="form-control rounded-pill" required value="{{ $foreman->email }}">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="afdelling_id">Afdelling</label>
+                                                <input type="text" class="form-control rounded-pill" value="{{ $afdelling->name }}" readonly>
+                                                <input type="hidden" name="afdelling_id" class="form-control rounded-pill" value="{{ $afdelling->id }}">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="password">Password</label>
+                                                <input type="password" name="password" class="form-control rounded-pill" placeholder="Kosongkan bila tidak mengubah password">
+                                            </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                        <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Perbarui</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal delete Foreman -->
+                        <div class="modal fade" id="delete-foreman{{ $key }}" tabindex="-1" aria-labelledby="delete-foremanLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="delete-foremanLabel">Hapus Mandor utama</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="{{ route('superadmin.foreman.delete', ['foreman' => $foreman->id]) }}">
+                                            @method('DELETE')
+                                            @csrf
+                                            Yakin untuk menghapus Mandor utama?
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill pr-4 pl-4">Ya</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @empty
+                        <small class="text-muted">Mandor tidak tersedia.</small>
+                        @endforelse
                     </ol>
-                    @else
-                    <small class="text-muted">Mandor tidak tersedia.</small>
-                    @endif
 
                     <div><span class="badge badge-sm badge-light">Mandor Bidang</span></div>
                     <ol style="list-style-type: circle">
                         <li id="spraying-parent"><a href="">Spraying ({{ count($sprayings) }})</a></li>
                         <ol id="spraying-children" style="list-style-type: decimal">
                             @foreach($sprayings as $key => $sp)
-                            <li>{{ $sp->name }}</li>
+                            <li>{{ $sp->name }} <span class="badge badge-sm badge-primary" data-toggle="modal" data-target="#edit-spraying{{ $key }}"><i class="fa fa-pen"></i></span> <span class="badge badge-sm badge-danger" data-toggle="modal" data-target="#delete-spraying{{ $key }}"><i class="fa fa-trash"></i></span></li>
+
+                            <!-- Modal edit Sub foreman -->
+                            <div class="modal fade" id="edit-spraying{{$key}}" tabindex="-1" aria-labelledby="edit-sprayingLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="edit-sprayingLabel">Edit Mandor bidang (Spraying)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.update', ['subforeman' => $sp->id]) }}">
+                                                @method('PUT')
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label for="foreman">Nama</label>
+                                                    <input type="text" name="subforeman" class="form-control rounded-pill rounded-pill" required value="{{ $sp->name }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email">Email</label>
+                                                    <input type="email" name="email" class="form-control rounded-pill" required value="{{ $sp->email }}">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Jenis Pekerjaan</label>
+                                                    <select name="jobtype_id" class="form-control rounded-pill">
+                                                        @foreach ($jobtypes as $jt)
+                                                        <option <?php $sp->jobtype_id === $jt->id ? print 'selected' : '' ?> value="{{ $jt->id }}">{{ $jt->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password">Password</label>
+                                                    <input type="password" name="password" class="form-control rounded-pill" placeholder="Kosongkan bila tidak mengubah password">
+                                                </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Perbarui</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal delete Sub foreman -->
+                            <div class="modal fade" id="delete-spraying{{ $key }}" tabindex="-1" aria-labelledby="delete-sprayingLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="delete-sprayingLabel">Hapus Mandor Bidang (Spraying)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.delete', ['subforeman' => $sp->id]) }}">
+                                                @method('DELETE')
+                                                @csrf
+                                                Yakin untuk menghapus Mandor Bidang?
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill pr-4 pl-4">Ya</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
                         </ol>
                         <li id="fertilizer-parent"><a href="">Fertilizer ({{ count($fertilizers) }})</a></li>
                         <ol id="fertilizer-children" style="list-style-type: decimal">
-                            @foreach($fertilizers as $fz)
-                            <li>{{ $fz->name }}</li>
+                            @foreach($fertilizers as $key => $fz)
+                            <li>{{ $fz->name }} <span class="badge badge-sm badge-primary" data-toggle="modal" data-target="#edit-fertilizer{{ $key }}"><i class="fa fa-pen"></i></span> <span class="badge badge-sm badge-danger" data-toggle="modal" data-target="#delete-fertilizer{{ $key }}"><i class="fa fa-trash"></i></span></li>
+
+                            <!-- Modal edit Sub foreman -->
+                            <div class="modal fade" id="edit-fertilizer{{ $key }}" tabindex="-1" aria-labelledby="edit-fertilizerLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="edit-sprayingLabel">Edit Mandor bidang (Fertilizer)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.update', ['subforeman' => $fz->id]) }}">
+                                                @method('PUT')
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label for="foreman">Nama</label>
+                                                    <input type="text" name="subforeman" class="form-control rounded-pill rounded-pill" required value="{{ $fz->name }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email">Email</label>
+                                                    <input type="email" name="email" class="form-control rounded-pill" required value="{{ $fz->email }}">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Jenis Pekerjaan</label>
+                                                    <select name="jobtype_id" class="form-control rounded-pill">
+                                                        @foreach ($jobtypes as $jt)
+                                                        <option <?php $fz->jobtype_id === $jt->id ? print 'selected' : '' ?> value="{{ $jt->id }}">{{ $jt->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password">Password</label>
+                                                    <input type="password" name="password" class="form-control rounded-pill" placeholder="Kosongkan bila tidak mengubah password">
+                                                </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Perbarui</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal delete Sub foreman -->
+                            <div class="modal fade" id="delete-fertilizer{{ $key }}" tabindex="-1" aria-labelledby="delete-fertilizerLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="delete-sprayingLabel">Hapus Mandor Bidang (Fertilizer)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.delete', ['subforeman' => $fz->id]) }}">
+                                                @method('DELETE')
+                                                @csrf
+                                                Yakin untuk menghapus Mandor Bidang?
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill pr-4 pl-4">Ya</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
                         </ol>
                         <li id="circle-parent"><a href="">Manual Circle ({{ count($circles) }})</a></li>
                         <ol id="circle-children" style="list-style-type: decimal">
-                            @foreach($circles as $cs)
-                            <li>{{ $cs->name }}</li>
+                            @foreach($circles as $key => $cs)
+                            <li>{{ $cs->name }} <span class="badge badge-sm badge-primary" data-toggle="modal" data-target="#edit-circle{{ $key }}"><i class="fa fa-pen"></i></span> <span class="badge badge-sm badge-danger" data-toggle="modal" data-target="#delete-circle{{ $key }}"><i class="fa fa-trash"></i></span></li>
+
+                            <!-- Modal edit Sub foreman -->
+                            <div class="modal fade" id="edit-circle{{ $key }}" tabindex="-1" aria-labelledby="edit-circleLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="edit-sprayingLabel">Edit Mandor bidang (circle)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.update', ['subforeman' => $cs->id]) }}">
+                                                @method('PUT')
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label for="foreman">Nama</label>
+                                                    <input type="text" name="subforeman" class="form-control rounded-pill rounded-pill" required value="{{ $cs->name }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email">Email</label>
+                                                    <input type="email" name="email" class="form-control rounded-pill" required value="{{ $cs->email }}">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Jenis Pekerjaan</label>
+                                                    <select name="jobtype_id" class="form-control rounded-pill">
+                                                        @foreach ($jobtypes as $jt)
+                                                        <option <?php $cs->jobtype_id === $jt->id ? print 'selected' : '' ?> value="{{ $jt->id }}">{{ $jt->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password">Password</label>
+                                                    <input type="password" name="password" class="form-control rounded-pill" placeholder="Kosongkan bila tidak mengubah password">
+                                                </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Perbarui</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal delete Sub foreman -->
+                            <div class="modal fade" id="delete-circle{{ $key }}" tabindex="-1" aria-labelledby="delete-circleLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="delete-sprayingLabel">Hapus Mandor Bidang (circle)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.delete', ['subforeman' => $cs->id]) }}">
+                                                @method('DELETE')
+                                                @csrf
+                                                Yakin untuk menghapus Mandor Bidang?
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill pr-4 pl-4">Ya</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
                         </ol>
                         <li id="pruning-parent"><a href="">Manual Pruning ({{ count($prunings) }})</a></li>
                         <ol id="pruning-children" style="list-style-type: decimal">
-                            @foreach($prunings as $pr)
-                            <li>{{ $pr->name }}</li>
+                            @foreach($prunings as $key => $pr)
+                            <li>{{ $pr->name }} <span class="badge badge-sm badge-primary" data-toggle="modal" data-target="#edit-pruning{{ $key }}"><i class="fa fa-pen"></i></span> <span class="badge badge-sm badge-danger" data-toggle="modal" data-target="#delete-pruning{{ $key }}"><i class="fa fa-trash"></i></span></li>
+
+                            <!-- Modal edit Sub foreman -->
+                            <div class="modal fade" id="edit-pruning{{ $key }}" tabindex="-1" aria-labelledby="edit-pruningLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="edit-sprayingLabel">Edit Mandor bidang (pruning)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.update', ['subforeman' => $pr->id]) }}">
+                                                @method('PUT')
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label for="foreman">Nama</label>
+                                                    <input type="text" name="subforeman" class="form-control rounded-pill rounded-pill" required value="{{ $pr->name }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email">Email</label>
+                                                    <input type="email" name="email" class="form-control rounded-pill" required value="{{ $pr->email }}">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Jenis Pekerjaan</label>
+                                                    <select name="jobtype_id" class="form-control rounded-pill">
+                                                        @foreach ($jobtypes as $jt)
+                                                        <option <?php $pr->jobtype_id === $jt->id ? print 'selected' : '' ?> value="{{ $jt->id }}">{{ $jt->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password">Password</label>
+                                                    <input type="password" name="password" class="form-control rounded-pill" placeholder="Kosongkan bila tidak mengubah password">
+                                                </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Perbarui</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal delete Sub foreman -->
+                            <div class="modal fade" id="delete-pruning{{ $key }}" tabindex="-1" aria-labelledby="delete-pruningLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="delete-sprayingLabel">Hapus Mandor Bidang (pruning)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.delete', ['subforeman' => $pr->id]) }}">
+                                                @method('DELETE')
+                                                @csrf
+                                                Yakin untuk menghapus Mandor Bidang?
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill pr-4 pl-4">Ya</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
                         </ol>
                         <li id="gawangan-parent"><a href="">Manual Gawangan ({{ count($gawangans) }})</a></li>
                         <ol id="gawangan-children" style="list-style-type: decimal">
-                            @foreach($gawangans as $gw)
-                            <li>{{ $gw->name }}</li>
+                            @foreach($gawangans as $key => $gw)
+                            <li>{{ $gw->name }} <span class="badge badge-sm badge-primary" data-toggle="modal" data-target="#edit-gawangan{{ $key }}"><i class="fa fa-pen"></i></span> <span class="badge badge-sm badge-danger" data-toggle="modal" data-target="#delete-gawangan{{ $key }}"><i class="fa fa-trash"></i></span></li>
+
+                            <!-- Modal edit Sub foreman -->
+                            <div class="modal fade" id="edit-gawangan{{ $key }}" tabindex="-1" aria-labelledby="edit-gawanganLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="edit-sprayingLabel">Edit Mandor bidang (gawangan)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.update', ['subforeman' => $gw->id]) }}">
+                                                @method('PUT')
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label for="foreman">Nama</label>
+                                                    <input type="text" name="subforeman" class="form-control rounded-pill rounded-pill" required value="{{ $gw->name }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email">Email</label>
+                                                    <input type="email" name="email" class="form-control rounded-pill" required value="{{ $gw->email }}">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Jenis Pekerjaan</label>
+                                                    <select name="jobtype_id" class="form-control rounded-pill">
+                                                        @foreach ($jobtypes as $jt)
+                                                        <option <?php $gw->jobtype_id === $jt->id ? print 'selected' : '' ?> value="{{ $jt->id }}">{{ $jt->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password">Password</label>
+                                                    <input type="password" name="password" class="form-control rounded-pill" placeholder="Kosongkan bila tidak mengubah password">
+                                                </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Perbarui</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal delete Sub foreman -->
+                            <div class="modal fade" id="delete-gawangan{{ $key }}" tabindex="-1" aria-labelledby="delete-gawanganLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="delete-sprayingLabel">Hapus Mandor Bidang (gawangan)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.delete', ['subforeman' => $gw->id]) }}">
+                                                @method('DELETE')
+                                                @csrf
+                                                Yakin untuk menghapus Mandor Bidang?
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill pr-4 pl-4">Ya</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
                         </ol>
                         <li id="pcontrol-parent"><a href="">Pest Control ({{ count($pcontrols) }})</a></li>
                         <ol id="pcontrol-children" style="list-style-type: decimal">
-                            @foreach($pcontrols as $key => $subforeman)
-                            <li>{{ $subforeman->name }}</li>
+                            @foreach($pcontrols as $key => $pc)
+                            <li>{{ $pc->name }} <span class="badge badge-sm badge-primary" data-toggle="modal" data-target="#edit-pcontrol{{ $key }}"><i class="fa fa-pen"></i></span> <span class="badge badge-sm badge-danger" data-toggle="modal" data-target="#delete-pcontrol{{ $key }}"><i class="fa fa-trash"></i></span></li>
+
+                            <!-- Modal edit Sub foreman -->
+                            <div class="modal fade" id="edit-pcontrol{{ $key }}" tabindex="-1" aria-labelledby="edit-pcontrolLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="edit-sprayingLabel">Edit Mandor bidang (pcontrol)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.update', ['subforeman' => $pc->id]) }}">
+                                                @method('PUT')
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label for="foreman">Nama</label>
+                                                    <input type="text" name="subforeman" class="form-control rounded-pill rounded-pill" required value="{{ $pc->name }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email">Email</label>
+                                                    <input type="email" name="email" class="form-control rounded-pill" required value="{{ $pc->email }}">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Jenis Pekerjaan</label>
+                                                    <select name="jobtype_id" class="form-control rounded-pill">
+                                                        @foreach ($jobtypes as $jt)
+                                                        <option <?php $pc->jobtype_id === $jt->id ? print 'selected' : '' ?> value="{{ $jt->id }}">{{ $jt->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password">Password</label>
+                                                    <input type="password" name="password" class="form-control rounded-pill" placeholder="Kosongkan bila tidak mengubah password">
+                                                </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Perbarui</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal delete Sub foreman -->
+                            <div class="modal fade" id="delete-pcontrol{{ $key }}" tabindex="-1" aria-labelledby="delete-pcontrolLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="delete-sprayingLabel">Hapus Mandor Bidang (pcontrol)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.delete', ['subforeman' => $pc->id]) }}">
+                                                @method('DELETE')
+                                                @csrf
+                                                Yakin untuk menghapus Mandor Bidang?
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill pr-4 pl-4">Ya</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
                         </ol>
                         <li id="harvesting-parent"><a href="">Harvesting ({{ count($harvestings) }})</a></li>
                         <ol id="harvesting-children" style="list-style-type: decimal">
-                            @foreach($harvestings as $hv)
-                            <li>{{ $hv->name }}</li>
+                            @foreach($harvestings as $key => $hv)
+                            <li>{{ $hv->name }} <span class="badge badge-sm badge-primary" data-toggle="modal" data-target="#edit-harvesting{{ $key }}"><i class="fa fa-pen"></i></span> <span class="badge badge-sm badge-danger" data-toggle="modal" data-target="#delete-harvesting{{ $key }}"><i class="fa fa-trash"></i></span></li>
+
+                            <!-- Modal edit Sub foreman -->
+                            <div class="modal fade" id="edit-harvesting{{ $key }}" tabindex="-1" aria-labelledby="edit-harvestingLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="edit-sprayingLabel">Edit Mandor bidang (harvesting)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.update', ['subforeman' => $hv->id]) }}">
+                                                @method('PUT')
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label for="foreman">Nama</label>
+                                                    <input type="text" name="subforeman" class="form-control rounded-pill rounded-pill" required value="{{ $hv->name }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="email">Email</label>
+                                                    <input type="email" name="email" class="form-control rounded-pill" required value="{{ $hv->email }}">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Jenis Pekerjaan</label>
+                                                    <select name="jobtype_id" class="form-control rounded-pill">
+                                                        @foreach ($jobtypes as $jt)
+                                                        <option <?php $hv->jobtype_id === $jt->id ? print 'selected' : '' ?> value="{{ $jt->id }}">{{ $jt->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password">Password</label>
+                                                    <input type="password" name="password" class="form-control rounded-pill" placeholder="Kosongkan bila tidak mengubah password">
+                                                </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Perbarui</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal delete Sub foreman -->
+                            <div class="modal fade" id="delete-harvesting{{ $key }}" tabindex="-1" aria-labelledby="delete-harvestingLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="delete-sprayingLabel">Hapus Mandor Bidang (harvesting)</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" action="{{ route('superadmin.subforeman.delete', ['subforeman' => $hv->id]) }}">
+                                                @method('DELETE')
+                                                @csrf
+                                                Yakin untuk menghapus Mandor Bidang?
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill pr-4 pl-4">Ya</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
                         </ol>
                     </ol>
