@@ -18,6 +18,7 @@ class Subforeman extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
+    
     public function getNameAttribute($value)
     {
         return ucwords($value);

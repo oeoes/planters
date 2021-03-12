@@ -34,17 +34,17 @@ use App\Http\Controllers\manager\AssistantController  as FM_AssistantController;
 use App\Http\Controllers\manager\TypejobController    as FM_TypejobController;
 
 
-Route::get('/test', function() {return view('root.app'); });
-
 Route::get('/', function() {
     return redirect('/login');
 });
+
 Route::get ('/login', [AuthController::class, 'loginform'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.process');
 Route::get ('/logout',[AuthController::class, 'logout'])
      ->middleware('auth:assistant,farmmanager,superadmin')->name('logout');
 
-/** Super Admin
+/** 
+ * Super Admin
  * Start
  */
 Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], function () {
@@ -57,7 +57,6 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
         Route::post('/filter', [SU_DashboardController::class, 'filter']);
         Route::post('/filter/completeness/block', [SU_DashboardController::class, 'filter_completeness_block']);
         Route::post('/filter/trend', [SU_DashboardController::class, 'filter_trend']);
-        // Route::get('/filter/{company}/{farm}/{afdelling}/{year}', [SU_DashboardController::class, 'filter']);
 
         Route::get('/loadpanen', [SU_DashboardController::class, 'loadpanen']);
     });
@@ -206,12 +205,14 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['auth:superadmin']], fu
 
 });
 
-/** Super Admin
+/** 
+ * Super Admin
  * End
  */
 
 
-/** Farm Manager
+/** 
+ * Farm Manager
  * Start
  */
 
@@ -347,11 +348,13 @@ Route::group(['prefix' => 'manager', 'middleware' => ['auth:farmmanager']], func
 
 });
 
-/** Farm Manager
+/** 
+ * Farm Manager
  * End
  */
 
- /** Assistant Start
+ /** 
+  * Assistant Start
  * End
  */
 
@@ -445,13 +448,10 @@ Route::group(['prefix' => 'assistant', 'middleware' => ['auth:assistant']], func
 
 });
 
-/** Assistant
+/** 
+ * Assistant
  * End
  */
-
-Route::get('/clear', function() { return session()->flush();});
-// Route::get('/test', [TestController::class, 'each']);
-// Route::get('/img', [TestController::class, 'img']);
 
 
 
@@ -465,10 +465,3 @@ Route::get('/afdelling/list/{farm_id}', [SU_AreaController::class, 'get_afdellin
  // get list block based on afdelling
 Route::get('/pyear/list/{afdelling_id}', [SU_AreaController::class, 'get_pyear_of_afdelling']);
 
-
-// auth routes
-// Auth::routes();
-
-Route::get('/debug-sentry', function () {
-    throw new Exception('My first Sentry error!');
-});

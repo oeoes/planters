@@ -18,4 +18,8 @@ class Farm extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function afdellings () {
+        // your code here
+    }
+
 }

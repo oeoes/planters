@@ -673,43 +673,44 @@ window.onload = function () {
         }
         axios.post(`/superadmin/dashboard/filter`, req).then(response => {
             const data = response.data.data;
+            console.log(data);
 
-            companyText.innerText = data.general.company_name;
-            farmText.innerText = data.general.farm;
-            afdellingText.innerText = data.general.afdelling;
-            yearText.innerText = plantYearField.value;
+            // companyText.innerText = data.general.company_name;
+            // farmText.innerText = data.general.farm;
+            // afdellingText.innerText = data.general.afdelling;
+            // yearText.innerText = plantYearField.value;
 
-            agencyText.innerText = !data.agency[0]?.name ? '-' : data.agency[0].name;
-            totalFarmText.innerText = !data.agency[0]?.total ? '-' : data.agency[0].total;
+            // agencyText.innerText = !data.agency[0]?.name ? '-' : data.agency[0].name;
+            // totalFarmText.innerText = !data.agency[0]?.total ? '-' : data.agency[0].total;
 
-            managerText.innerText = !data.manager[0]?.name ? '-' : data.manager[0].name;
-            totalAfdellingText.innerText = !data.manager[0]?.total ? '0' : data.manager[0].total;
+            // managerText.innerText = !data.manager[0]?.name ? '-' : data.manager[0].name;
+            // totalAfdellingText.innerText = !data.manager[0]?.total ? '0' : data.manager[0].total;
 
-            assistantText.innerText = !data.assistant[0]?.name ? '-' : data.assistant[0].name;
-            totalBlockText.innerText = !data.assistant[0]?.total ? '0' : data.assistant[0].total;
+            // assistantText.innerText = !data.assistant[0]?.name ? '-' : data.assistant[0].name;
+            // totalBlockText.innerText = !data.assistant[0]?.total ? '0' : data.assistant[0].total;
 
-            foremanText.innerText = data.foreman;
-            subforemanText.innerText = data.subforeman;
+            // foremanText.innerText = data.foreman;
+            // subforemanText.innerText = data.subforeman;
 
-            /**
-             * scroller
-             */
-            scroller(data.harvest);
+            // /**
+            //  * scroller
+            //  */
+            // scroller(data.harvest);
 
-            /**
-             * knobs
-             */
-            knobs(data.job_completeness);
-            console.log(data.job_completeness);
+            // /**
+            //  * knobs
+            //  */
+            // knobs(data.job_completeness);
+            // console.log(data.job_completeness);
 
-            // panen
-            loadPanen(data.panen[0], data.panen[1]);
+            // // panen
+            // loadPanen(data.panen[0], data.panen[1]);
 
-            // panen each afdelling
-            loadPanenOnFarm(data.panen_afdelling[0], data.panen_afdelling[1]);
+            // // panen each afdelling
+            // loadPanenOnFarm(data.panen_afdelling[0], data.panen_afdelling[1]);
 
-            // ketuntasan pekerjaan masing" block
-            loadJobCompletenessBlock(data.job_completeness_each_block[0], data.job_completeness_each_block[1], data.job_completeness_each_block[2])
+            // // ketuntasan pekerjaan masing" block
+            // loadJobCompletenessBlock(data.job_completeness_each_block[0], data.job_completeness_each_block[1], data.job_completeness_each_block[2])
 
         }).finally(() => {
             this.innerText = 'Filter';

@@ -13,7 +13,7 @@ class Company extends Model
     protected $guarded = [];
 
     public function farm () {
-        return $this->hasOne(Farm::class);
+        return $this->hasMany(Farm::class);
     }
 
     public function owner () {

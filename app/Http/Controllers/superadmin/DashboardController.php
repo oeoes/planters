@@ -8,10 +8,12 @@ use App\Models\Block;
 use App\Models\BlockReference;
 use App\Models\Company;
 use App\Models\Farm;
+use App\Models\Foreman;
 use App\Models\Harvesting\EmployeeHarvesting;
 use App\Models\Harvesting\FillHarvesting;
 use App\Models\Harvesting\HarvestingType;
 use App\Models\Maintain\SprayingType;
+use App\Models\Subforeman;
 use Carbon\Carbon;
 use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
@@ -31,7 +33,7 @@ class DashboardController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'List of farms',
-            'data' => Farm::where('company_id', $company_id)->get()
+            'data' => Farm::where('company_id', $company_id)->get()->makeHidden(['created_at', 'updated_at'])
         ]);
     }
 
@@ -40,7 +42,7 @@ class DashboardController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'List of afdellings',
-            'data' => Afdelling::where('farm_id', $farm_id)->get()
+            'data' => Afdelling::where('farm_id', $farm_id)->get()->makeHidden(['created_at', 'updated_at'])
         ]);
     }
 
@@ -78,13 +80,8 @@ class DashboardController extends Controller
             ->where('afdellings.id', $request->afdelling)
             ->get();
 
-        $foreman = DB::table('foremans')
-            ->where('afdelling_id', $request->afdelling)
-            ->get()->count();
-
-        $subforeman = DB::table('subforemans')
-            ->where('afdelling_id', $request->afdelling)
-            ->get()->count();
+        $foreman = Foreman::where('afdelling_id', $request->afdelling)->get()->count();
+        $subforeman = Subforeman::where('afdelling_id', $request->afdelling)->get()->count();
 
         return response()->json([
             'status' => true,
