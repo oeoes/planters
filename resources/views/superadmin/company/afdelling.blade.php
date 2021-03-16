@@ -17,9 +17,9 @@
 <div class="d-flex flex-row-reverse">
     <button class="btn btn-sm btn-outline-info rounded-pill pl-3 pr-3 ml-1" data-toggle="modal" data-target="#add-afdelling">Afdelling <i class="fas fa-plus ml-1"></i> </button>
     @if($manager)
-    <button class="btn btn-sm btn-outline-primary rounded-pill pl-3 pr-3">{{ ucwords($manager->name) }} <i class="fas fa-user mr-1"></i> </button>
+    <a href="{{ route('superadmin.company.farm.manager', ['farm' => $farm->id]) }}" class="btn btn-sm btn-outline-primary rounded-pill pl-3 pr-3">{{ ucwords($manager->name) }} <i class="fas fa-user mr-1"></i> </a>
     @else
-    <button class="btn btn-sm btn-outline-secondary rounded-pill pl-3 pr-3" data-toggle="modal" data-target="#add-manager">Manager Kebun <i class="fas fa-user-plus ml-1"></i> </button>
+    <a href="{{ route('superadmin.company.farm.manager', ['farm' => $farm->id]) }}" class="btn btn-sm btn-outline-secondary rounded-pill pl-3 pr-3">Manager Kebun <i class="fas fa-user-plus ml-1"></i> </a>
 
     <!-- Modal add manager -->
     <div class="modal fade" id="add-manager" tabindex="-1" aria-labelledby="add-managerLabel" aria-hidden="true">

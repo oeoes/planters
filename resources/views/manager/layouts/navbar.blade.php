@@ -22,6 +22,7 @@
 
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
+          <a class="dropdown-item" href="{{ route('account.page.update', ['role' => 'farmmanager']) }}">Account Setting</a>
         </div>
       </li>
     </ul>

@@ -27,9 +27,9 @@
 <div class="d-flex flex-row-reverse">
     <button class="btn btn-sm btn-outline-success rounded-pill pl-3 pr-3 ml-1" data-toggle="modal" data-target="#add-farm">Farm <i class="fas fa-plus ml-1"></i> </button>
     @if($company_owner)
-    <button class="btn btn-sm btn-outline-info rounded-pill pl-3 pr-3">{{ ucwords($company_owner->name) }} <i class="fas fa-user mr-1"></i> </button>
+    <a href="{{ route('superadmin.company.add.owner', ['company' => $company->id]) }}" class="btn btn-sm btn-outline-info rounded-pill pl-3 pr-3">{{ ucwords($company_owner->name) }} <i class="fas fa-user mr-1"></i> </a>
     @else
-    <button class="btn btn-sm btn-outline-secondary rounded-pill pl-3 pr-3" data-toggle="modal" data-target="#add-company_owner">Owner PT <i class="fas fa-user-plus mr-1"></i> </button>
+    <a href="{{ route('superadmin.company.add.owner', ['company' => $company->id]) }}" class="btn btn-sm btn-outline-secondary rounded-pill pl-3 pr-3">Owner PT <i class="fas fa-user-plus mr-1"></i> </a>
 
     <!-- Modal add company_owner -->
     <div class="modal fade" id="add-company_owner" tabindex="-1" aria-labelledby="add-company_ownerLabel" aria-hidden="true">
@@ -64,7 +64,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Tutup</button>
-                    <button id="update-account" type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Tambah</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Tambah</button>
                     </form>
                 </div>
             </div>
@@ -98,7 +98,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill pr-4 pl-4" data-dismiss="modal">Tutup</button>
-                    <button id="update-account" type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Tambah</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill pr-4 pl-4">Tambah</button>
                     </form>
                 </div>
             </div>

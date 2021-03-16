@@ -11,4 +11,12 @@ class Agency extends Model
 
     protected $table = 'agencies';
     protected $guarded = [];
+
+    public function companies () {
+        return $this->hasMany(Company::class);
+    }
+
+    public function getNameAttribute ($value) {
+        return ucwords($value);
+    }
 }

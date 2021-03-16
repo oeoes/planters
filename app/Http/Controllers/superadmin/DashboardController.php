@@ -308,4 +308,6 @@ class DashboardController extends Controller
 
         return [$taksasi_result, $harvesting_result];
     }
+
+    
 }

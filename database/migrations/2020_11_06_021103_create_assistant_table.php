@@ -18,9 +18,11 @@ class CreateAssistantTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->foreignId('afdelling_id')->constrained('afdellings');
+            $table->foreignId('afdelling_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('afdelling_id')->references('id')->on('afdellings')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 

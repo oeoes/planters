@@ -18,7 +18,6 @@ class CreateAgencyTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->foreignId('company_id')->constrained('companies');
             $table->rememberToken();
             $table->timestamps();
         });

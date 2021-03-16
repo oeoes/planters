@@ -17,9 +17,11 @@ class CreateFarmManagerTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->foreignId('farm_id')->constrained();
+            $table->foreignId('farm_id')->nullable();
             $table->string('password');
             $table->timestamps();
+
+            $table->foreign('farm_id')->references('id')->on('farms')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 

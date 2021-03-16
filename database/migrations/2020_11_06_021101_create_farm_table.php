@@ -15,6 +15,7 @@ class CreateFarmTable extends Migration
     {
         Schema::create('farms', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained();
             $table->string('name');
             $table->timestamps();
         });

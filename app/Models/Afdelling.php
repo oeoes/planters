@@ -16,6 +16,10 @@ class Afdelling extends Model
         return $this->hasOne(Assistant::class);
     }
 
+    public function farm () {
+        return $this->belongsTo(Farm::class);
+    }
+
     public function foreman () {
         return $this->hasMany(Foreman::class);
     }

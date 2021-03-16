@@ -20,9 +20,9 @@
     <button class="btn btn-sm btn-primary rounded-pill ml-1 btn-hov" data-toggle="modal" data-target="#add-foreman"><span class="btn-hov-txt">Md. Utama</span> <i class="fas fa-user-plus"></i> </button>
     <button class="btn btn-sm btn-info rounded-pill ml-1 btn-hov" data-toggle="modal" data-target="#add-subforeman"><span class="btn-hov-txt">Md. Bidang</span> <i class="fas fa-user-plus"></i> </button>
     @if($assistant)
-    <button class="btn btn-sm btn-outline-info rounded-pill pl-3 pr-3">{{ ucwords($assistant->name) }} <i class="fas fa-user"></i> </button>
+    <a href="{{ route('superadmin.company.farm.afdelling.assistant', ['afdelling' => $afdelling->id]) }}" class="btn btn-sm btn-outline-info rounded-pill pl-3 pr-3">{{ ucwords($assistant->name) }} <i class="fas fa-user"></i> </a>
     @else
-    <button class="btn btn-sm btn-outline-secondary rounded-pill pl-3 pr-3" data-toggle="modal" data-target="#add-assistant">Assist. Kebun <i class="fas fa-user-plus"></i> </button>
+    <a href="{{ route('superadmin.company.farm.afdelling.assistant', ['afdelling' => $afdelling->id]) }}" class="btn btn-sm btn-outline-secondary rounded-pill pl-3 pr-3">Assist. Kebun <i class="fas fa-user-plus"></i> </a>
 
     <!-- Modal add assistant -->
     <div class="modal fade" id="add-assistant" tabindex="-1" aria-labelledby="add-assistantLabel" aria-hidden="true">

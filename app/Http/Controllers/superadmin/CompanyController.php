@@ -5,9 +5,11 @@ namespace App\Http\Controllers\superadmin;
 use App\Http\Controllers\Controller;
 use App\Models\Afdelling;
 use App\Models\Agency;
+use App\Models\Assistant;
 use App\Models\Block;
 use App\Models\Company;
 use App\Models\Farm;
+use App\Models\FarmManager;
 use App\Models\Harvesting\HarvestingType;
 use App\Models\JobType;
 use App\Models\Maintain\CircleType;
@@ -25,7 +27,7 @@ use Ramsey\Uuid\Uuid;
 class CompanyController extends Controller
 {
     public function index () {
-        $companies = DB::table('companies')->leftJoin('agencies', 'companies.id', '=', 'agencies.company_id')
+        $companies = DB::table('companies')->leftJoin('agencies', 'companies.agency_id', '=', 'agencies.id')
                     ->select('companies.*', 'agencies.name as owner')
                     ->get();
         return view('superadmin.company.index', [
@@ -36,11 +38,46 @@ class CompanyController extends Controller
     public function store_agency (Request $request) {
         Agency::create([
             'name' => $request->name,
-            'company_id' => $request->company_id,
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
         return back()->withSuccess('Agency added');
+    }
+
+    public function add_owner_pt (Company $company) {
+        $owners = Agency::all();
+        return view('superadmin.accounts.agency')->with(['company' => $company, 'owners' => $owners]);
+    }
+
+    public function set_ownership (Company $company, $agency) {
+        $company->update(['agency_id' => $agency]);
+        return redirect()->route('superadmin.company.farm', ['company_id' => $company->id]);
+    }
+
+    public function add_manager (Farm $farm) {
+        $managers = FarmManager::all();
+        return view('superadmin.accounts.manager')->with(['farm' => $farm, 'managers' => $managers]);
+    }
+
+    public function set_manager (Farm $farm, FarmManager $manager) {
+        DB::table('farm_managers')->where('farm_id', $farm->id)->update(['farm_id' => NULL]);
+        $manager->update(['farm_id' => $farm->id]);
+
+        return redirect()->route('superadmin.company.farm.afdellings', ['farm_id' => $farm->id]);
+    }
+
+    public function add_assistant (Afdelling $afdelling) {
+        $afd = Afdelling::where('farm_id', $afdelling->farm_id)->pluck('id');
+        $assistants = Assistant::whereIn('afdelling_id', $afd)->orWhere('afdelling_id', NULL)->get();
+
+        return view('superadmin.accounts.assistant')->with(['afdelling' => $afdelling, 'assistants' => $assistants]);
+    }
+
+    public function set_assistant (Afdelling $afdelling, Assistant $assistant) {
+        DB::table('assistants')->where('afdelling_id', $afdelling->id)->update(['afdelling_id' => NULL]);
+        $assistant->update(['afdelling_id' => $afdelling->id]);
+
+        return redirect()->route('superadmin.company.farm.afdelling.blocks', $afdelling->id);
     }
 
     public function store (Request $request) {
@@ -102,11 +139,11 @@ class CompanyController extends Controller
                 ->where('farms.company_id', $company_id)
                 ->select('farms.id', 'farms.name', 'farm_managers.name as manager')->get();
         $company = Company::find($company_id);
-        $company_owner = $company->owner;
+        
         return view('superadmin.company.farm', [
             'farms' => $farms,
             'company' => $company,
-            'company_owner' => $company_owner
+            'company_owner' => DB::table('companies')->join('agencies', 'agencies.id', '=', 'companies.agency_id')->where('companies.id', $company_id)->first()
         ]);
     }
 
